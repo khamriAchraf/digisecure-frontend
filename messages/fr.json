@@ -1,0 +1,94 @@
+{
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "assets": "Actifs",
+    "administration": "Administration",
+    "analytics": "Analyses",
+    "contracts": "Contrats",
+    "settings": "Paramètres",
+    "security": "Sécurité"
+  },
+  "assets": {
+    "overview": "Vue d'ensemble",
+    "forecasts": "Prévisions",
+    "outlook": "Perspectives",
+    "realTime": "Temps réel"
+  },
+  "administration": {
+    "users": "Utilisateurs",
+    "groups": "Groupes",
+    "roles": "Rôles",
+    "dictionaries": "Dictionnaires"
+  },
+  "security": {
+    "enable2FA": "Activer 2FA",
+    "changePassword": "Changer le mot de passe",
+    "recoveryCodes": "Codes de récupération"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "actions": "Actions",
+    "status": "Statut",
+    "date": "Date",
+    "name": "Nom",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "submit": "Soumettre",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "open": "Ouvrir",
+    "yes": "Oui",
+    "no": "Non",
+    "success": "Succès",
+    "error": "Erreur",
+    "warning": "Avertissement",
+    "info": "Information",
+    "redirecting": "Redirection..."
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "forgotPassword": "Mot de passe oublié ?",
+    "rememberMe": "Se souvenir de moi",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "signUp": "S'inscrire",
+    "signIn": "Se connecter",
+    "welcomeBack": "Bon retour !",
+    "signInToAccount": "Connectez-vous à votre compte",
+    "passwordPlaceholder": "Votre mot de passe",
+    "invalidCredentials": "Email ou mot de passe invalide"
+  },
+  "language": {
+    "english": "Anglais",
+    "french": "Français",
+    "selectLanguage": "Sélectionner la langue"
+  },
+  "breadcrumbs": {
+    "home": "Accueil",
+    "assets": "Actifs",
+    "admin": "Administration",
+    "users": "Utilisateurs",
+    "groups": "Groupes",
+    "roles": "Rôles",
+    "dictionaries": "Dictionnaires",
+    "forecasts": "Prévisions",
+    "outlook": "Perspectives",
+    "real-time": "Temps Réel",
+    "settings": "Paramètres",
+    "login": "Connexion",
+    "register": "Inscription"
+  }
+} 

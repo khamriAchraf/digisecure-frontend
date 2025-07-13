@@ -1,0 +1,94 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "assets": "Assets",
+    "administration": "Administration",
+    "analytics": "Analytics",
+    "contracts": "Contracts",
+    "settings": "Settings",
+    "security": "Security"
+  },
+  "assets": {
+    "overview": "Overview",
+    "forecasts": "Forecasts",
+    "outlook": "Outlook",
+    "realTime": "Real time"
+  },
+  "administration": {
+    "users": "Users",
+    "groups": "Groups",
+    "roles": "Roles",
+    "dictionaries": "Dictionaries"
+  },
+  "security": {
+    "enable2FA": "Enable 2FA",
+    "changePassword": "Change password",
+    "recoveryCodes": "Recovery codes"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "actions": "Actions",
+    "status": "Status",
+    "date": "Date",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "open": "Open",
+    "yes": "Yes",
+    "no": "No",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information",
+    "redirecting": "Redirecting..."
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "forgotPassword": "Forgot Password?",
+    "rememberMe": "Remember me",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signUp": "Sign up",
+    "signIn": "Sign in",
+    "welcomeBack": "Welcome back!",
+    "signInToAccount": "Sign in to your account",
+    "passwordPlaceholder": "Your password",
+    "invalidCredentials": "Invalid email or password"
+  },
+  "language": {
+    "english": "English",
+    "french": "French",
+    "selectLanguage": "Select Language"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "assets": "Assets",
+    "admin": "Administration",
+    "users": "Users",
+    "groups": "Groups",
+    "roles": "Roles",
+    "dictionaries": "Dictionaries",
+    "forecasts": "Forecasts",
+    "outlook": "Outlook",
+    "real-time": "Real Time",
+    "settings": "Settings",
+    "login": "Login",
+    "register": "Register"
+  }
+} 
