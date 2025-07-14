@@ -75,7 +75,7 @@ export const userConfig: DataTableConfig<User> = {
   sortableFields: ['id', 'full_name', 'email', 'phone', 'location', 'status'],
   defaultSort: { field: 'id', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000, 99999],
 };
 
 // Role configuration
@@ -121,7 +121,7 @@ export const roleConfig: DataTableConfig<Role> = {
   sortableFields: ['id', 'name', 'is_builtin'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 20, 50, 100],
 };
 
 // Group configuration
@@ -181,7 +181,7 @@ export const groupConfig: DataTableConfig<Group> = {
   sortableFields: ['id', 'name', 'type', 'contain_users', 'contain_items'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 20, 50, 100],
 };
 
 // Asset configuration
@@ -248,7 +248,7 @@ export const assetConfig: DataTableConfig<Asset> = {
   sortableFields: ['id', 'name', 'serial_number', 'inventory_number', 'status'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 20, 50, 100],
 };
 
 // Asset Type configuration
@@ -294,7 +294,7 @@ export const assetTypeConfig: DataTableConfig<AssetType> = {
   sortableFields: ['id', 'name', 'is_builtin'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 20, 50, 100],
 };
 
 // Manufacturer configuration
@@ -326,7 +326,7 @@ export const manufacturerConfig: DataTableConfig<Manufacturer> = {
   sortableFields: ['id', 'name'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 20, 50, 100],
 };
 
 // Location configuration
@@ -379,7 +379,7 @@ export const locationConfig: DataTableConfig<Location> = {
   sortableFields: ['id', 'name', 'town', 'country', 'postal_code'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 20, 50, 100],
 };
 
 // Configuration registry

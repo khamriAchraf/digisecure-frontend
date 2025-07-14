@@ -69,7 +69,7 @@ export function useDataTable<T extends { id: number | string }>({
   
   // Initialize state
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [pageSize, setPageSize] = useState(initialPageSize || config.defaultPageSize || 20);
+  const [pageSize, setPageSize] = useState(initialPageSize || config.defaultPageSize);
   const [sortBy, setSortBy] = useState(initialSortBy || config.defaultSort?.field);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(initialSortOrder);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
@@ -128,7 +128,8 @@ export function useDataTable<T extends { id: number | string }>({
   
   const handlePageSizeChange = useCallback((newPageSize: number) => {
     setPageSize(newPageSize);
-    setCurrentPage(1); // Reset to first page when changing page size
+    setCurrentPage(1); // Reset to first page
+    // The useEffect or SWR should re-fetch with new params
   }, []);
   
   const setSort = useCallback((field: string, order: 'asc' | 'desc') => {
@@ -168,6 +169,7 @@ export function useDataTable<T extends { id: number | string }>({
     
     // Pagination
     currentPage,
+    // @ts-ignore
     pageSize,
     totalItems,
     totalPages,

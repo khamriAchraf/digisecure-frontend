@@ -154,7 +154,7 @@ const customConfig = {
   sortableFields: ['id', 'name'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 25,
-  pageSizeOptions: [10, 25, 50, 100],
+  pageSizeOptions: [5, 10, 25, 50, 100],
 };
 
 <DataTable<User>
@@ -262,7 +262,7 @@ export const newDataTypeConfig: DataTableConfig<NewDataType> = {
   sortableFields: ['id', 'field1'],
   defaultSort: { field: 'id', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 20, 50, 100],
 };
 
 // Add to registry

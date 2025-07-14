@@ -17,7 +17,6 @@ export default function AdminUsersPage() {
     refresh,
   } = useDataTable<User>({
     dataType: 'users',
-    initialPageSize: 20,
   });
 
   useEffect(() => {
@@ -55,6 +54,7 @@ export default function AdminUsersPage() {
       <DataTable<User>
         dataType="users"
         data={paginatedData?.data || data}
+        paginatedData={paginatedData}
         isLoading={isLoading}
         error={error?.message}
         onPageChange={setPage}

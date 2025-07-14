@@ -37,7 +37,7 @@ import {
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { DataTableConfig, getDataTableConfig, DataType } from './config';
-import { PaginatedResponse, PaginationParams } from '../../types/models';
+import { PaginatedResponse } from '../../types/models';
 import { TableColumn } from '../../types/utils';
 
 // Props interface for the DataTable component
@@ -464,8 +464,9 @@ export function DataTable<T extends { id: number | string }>({
   );
   
   // Pagination
-  const pagination = showPagination && totalPages > 1 && (
+  const pagination = showPagination && (
     <Group justify="space-between" mt="md">
+      {/* Left side: page-size selector + item range */}
       <Group>
         {showPageSizeSelector && config.pageSizeOptions && (
           <Select
@@ -477,19 +478,22 @@ export function DataTable<T extends { id: number | string }>({
             style={{ width: 120 }}
           />
         )}
-        
+
         <Text size="sm" c="dimmed">
           Showing {((state.currentPage - 1) * state.pageSize) + 1} to{' '}
           {Math.min(state.currentPage * state.pageSize, totalItems)} of {totalItems} items
         </Text>
       </Group>
-      
-      <Pagination
-        value={state.currentPage}
-        onChange={handlePageChange}
-        total={totalPages}
-        size="sm"
-      />
+
+      {/* Right side: pagination control only if more than one page */}
+      {totalPages > 1 && (
+        <Pagination
+          value={state.currentPage}
+          onChange={handlePageChange}
+          total={totalPages}
+          size="sm"
+        />
+      )}
     </Group>
   );
   

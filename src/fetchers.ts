@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { useSession, getSession, signOut } from 'next-auth/react';
-import { PaginatedResponse, PaginationParams, User, Role, Group, Asset, AssetType, Manufacturer, Location } from '../types/models';
+import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location } from '../types/models';
+import { PaginationParams } from '../types/utils';
 
 // Base URL for the backend API – change this to match your backend configuration
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000/api/v1';
@@ -35,7 +36,7 @@ const jsonFetcher = async (url: string, token?: string, retry = true) => {
     signOut({ callbackUrl: '/login' });
   }
 
-  const error = new Error('An error occurred while fetching the data');
+  const error = new Error('An error occurred while fetching the data') as any;
   error.info = await res.json().catch(() => ({}));
   error.status = res.status;
   throw error;
@@ -74,7 +75,7 @@ function usePaginatedData<T>(
 
   const { data, error, isLoading, mutate } = useSWR<PaginatedResponse<T>>(
     url,
-    (url) => jsonFetcher(url, token)
+    (url: string) => jsonFetcher(url, token)
   );
 
   return {
