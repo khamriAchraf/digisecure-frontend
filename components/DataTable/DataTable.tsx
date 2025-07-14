@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import {
   Table,
   TextInput,
@@ -40,6 +40,7 @@ import { DataTableConfig, getDataTableConfig, DataType } from './config';
 import { PaginatedResponse } from '../../types/models';
 import { TableColumn } from '../../types/utils';
 import { t } from '../../i18n';
+import { useVisibleColumns } from './useVisibleColumns';
 
 // Props interface for the DataTable component
 export interface DataTableProps<T> {
@@ -141,6 +142,15 @@ export function DataTable<T extends { id: number | string }>({
   const defaultConfig = getDataTableConfig<T>(dataType, t);
   const config = { ...defaultConfig, ...customConfig };
 
+  // Get visible columns from user preferences
+  const {
+    visibleColumns,
+    visibleKeys,
+    saveVisibility,
+    resetVisibility,
+    hasCustomConfig,
+  } = useVisibleColumns(dataType, config.columns);
+
   // State management
   const [state, setState] = useState<DataTableState<T>>({
     searchQuery: '',
@@ -154,7 +164,17 @@ export function DataTable<T extends { id: number | string }>({
 
   const [filterModalOpened, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
   const [settingsModalOpened, { open: openSettingsModal, close: closeSettingsModal }] = useDisclosure(false);
+  
+  // Clear error when settings modal is closed
+  const handleCloseSettingsModal = useCallback(() => {
+    setSettingsError(null);
+    closeSettingsModal();
+  }, [closeSettingsModal]);
+  const [columnDraft, setColumnDraft] = useState<Set<string>>(new Set());
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsError, setSettingsError] = useState<string | null>(null);
   const [, forceUpdate] = useState({});
+  const prevVisibleKeysRef = useRef<string[]>([]);
 
   // Listen for language changes and force re-render
   useEffect(() => {
@@ -247,6 +267,65 @@ export function DataTable<T extends { id: number | string }>({
     onFilterChange?.({});
   }, [onFilterChange]);
 
+  // Column visibility handlers
+  const handleColumnToggle = useCallback((columnKey: string, checked: boolean) => {
+    setColumnDraft(prevDraft => {
+      const newDraft = new Set(prevDraft);
+      if (checked) {
+        newDraft.add(columnKey);
+      } else {
+        newDraft.delete(columnKey);
+      }
+      return newDraft;
+    });
+  }, []);
+
+  const handleSaveSettings = useCallback(async () => {
+    setIsSavingSettings(true);
+    setSettingsError(null);
+    try {
+      const currentDraft = Array.from(columnDraft);
+      if (currentDraft.length === 0) return; // Must have at least one column
+      
+      await saveVisibility(currentDraft);
+      handleCloseSettingsModal();
+    } catch (error) {
+      console.error('Failed to save settings:', error);
+      setSettingsError(error instanceof Error ? error.message : 'Failed to save settings');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  }, [columnDraft, saveVisibility, handleCloseSettingsModal]);
+
+  const handleResetSettings = useCallback(async () => {
+    setIsSavingSettings(true);
+    setSettingsError(null);
+    try {
+      await resetVisibility();
+      setColumnDraft(new Set(config.columns.map(c => String(c.key))));
+      handleCloseSettingsModal();
+    } catch (error) {
+      console.error('Failed to reset settings:', error);
+      setSettingsError(error instanceof Error ? error.message : 'Failed to reset settings');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  }, [resetVisibility, config.columns, handleCloseSettingsModal]);
+
+  // Update draft when visibleKeys change
+  useEffect(() => {
+    if (visibleKeys.length === 0) return; // Don't update if visibleKeys is empty
+    
+    const currentKeys = Array.from(visibleKeys).sort();
+    const prevKeys = prevVisibleKeysRef.current;
+    
+    // Only update if the keys are actually different
+    if (JSON.stringify(currentKeys) !== JSON.stringify(prevKeys)) {
+      setColumnDraft(new Set(visibleKeys));
+      prevVisibleKeysRef.current = currentKeys;
+    }
+  }, [visibleKeys]);
+
   // Render functions
   const renderCell = (column: TableColumn<T>, item: T) => {
     const value = item[column.key];
@@ -324,17 +403,20 @@ export function DataTable<T extends { id: number | string }>({
           </ActionIcon>
         )}
 
-        <Menu>
+                <Menu>
           <Menu.Target>
             <ActionIcon size="lg" variant="light">
               <IconSettings size={16} />
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-                          <Menu.Item onClick={openSettingsModal}>
-                <IconSettings size={16} />
-                {t('datatable.tableSettings')}
-              </Menu.Item>
+            <Menu.Item onClick={() => {
+              setSettingsError(null);
+              openSettingsModal();
+            }}>
+              <IconSettings size={16} />
+              {t('datatable.tableSettings')}
+            </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Group>
@@ -393,7 +475,7 @@ export function DataTable<T extends { id: number | string }>({
             </Table.Th>
           )}
 
-          {config.columns.map((column) => (
+          {visibleColumns.map((column) => (
             <Table.Th
               key={String(column.key)}
               style={{ width: column.width, cursor: column.sortable ? 'pointer' : 'default' }}
@@ -415,12 +497,12 @@ export function DataTable<T extends { id: number | string }>({
       </Table.Thead>
 
       <Table.Tbody>
-        {processedData.length === 0 ? (
+                {processedData.length === 0 ? (
           <Table.Tr>
-            <Table.Td colSpan={config.columns.length + (selectable ? 1 : 0) + (showActions ? 1 : 0)}>
-                              <Text ta="center" c="dimmed" py="xl">
-                  {isLoading ? t('common.loading') : t('datatable.noDataFound')}
-                </Text>
+            <Table.Td colSpan={visibleColumns.length + (selectable ? 1 : 0) + (showActions ? 1 : 0)}>
+              <Text ta="center" c="dimmed" py="xl">
+                {isLoading ? t('common.loading') : t('datatable.noDataFound')}
+              </Text>
             </Table.Td>
           </Table.Tr>
         ) : (
@@ -435,7 +517,7 @@ export function DataTable<T extends { id: number | string }>({
                 </Table.Td>
               )}
 
-              {config.columns.map((column) => (
+              {visibleColumns.map((column) => (
                 <Table.Td key={String(column.key)}>
                   {renderCell(column, item)}
                 </Table.Td>
@@ -541,29 +623,57 @@ export function DataTable<T extends { id: number | string }>({
     </Modal>
   );
 
-  // Settings modal
+    // Settings modal
   const settingsModal = (
-    <Modal opened={settingsModalOpened} onClose={closeSettingsModal} title={t('datatable.tableSettings')} size="md">
+    <Modal opened={settingsModalOpened} onClose={handleCloseSettingsModal} title={t('datatable.tableSettings')} size="md">
       <Stack>
-                  <Text size="sm" c="dimmed">
-            {t('datatable.configureTable')}
-          </Text>
+        <Text size="sm" c="dimmed">
+          {t('datatable.configureTable')}
+        </Text>
 
         <Divider />
 
-        <Text fw={500}>{t('datatable.visibleColumns')}</Text>
+        <Text fw={500}>{t('datatable.columnVisibility')}</Text>
+        <Text size="sm" c="dimmed" mb="md">
+          {t('datatable.columnVisibilityHelp')}
+        </Text>
+
         {config.columns.map((column) => (
           <Checkbox
             key={String(column.key)}
             label={column.label}
-            defaultChecked={true}
-            disabled
+            checked={columnDraft.has(String(column.key))}
+            onChange={(e) => handleColumnToggle(String(column.key), e.target.checked)}
+            disabled={columnDraft.size === 1 && columnDraft.has(String(column.key))}
           />
         ))}
 
-                  <Text size="sm" c="dimmed">
-            {t('datatable.columnVisibilityNote')}
-          </Text>
+        {settingsError && (
+          <Alert color="red">
+            {settingsError}
+          </Alert>
+        )}
+
+        <Divider />
+
+        <Group justify="space-between">
+          <Button 
+            variant="light" 
+            onClick={handleResetSettings}
+            loading={isSavingSettings}
+            disabled={columnDraft.size === 0 || !hasCustomConfig}
+            title={!hasCustomConfig ? t('datatable.noCustomConfig') : undefined}
+          >
+            {t('datatable.resetToDefaults')}
+          </Button>
+          <Button 
+            onClick={handleSaveSettings}
+            loading={isSavingSettings}
+            disabled={columnDraft.size === 0}
+          >
+            {t('datatable.saveSettings')}
+          </Button>
+        </Group>
       </Stack>
     </Modal>
   );
@@ -582,7 +692,9 @@ export function DataTable<T extends { id: number | string }>({
       {searchAndFilters}
 
       <Box style={{ overflow: 'auto' }}>
-        {tableContent}
+        <div key={visibleColumns.length + '-' + visibleColumns.map(c => c.key).join(',')}>
+          {tableContent}
+        </div>
       </Box>
 
       {pagination}

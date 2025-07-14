@@ -182,4 +182,10 @@ export interface ChartData {
     borderColor?: string | string[];
     borderWidth?: number;
   }[];
+}
+
+// Table configuration types
+export interface PersistedTableConfig {
+  table_key: string;          // e.g. 'users', 'groups' …
+  columns: string[];          // list of column keys the user chose
 } 

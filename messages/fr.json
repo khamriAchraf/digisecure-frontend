@@ -98,7 +98,7 @@
     "clearAll": "Tout effacer",
     "applyFilters": "Appliquer les filtres",
     "tableSettings": "Paramètres du tableau",
-    "configureTable": "Configurer les options d'affichage et le comportement du tableau.",
+    "configureTable": "Configurez les options d'affichage et le comportement du tableau.",
     "visibleColumns": "Colonnes visibles",
     "columnVisibilityNote": "La visibilité des colonnes peut être configurée dans le fichier de configuration du tableau.",
     "itemsPerPage": "Éléments par page",
@@ -135,6 +135,15 @@
     "na": "N/A",
     "users": "Gestion des utilisateurs",
     "groups": "Gestion des groupes",
-    "roles": "Gestion des rôles"
+    "roles": "Gestion des rôles",
+    "columnVisibility": "Visibilité des colonnes",
+    "selectColumns": "Sélectionnez les colonnes à afficher",
+    "resetToDefaults": "Réinitialiser",
+    "saveSettings": "Enregistrer les paramètres",
+    "columnVisibilityHelp": "Cochez les colonnes que vous souhaitez voir dans ce tableau. Au moins une colonne doit être sélectionnée.",
+    "settingsSaved": "Paramètres du tableau enregistrés avec succès",
+    "settingsReset": "Paramètres du tableau réinitialisés",
+    "noCustomConfig": "Aucune configuration personnalisée à réinitialiser - utilise déjà les valeurs par défaut",
+    "usingCustomConfig": "Utilisation d'une configuration de colonnes personnalisée"
   }
 } 

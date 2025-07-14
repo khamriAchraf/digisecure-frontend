@@ -135,6 +135,15 @@
     "na": "N/A",
     "users": "User Management",
     "groups": "Group Management",
-    "roles": "Role Management"
+    "roles": "Role Management",
+    "columnVisibility": "Column Visibility",
+    "selectColumns": "Select which columns to display",
+    "resetToDefaults": "Reset to Defaults",
+    "saveSettings": "Save Settings",
+    "columnVisibilityHelp": "Check the columns you want to see in this table. At least one column must be selected.",
+    "settingsSaved": "Table settings saved successfully",
+    "settingsReset": "Table settings reset to defaults",
+    "noCustomConfig": "No custom configuration to reset - already using defaults",
+    "usingCustomConfig": "Using custom column configuration"
   }
 } 
