@@ -15,6 +15,7 @@ A flexible, performant, and feature-rich data table component built with Mantine
 - **Customizable**: Extensive configuration options
 - **Type-safe**: Full TypeScript support
 - **Performance**: Optimized rendering with React.memo and useMemo
+- **Multilingual support**: Full internationalization support for English and French
 
 ## Quick Start
 
@@ -106,11 +107,62 @@ function UsersPage() {
 }
 ```
 
+## Multilingual Support
+
+The DataTable component fully supports internationalization with English and French translations. All UI text, column labels, and messages are automatically translated based on the current locale.
+
+### Translation Keys
+
+The component uses the following translation key patterns:
+- `datatable.*` - DataTable-specific translations
+- `common.*` - Common UI elements (shared across the app)
+
+### Reactive Translation System
+
+The DataTable component automatically updates when the language changes without requiring a page refresh. The configuration system uses factory functions that receive the current translation function, ensuring all labels and messages are always up-to-date with the selected language.
+
+### Supported Languages
+
+- **English (en)**: Default language
+- **French (fr)**: Full translation support
+
+### Adding New Languages
+
+To add support for additional languages:
+
+1. Add the new locale to `i18n.ts`:
+```tsx
+export const locales = ['en', 'fr', 'es'] as const;
+```
+
+2. Create translation files in `messages/`:
+```json
+// messages/es.json
+{
+  "datatable": {
+    "searchPlaceholder": "Buscar...",
+    "filters": "Filtros",
+    // ... other translations
+  }
+}
+```
+
+3. Import and add to the messages object in `i18n.ts`:
+```tsx
+import esMessages from './messages/es.json';
+
+const messages = {
+  en: enMessages,
+  fr: frMessages,
+  es: esMessages,
+};
+```
+
 ## Configuration
 
 The DataTable uses a configuration system to define how different data types should be displayed. Each data type has its own configuration that specifies:
 
-- **Columns**: Which fields to display and how to render them
+- **Columns**: Which fields to display and how to render them (with automatic translation)
 - **Searchable fields**: Which fields to include in global search
 - **Sortable fields**: Which fields can be sorted
 - **Default settings**: Default sort, page size, etc.
@@ -127,20 +179,22 @@ The DataTable uses a configuration system to define how different data types sho
 
 ### Custom Configuration
 
-You can override the default configuration for any data type:
+You can override the default configuration for any data type. Note that custom configurations should use translation keys for labels to maintain multilingual support:
 
 ```tsx
+import { t } from '../../i18n';
+
 const customConfig = {
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'name',
-      label: 'Name',
+      label: t('common.name'),
       sortable: true,
       filterable: true,
       render: (value, row) => (
@@ -303,10 +357,6 @@ The DataTable uses Mantine's theming system. You can customize the appearance by
 - Large datasets are handled efficiently with pagination
 - Search and filtering are debounced to prevent excessive API calls
 - Virtual scrolling can be added for very large datasets if needed
-
-## Examples
-
-See `DataTableExample.tsx` for complete usage examples with different data types and features.
 
 ## Backend Requirements
 

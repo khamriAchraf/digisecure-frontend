@@ -231,24 +231,4 @@ export interface AssetFilters {
   search?: string;
 }
 
-// Export all types
-export type {
-  BaseModel,
-  User,
-  Role,
-  Permission,
-  Group,
-  Asset,
-  AssetType,
-  Manufacturer,
-  Location,
-  RefreshToken,
-  ApiResponse,
-  PaginatedResponse,
-  CreateUserRequest,
-  UpdateUserRequest,
-  CreateAssetRequest,
-  UpdateAssetRequest,
-  UserFilters,
-  AssetFilters
-}; 
+// All types are already exported as interfaces above 

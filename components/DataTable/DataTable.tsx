@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   Table,
   TextInput,
@@ -39,6 +39,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { DataTableConfig, getDataTableConfig, DataType } from './config';
 import { PaginatedResponse } from '../../types/models';
 import { TableColumn } from '../../types/utils';
+import { t } from '../../i18n';
 
 // Props interface for the DataTable component
 export interface DataTableProps<T> {
@@ -48,10 +49,10 @@ export interface DataTableProps<T> {
   paginatedData?: PaginatedResponse<T>;
   isLoading?: boolean;
   error?: string | null;
-  
+
   // Custom configuration (optional, will use default if not provided)
   config?: Partial<DataTableConfig<T>>;
-  
+
   // Callbacks
   onPageChange?: (page: number) => void;
   onPageSizeChange?: (pageSize: number) => void;
@@ -59,19 +60,19 @@ export interface DataTableProps<T> {
   onSearchChange?: (query: string) => void;
   onFilterChange?: (filters: Record<string, any>) => void;
   onRefresh?: () => void;
-  
+
   // Action callbacks
   onView?: (item: T) => void;
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
   onCreate?: () => void;
   onExport?: () => void;
-  
+
   // Selection
   selectable?: boolean;
   selectedItems?: T[];
   onSelectionChange?: (items: T[]) => void;
-  
+
   // Customization
   title?: string;
   showSearch?: boolean;
@@ -82,7 +83,7 @@ export interface DataTableProps<T> {
   showRefreshButton?: boolean;
   showCreateButton?: boolean;
   showExportButton?: boolean;
-  
+
   // Styling
   height?: string | number;
   minHeight?: string | number;
@@ -137,9 +138,9 @@ export function DataTable<T extends { id: number | string }>({
   className,
 }: DataTableProps<T>) {
   // Get configuration for the data type
-  const defaultConfig = getDataTableConfig<T>(dataType);
+  const defaultConfig = getDataTableConfig<T>(dataType, t);
   const config = { ...defaultConfig, ...customConfig };
-  
+
   // State management
   const [state, setState] = useState<DataTableState<T>>({
     searchQuery: '',
@@ -150,15 +151,28 @@ export function DataTable<T extends { id: number | string }>({
     pageSize: config.defaultPageSize || 20,
     selectedRows: selectedItems,
   });
-  
+
   const [filterModalOpened, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
   const [settingsModalOpened, { open: openSettingsModal, close: closeSettingsModal }] = useDisclosure(false);
-  
+  const [, forceUpdate] = useState({});
+
+  // Listen for language changes and force re-render
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      forceUpdate({});
+    };
+
+    window.addEventListener('storage', handleLanguageChange);
+    return () => {
+      window.removeEventListener('storage', handleLanguageChange);
+    };
+  }, []);
+
   // Use paginated data if available, otherwise use regular data
   const tableData = paginatedData?.data || data;
   const totalItems = paginatedData?.total || data.length;
   const totalPages = paginatedData?.total_pages || Math.ceil(totalItems / state.pageSize);
-  
+
   // Memoized data with optional client-side sorting only (filtering handled by backend)
   const processedData = useMemo(() => {
     const dataCopy = [...tableData];
@@ -180,45 +194,45 @@ export function DataTable<T extends { id: number | string }>({
 
     return dataCopy;
   }, [tableData, state.sortBy, state.sortOrder, config]);
-  
+
   // Event handlers
   const handleSearchChange = useCallback((value: string) => {
     setState(prev => ({ ...prev, searchQuery: value, currentPage: 1 }));
     onSearchChange?.(value);
   }, [onSearchChange]);
-  
+
   const handleSortChange = useCallback((field: keyof T) => {
     const newOrder = state.sortBy === field && state.sortOrder === 'asc' ? 'desc' : 'asc';
     setState(prev => ({ ...prev, sortBy: field, sortOrder: newOrder }));
     onSortChange?.(field, newOrder);
   }, [state.sortBy, state.sortOrder, onSortChange]);
-  
+
   const handlePageChange = useCallback((page: number) => {
     setState(prev => ({ ...prev, currentPage: page }));
     onPageChange?.(page);
   }, [onPageChange]);
-  
+
   const handlePageSizeChange = useCallback((pageSize: string | null) => {
     const newPageSize = parseInt(pageSize || '0');
     setState(prev => ({ ...prev, pageSize: newPageSize, currentPage: 1 }));
     onPageSizeChange?.(newPageSize);
   }, [onPageSizeChange]);
-  
+
   const handleSelectionChange = useCallback((item: T, checked: boolean) => {
     const newSelection = checked
       ? [...state.selectedRows, item]
       : state.selectedRows.filter(row => row.id !== item.id);
-    
+
     setState(prev => ({ ...prev, selectedRows: newSelection }));
     onSelectionChange?.(newSelection);
   }, [state.selectedRows, onSelectionChange]);
-  
+
   const handleSelectAll = useCallback((checked: boolean) => {
     const newSelection = checked ? [...processedData] : [];
     setState(prev => ({ ...prev, selectedRows: newSelection }));
     onSelectionChange?.(newSelection);
   }, [processedData, onSelectionChange]);
-  
+
   const handleFilterChange = useCallback((key: string, value: any) => {
     setState(prev => ({
       ...prev,
@@ -227,39 +241,39 @@ export function DataTable<T extends { id: number | string }>({
     }));
     onFilterChange?.({ ...state.filters, [key]: value });
   }, [state.filters, onFilterChange]);
-  
+
   const clearFilters = useCallback(() => {
     setState(prev => ({ ...prev, filters: {}, currentPage: 1 }));
     onFilterChange?.({});
   }, [onFilterChange]);
-  
+
   // Render functions
   const renderCell = (column: TableColumn<T>, item: T) => {
     const value = item[column.key];
-    
+
     if (column.render) {
       return column.render(value, item);
     }
-    
+
     if (value === null || value === undefined) {
       return <Text c="dimmed">N/A</Text>;
     }
-    
+
     return <Text>{String(value)}</Text>;
   };
-  
+
   const renderSortIcon = (column: TableColumn<T>) => {
     if (!column.sortable || !config.sortableFields.includes(column.key)) {
       return null;
     }
-    
+
     if (state.sortBy === column.key) {
       return state.sortOrder === 'asc' ? <IconSortAscending size={16} /> : <IconSortDescending size={16} />;
     }
-    
+
     return <IconSortAscending size={16} style={{ opacity: 0.3 }} />;
   };
-  
+
   // Table header
   const tableHeader = (
     <Group justify="space-between" mb="md">
@@ -268,69 +282,71 @@ export function DataTable<T extends { id: number | string }>({
         <Text fw={600} size="lg">
           {title || `${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`}
         </Text>
-        {totalItems > 0 && (
-          <Badge variant="light" color="blue">
-            {totalItems} {totalItems === 1 ? 'item' : 'items'}
-          </Badge>
-        )}
+                  {totalItems > 0 && (
+            <Badge variant="light" color="blue">
+              {totalItems} {totalItems === 1 ? t('datatable.item') : t('datatable.items')}
+            </Badge>
+          )}
       </Group>
-      
+
       <Group>
-        {showRefreshButton && (
-          <ActionIcon
-            variant="light"
-            onClick={onRefresh}
-            loading={isLoading}
-            title="Refresh"
-          >
-            <IconRefresh size={16} />
-          </ActionIcon>
-        )}
-        
+
         {showCreateButton && onCreate && (
           <Button
             leftSection={<IconPlus size={16} />}
             onClick={onCreate}
             size="sm"
-          >
-            Create
-          </Button>
+                      >
+              {t('common.create')}
+            </Button>
         )}
-        
+
         {showExportButton && onExport && (
           <Button
             leftSection={<IconDownload size={16} />}
             onClick={onExport}
             variant="light"
             size="sm"
-          >
-            Export
-          </Button>
+                      >
+              {t('datatable.export')}
+            </Button>
         )}
-        
+
+        {showRefreshButton && (
+          <ActionIcon
+            variant="light"
+            size="lg"
+            onClick={onRefresh}
+            loading={isLoading}
+                          title={t('datatable.refresh')}
+          >
+            <IconRefresh size={16} />
+          </ActionIcon>
+        )}
+
         <Menu>
           <Menu.Target>
-            <ActionIcon variant="light">
+            <ActionIcon size="lg" variant="light">
               <IconSettings size={16} />
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item onClick={openSettingsModal}>
-              <IconSettings size={16} />
-              Table Settings
-            </Menu.Item>
+                          <Menu.Item onClick={openSettingsModal}>
+                <IconSettings size={16} />
+                {t('datatable.tableSettings')}
+              </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Group>
     </Group>
   );
-  
+
   // Search and filters
   const searchAndFilters = (
     <Group mb="md" gap="sm">
       {showSearch && (
         <TextInput
-          placeholder="Search..."
+          placeholder={t('datatable.searchPlaceholder')}
           value={state.searchQuery}
           onChange={(e) => handleSearchChange(e.target.value)}
           leftSection={<IconSearch size={16} />}
@@ -338,30 +354,30 @@ export function DataTable<T extends { id: number | string }>({
           size="sm"
         />
       )}
-      
+
       {showFilters && (
         <Button
           variant="light"
           leftSection={<IconFilter size={16} />}
           onClick={openFilterModal}
           size="sm"
-        >
-          Filters
-        </Button>
+                  >
+            {t('datatable.filters')}
+          </Button>
       )}
-      
+
       {Object.keys(state.filters).length > 0 && (
         <Button
           variant="subtle"
           onClick={clearFilters}
           size="sm"
-        >
-          Clear Filters
-        </Button>
+                  >
+            {t('datatable.clearFilters')}
+          </Button>
       )}
     </Group>
   );
-  
+
   // Table content
   const tableContent = (
     <Table striped highlightOnHover>
@@ -376,7 +392,7 @@ export function DataTable<T extends { id: number | string }>({
               />
             </Table.Th>
           )}
-          
+
           {config.columns.map((column) => (
             <Table.Th
               key={String(column.key)}
@@ -391,20 +407,20 @@ export function DataTable<T extends { id: number | string }>({
               </Group>
             </Table.Th>
           ))}
-          
+
           {showActions && (onView || onEdit || onDelete) && (
-            <Table.Th style={{ width: 50 }}>Actions</Table.Th>
+            <Table.Th style={{ width: 50 }}>{t('datatable.actions')}</Table.Th>
           )}
         </Table.Tr>
       </Table.Thead>
-      
+
       <Table.Tbody>
         {processedData.length === 0 ? (
           <Table.Tr>
             <Table.Td colSpan={config.columns.length + (selectable ? 1 : 0) + (showActions ? 1 : 0)}>
-              <Text ta="center" c="dimmed" py="xl">
-                {isLoading ? 'Loading...' : 'No data found'}
-              </Text>
+                              <Text ta="center" c="dimmed" py="xl">
+                  {isLoading ? t('common.loading') : t('datatable.noDataFound')}
+                </Text>
             </Table.Td>
           </Table.Tr>
         ) : (
@@ -418,13 +434,13 @@ export function DataTable<T extends { id: number | string }>({
                   />
                 </Table.Td>
               )}
-              
+
               {config.columns.map((column) => (
                 <Table.Td key={String(column.key)}>
                   {renderCell(column, item)}
                 </Table.Td>
               ))}
-              
+
               {showActions && (onView || onEdit || onDelete) && (
                 <Table.Td>
                   <Menu>
@@ -435,22 +451,22 @@ export function DataTable<T extends { id: number | string }>({
                     </Menu.Target>
                     <Menu.Dropdown>
                       {onView && (
-                        <Menu.Item onClick={() => onView(item)}>
-                          <IconEye size={16} />
-                          View
-                        </Menu.Item>
+                                                  <Menu.Item onClick={() => onView(item)}>
+                            <IconEye size={16} />
+                            {t('datatable.view')}
+                          </Menu.Item>
                       )}
                       {onEdit && (
-                        <Menu.Item onClick={() => onEdit(item)}>
-                          <IconEdit size={16} />
-                          Edit
-                        </Menu.Item>
+                                                  <Menu.Item onClick={() => onEdit(item)}>
+                            <IconEdit size={16} />
+                            {t('common.edit')}
+                          </Menu.Item>
                       )}
                       {onDelete && (
-                        <Menu.Item onClick={() => onDelete(item)} color="red">
-                          <IconTrash size={16} />
-                          Delete
-                        </Menu.Item>
+                                                  <Menu.Item onClick={() => onDelete(item)} color="red">
+                            <IconTrash size={16} />
+                            {t('common.delete')}
+                          </Menu.Item>
                       )}
                     </Menu.Dropdown>
                   </Menu>
@@ -462,7 +478,7 @@ export function DataTable<T extends { id: number | string }>({
       </Table.Tbody>
     </Table>
   );
-  
+
   // Pagination
   const pagination = showPagination && (
     <Group justify="space-between" mt="md">
@@ -470,7 +486,7 @@ export function DataTable<T extends { id: number | string }>({
       <Group>
         {showPageSizeSelector && config.pageSizeOptions && (
           <Select
-            label="Items per page"
+            label={t('datatable.itemsPerPage')}
             value={String(state.pageSize)}
             onChange={handlePageSizeChange}
             data={config.pageSizeOptions.map(size => ({ value: String(size), label: String(size) }))}
@@ -479,10 +495,10 @@ export function DataTable<T extends { id: number | string }>({
           />
         )}
 
-        <Text size="sm" c="dimmed">
-          Showing {((state.currentPage - 1) * state.pageSize) + 1} to{' '}
-          {Math.min(state.currentPage * state.pageSize, totalItems)} of {totalItems} items
-        </Text>
+                  <Text size="sm" c="dimmed">
+            {t('datatable.showing')} {((state.currentPage - 1) * state.pageSize) + 1} {t('datatable.to')}{' '}
+            {Math.min(state.currentPage * state.pageSize, totalItems)} {t('datatable.of')} {totalItems} {t('datatable.items')}
+          </Text>
       </Group>
 
       {/* Right side: pagination control only if more than one page */}
@@ -496,10 +512,10 @@ export function DataTable<T extends { id: number | string }>({
       )}
     </Group>
   );
-  
+
   // Filter modal
   const filterModal = (
-    <Modal opened={filterModalOpened} onClose={closeFilterModal} title="Filters" size="md">
+    <Modal opened={filterModalOpened} onClose={closeFilterModal} title={t('datatable.filters')} size="md">
       <Stack>
         {config.columns
           .filter(column => column.filterable)
@@ -509,33 +525,33 @@ export function DataTable<T extends { id: number | string }>({
               label={column.label}
               value={state.filters[String(column.key)] || ''}
               onChange={(e) => handleFilterChange(String(column.key), e.target.value)}
-              placeholder={`Filter by ${column.label.toLowerCase()}...`}
+              placeholder={`${t('datatable.filterBy')} ${column.label.toLowerCase()}...`}
             />
           ))}
-        
+
         <Group justify="flex-end">
-          <Button variant="light" onClick={clearFilters}>
-            Clear All
-          </Button>
-          <Button onClick={closeFilterModal}>
-            Apply Filters
-          </Button>
+                      <Button variant="light" onClick={clearFilters}>
+              {t('datatable.clearAll')}
+            </Button>
+                      <Button onClick={closeFilterModal}>
+              {t('datatable.applyFilters')}
+            </Button>
         </Group>
       </Stack>
     </Modal>
   );
-  
+
   // Settings modal
   const settingsModal = (
-    <Modal opened={settingsModalOpened} onClose={closeSettingsModal} title="Table Settings" size="md">
+    <Modal opened={settingsModalOpened} onClose={closeSettingsModal} title={t('datatable.tableSettings')} size="md">
       <Stack>
-        <Text size="sm" c="dimmed">
-          Configure table display options and behavior.
-        </Text>
-        
+                  <Text size="sm" c="dimmed">
+            {t('datatable.configureTable')}
+          </Text>
+
         <Divider />
-        
-        <Text fw={500}>Visible Columns</Text>
+
+        <Text fw={500}>{t('datatable.visibleColumns')}</Text>
         {config.columns.map((column) => (
           <Checkbox
             key={String(column.key)}
@@ -544,31 +560,31 @@ export function DataTable<T extends { id: number | string }>({
             disabled
           />
         ))}
-        
-        <Text size="sm" c="dimmed">
-          Column visibility can be configured in the table configuration file.
-        </Text>
+
+                  <Text size="sm" c="dimmed">
+            {t('datatable.columnVisibilityNote')}
+          </Text>
       </Stack>
     </Modal>
   );
-  
+
   return (
-    <Paper p="md" className={className} style={{ height, minHeight, maxHeight }}>
+    <Paper p="0" className={className} style={{ height, minHeight, maxHeight }}>
       <LoadingOverlay visible={isLoading} />
-      
+
       {error && (
         <Alert color="red" mb="md">
           {error}
         </Alert>
       )}
-      
+
       {tableHeader}
       {searchAndFilters}
-      
+
       <Box style={{ overflow: 'auto' }}>
         {tableContent}
       </Box>
-      
+
       {pagination}
       {filterModal}
       {settingsModal}

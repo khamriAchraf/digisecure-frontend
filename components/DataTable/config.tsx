@@ -18,47 +18,57 @@ export interface DataTableConfig<T> {
   pageSizeOptions?: number[];
 }
 
-// User configuration
-export const userConfig: DataTableConfig<User> = {
+// Helper function to create translated column configurations
+const createTranslatedColumns = <T,>(columns: (keyof T)[], t: (key: string) => string) => {
+  return columns.map(key => ({
+    key,
+    label: t(`datatable.${String(key)}`),
+    sortable: true,
+    filterable: true,
+  }));
+};
+
+// User configuration factory
+export const createUserConfig = (t: (key: string) => string): DataTableConfig<User> => ({
   type: 'users',
   icon: IconUser,
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'full_name',
-      label: 'Full Name',
+      label: t('datatable.fullName'),
       sortable: true,
       filterable: true,
-      render: (value: any, row: User) => value || row.username || 'N/A',
+      render: (value: any, row: User) => value || row.username || t('datatable.na'),
     },
     {
       key: 'email',
-      label: 'Email',
+      label: t('common.email'),
       sortable: true,
       filterable: true,
     },
     {
       key: 'phone',
-      label: 'Phone',
+      label: t('datatable.phone'),
       sortable: false,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
     {
       key: 'location',
-      label: 'Location',
+      label: t('datatable.location'),
       sortable: true,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
     {
       key: 'status',
-      label: 'Status',
+      label: t('common.status'),
       sortable: true,
       filterable: true,
       render: (value: any) => (
@@ -66,7 +76,7 @@ export const userConfig: DataTableConfig<User> = {
           color: value === 'active' ? 'green' : value === 'inactive' ? 'orange' : 'red',
           fontWeight: 'bold'
         }}>
-          {value?.charAt(0).toUpperCase() + value?.slice(1) || 'N/A'}
+          {value?.charAt(0).toUpperCase() + value?.slice(1) || t('datatable.na')}
         </span>
       ),
     },
@@ -76,28 +86,28 @@ export const userConfig: DataTableConfig<User> = {
   defaultSort: { field: 'id', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000, 99999],
-};
+});
 
-// Role configuration
-export const roleConfig: DataTableConfig<Role> = {
+// Role configuration factory
+export const createRoleConfig = (t: (key: string) => string): DataTableConfig<Role> => ({
   type: 'roles',
   icon: IconShield,
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'name',
-      label: 'Name',
+      label: t('common.name'),
       sortable: true,
       filterable: true,
     },
     {
       key: 'is_builtin',
-      label: 'Built-in',
+      label: t('datatable.builtIn'),
       sortable: true,
       filterable: true,
       render: (value: any) => (
@@ -105,16 +115,16 @@ export const roleConfig: DataTableConfig<Role> = {
           color: value ? 'blue' : 'gray',
           fontWeight: 'bold'
         }}>
-          {value ? 'Yes' : 'No'}
+          {value ? t('common.yes') : t('common.no')}
         </span>
       ),
     },
     {
       key: 'description',
-      label: 'Description',
+      label: t('datatable.description'),
       sortable: false,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
   ],
   searchableFields: ['name', 'description'],
@@ -122,35 +132,34 @@ export const roleConfig: DataTableConfig<Role> = {
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 20, 50, 100],
-};
+});
 
-// Group configuration
-export const groupConfig: DataTableConfig<Group> = {
+// Group configuration factory
+export const createGroupConfig = (t: (key: string) => string): DataTableConfig<Group> => ({
   type: 'groups',
   icon: IconUsers,
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'name',
-      label: 'Name',
+      label: t('common.name'),
       sortable: true,
       filterable: true,
     },
     {
-      key: 'type',
-      label: 'Type',
-      sortable: true,
+      key: 'description',
+      label: t('datatable.description'),
+      sortable: false,
       filterable: true,
-      render: (value: any) => value || 'N/A',
     },
     {
       key: 'contain_users',
-      label: 'Contains Users',
+      label: t('datatable.containsUsers'),
       sortable: true,
       filterable: true,
       render: (value: any) => (
@@ -158,13 +167,13 @@ export const groupConfig: DataTableConfig<Group> = {
           color: value ? 'green' : 'gray',
           fontWeight: 'bold'
         }}>
-          {value ? 'Yes' : 'No'}
+          {value ? t('common.yes') : t('common.no')}
         </span>
       ),
     },
     {
       key: 'contain_items',
-      label: 'Contains Items',
+      label: t('datatable.containsItems'),
       sortable: true,
       filterable: true,
       render: (value: any) => (
@@ -172,7 +181,7 @@ export const groupConfig: DataTableConfig<Group> = {
           color: value ? 'green' : 'gray',
           fontWeight: 'bold'
         }}>
-          {value ? 'Yes' : 'No'}
+          {value ? t('common.yes') : t('common.no')}
         </span>
       ),
     },
@@ -182,42 +191,42 @@ export const groupConfig: DataTableConfig<Group> = {
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 20, 50, 100],
-};
+});
 
-// Asset configuration
-export const assetConfig: DataTableConfig<Asset> = {
+// Asset configuration factory
+export const createAssetConfig = (t: (key: string) => string): DataTableConfig<Asset> => ({
   type: 'assets',
   icon: IconDeviceDesktop,
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'name',
-      label: 'Name',
+      label: t('common.name'),
       sortable: true,
       filterable: true,
     },
     {
       key: 'serial_number',
-      label: 'Serial Number',
+      label: t('datatable.serialNumber'),
       sortable: true,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
     {
       key: 'inventory_number',
-      label: 'Inventory #',
+      label: t('datatable.inventoryNumber'),
       sortable: true,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
     {
       key: 'status',
-      label: 'Status',
+      label: t('common.status'),
       sortable: true,
       filterable: true,
       render: (value: any) => (
@@ -225,23 +234,23 @@ export const assetConfig: DataTableConfig<Asset> = {
           color: value === 'active' ? 'green' : value === 'maintenance' ? 'orange' : 'red',
           fontWeight: 'bold'
         }}>
-          {value?.charAt(0).toUpperCase() + value?.slice(1) || 'N/A'}
+          {value?.charAt(0).toUpperCase() + value?.slice(1) || t('datatable.na')}
         </span>
       ),
     },
     {
       key: 'asset_type_rel',
-      label: 'Type',
+      label: t('datatable.type'),
       sortable: false,
       filterable: true,
-      render: (value: any) => value?.name || 'N/A',
+      render: (value: any) => value?.name || t('datatable.na'),
     },
     {
       key: 'manufacturer',
-      label: 'Manufacturer',
+      label: t('datatable.manufacturer'),
       sortable: false,
       filterable: true,
-      render: (value: any) => value?.name || 'N/A',
+      render: (value: any) => value?.name || t('datatable.na'),
     },
   ],
   searchableFields: ['name', 'serial_number', 'inventory_number', 'status'],
@@ -249,28 +258,28 @@ export const assetConfig: DataTableConfig<Asset> = {
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 20, 50, 100],
-};
+});
 
-// Asset Type configuration
-export const assetTypeConfig: DataTableConfig<AssetType> = {
+// Asset Type configuration factory
+export const createAssetTypeConfig = (t: (key: string) => string): DataTableConfig<AssetType> => ({
   type: 'asset_types',
   icon: IconCategory,
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'name',
-      label: 'Name',
+      label: t('common.name'),
       sortable: true,
       filterable: true,
     },
     {
       key: 'is_builtin',
-      label: 'Built-in',
+      label: t('datatable.builtIn'),
       sortable: true,
       filterable: true,
       render: (value: any) => (
@@ -278,16 +287,16 @@ export const assetTypeConfig: DataTableConfig<AssetType> = {
           color: value ? 'blue' : 'gray',
           fontWeight: 'bold'
         }}>
-          {value ? 'Yes' : 'No'}
+          {value ? t('common.yes') : t('common.no')}
         </span>
       ),
     },
     {
       key: 'description',
-      label: 'Description',
+      label: t('datatable.description'),
       sortable: false,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
   ],
   searchableFields: ['name', 'description'],
@@ -295,31 +304,31 @@ export const assetTypeConfig: DataTableConfig<AssetType> = {
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 20, 50, 100],
-};
+});
 
-// Manufacturer configuration
-export const manufacturerConfig: DataTableConfig<Manufacturer> = {
+// Manufacturer configuration factory
+export const createManufacturerConfig = (t: (key: string) => string): DataTableConfig<Manufacturer> => ({
   type: 'manufacturers',
   icon: IconBuilding,
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'name',
-      label: 'Name',
+      label: t('common.name'),
       sortable: true,
       filterable: true,
     },
     {
       key: 'comment',
-      label: 'Comment',
+      label: t('datatable.comment'),
       sortable: false,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
   ],
   searchableFields: ['name', 'comment'],
@@ -327,52 +336,52 @@ export const manufacturerConfig: DataTableConfig<Manufacturer> = {
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 20, 50, 100],
-};
+});
 
-// Location configuration
-export const locationConfig: DataTableConfig<Location> = {
+// Location configuration factory
+export const createLocationConfig = (t: (key: string) => string): DataTableConfig<Location> => ({
   type: 'locations',
   icon: IconMapPin,
   columns: [
     {
       key: 'id',
-      label: 'ID',
+      label: t('datatable.id'),
       sortable: true,
       width: 80,
     },
     {
       key: 'name',
-      label: 'Name',
+      label: t('common.name'),
       sortable: true,
       filterable: true,
     },
     {
       key: 'address',
-      label: 'Address',
+      label: t('datatable.address'),
       sortable: false,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
     {
       key: 'town',
-      label: 'Town',
+      label: t('datatable.town'),
       sortable: true,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
     {
       key: 'country',
-      label: 'Country',
+      label: t('datatable.country'),
       sortable: true,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
     {
       key: 'postal_code',
-      label: 'Postal Code',
+      label: t('datatable.postalCode'),
       sortable: true,
       filterable: true,
-      render: (value: any) => value || 'N/A',
+      render: (value: any) => value || t('datatable.na'),
     },
   ],
   searchableFields: ['name', 'address', 'town', 'country', 'postal_code'],
@@ -380,27 +389,29 @@ export const locationConfig: DataTableConfig<Location> = {
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 20, 50, 100],
-};
+});
 
-// Configuration registry
-export const dataTableConfigs = {
-  users: userConfig,
-  roles: roleConfig,
-  groups: groupConfig,
-  assets: assetConfig,
-  asset_types: assetTypeConfig,
-  manufacturers: manufacturerConfig,
-  locations: locationConfig,
-} as const;
+// Configuration registry factory
+export const createDataTableConfigs = (t: (key: string) => string) => ({
+  users: createUserConfig(t),
+  roles: createRoleConfig(t),
+  groups: createGroupConfig(t),
+  assets: createAssetConfig(t),
+  asset_types: createAssetTypeConfig(t),
+  manufacturers: createManufacturerConfig(t),
+  locations: createLocationConfig(t),
+});
 
-export type DataType = keyof typeof dataTableConfigs;
+export type DataType = 'users' | 'roles' | 'groups' | 'assets' | 'asset_types' | 'manufacturers' | 'locations';
 
 // Helper function to get configuration for a data type
-export function getDataTableConfig<T>(type: DataType): DataTableConfig<T> {
-  return dataTableConfigs[type] as unknown as DataTableConfig<T>;
+export function getDataTableConfig<T>(type: DataType, t: (key: string) => string): DataTableConfig<T> {
+  const configs = createDataTableConfigs(t);
+  return configs[type] as unknown as DataTableConfig<T>;
 }
 
 // Helper function to check if a data type is supported
 export function isSupportedDataType(type: string): type is DataType {
-  return type in dataTableConfigs;
+  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'assets', 'asset_types', 'manufacturers', 'locations'];
+  return supportedTypes.includes(type as DataType);
 } 

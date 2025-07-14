@@ -1,7 +1,8 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useUsers, useRoles, useGroups, useAssets, useAssetTypes, useManufacturers, useLocations } from '../../src/fetchers';
 import { DataType, getDataTableConfig } from './config';
 import { PaginatedResponse } from '../../types/models';
+import { t } from '../../i18n';
 
 // Hook parameters interface
 export interface UseDataTableParams<T> {
@@ -65,7 +66,7 @@ export function useDataTable<T extends { id: number | string }>({
   initialFilters = {},
 }: UseDataTableParams<T>): UseDataTableReturn<T> {
   // Get configuration for the data type
-  const config = getDataTableConfig<T>(dataType);
+  const config = getDataTableConfig<T>(dataType, t);
   
   // Initialize state
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -75,6 +76,19 @@ export function useDataTable<T extends { id: number | string }>({
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [filters, setFiltersState] = useState(initialFilters);
   const [selectedItems, setSelectedItems] = useState<T[]>([]);
+  const [, forceUpdate] = useState({});
+
+  // Listen for language changes and force re-render
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      forceUpdate({});
+    };
+
+    window.addEventListener('storage', handleLanguageChange);
+    return () => {
+      window.removeEventListener('storage', handleLanguageChange);
+    };
+  }, []);
   
   // Build query parameters
   const queryParams = useMemo(() => {
@@ -153,7 +167,7 @@ export function useDataTable<T extends { id: number | string }>({
   }, []);
   
   const refresh = useCallback(() => {
-    mutate();
+    mutate(undefined, { revalidate: true });
   }, [mutate]);
   
   // Computed values
