@@ -279,3 +279,49 @@ export const upsertTableConfig = async (tableKey: string, columns: string[], tok
 export const deleteTableConfig = async (tableKey: string, token?: string) => {
   return apiClient.delete(`${API_BASE}/table-configs/${tableKey}`, token);
 }; 
+
+// Schema fetcher hook – fetches and caches JSON schema for resource creation forms
+export interface ResourceSchemaResponse {
+  version: string;
+  resource_type: string;
+  schema: any; // JSON-Schema describing data shape
+  ui: any;     // UI metadata to help build forms
+}
+
+/**
+ * Fetch JSON schema describing how to create a resource of the given type.
+ * Result is cached aggressively because schemas change very rarely.
+ *
+ * @param resourceType – e.g. "group", "user" …
+ */
+export const useResourceSchema = (resourceType?: string) => {
+  // Do not make the request until we actually have a resource type
+  const key = resourceType ? `${API_BASE}/schemas/${resourceType}` : null;
+
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<ResourceSchemaResponse>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      // Schemas barely ever change – cache for 7 days and don’t revalidate on focus/reconnect
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 1000 * 60 * 60 * 24 * 7, // 7 days
+      keepPreviousData: true,
+    },
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+}; 

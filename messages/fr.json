@@ -16,8 +16,11 @@
   },
   "administration": {
     "users": "Utilisateurs",
+    "user": "Utilisateur",
     "groups": "Groupes",
+    "group": "Groupe",
     "roles": "Rôles",
+    "role": "Rôle",
     "dictionaries": "Dictionnaires"
   },
   "security": {
@@ -43,6 +46,7 @@
     "password": "Mot de passe",
     "confirmPassword": "Confirmer le mot de passe",
     "submit": "Soumettre",
+    "submitting": "Soumission...",
     "back": "Retour",
     "next": "Suivant",
     "previous": "Précédent",
@@ -89,7 +93,8 @@
     "real-time": "Temps Réel",
     "settings": "Paramètres",
     "login": "Connexion",
-    "register": "Inscription"
+    "register": "Inscription",
+    "new": "Nouveau"
   },
   "datatable": {
     "searchPlaceholder": "Rechercher...",
@@ -145,5 +150,187 @@
     "settingsReset": "Paramètres du tableau réinitialisés",
     "noCustomConfig": "Aucune configuration personnalisée à réinitialiser - utilise déjà les valeurs par défaut",
     "usingCustomConfig": "Utilisation d'une configuration de colonnes personnalisée"
+  },
+  "forms": {
+    "errors": {
+      "loadFailed": "Échec du chargement de la définition du formulaire.",
+      "required": "Ce champ est requis",
+      "minLength": "Doit contenir au moins {count} caractères",
+      "maxLength": "Doit contenir au plus {count} caractères",
+      "invalid": "Format invalide"
+    },
+    "group": {
+      "create": {
+        "title": "Créer un groupe",
+        "description": "Créer un nouveau groupe dans le système"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom du groupe",
+          "help_text": "Le nom du groupe doit être unique et contenir entre 1 et 100 caractères",
+          "errors": {
+            "required": "Le nom du groupe est requis",
+            "min_length": "Le nom du groupe doit contenir au moins {count} caractères",
+            "max_length": "Le nom du groupe doit contenir au plus {count} caractères"
+          }
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Sélectionnez le type de groupe",
+          "help_text": "Type de groupe (optionnel)",
+          "options": {
+            "skill": "Groupe de compétences",
+            "org": "Groupe d'organisation",
+            "notification": "Groupe de notification"
+          }
+        },
+        "parent_id": {
+          "label": "Groupe parent",
+          "placeholder": "Sélectionnez le groupe parent (optionnel)",
+          "help_text": "Groupe parent s'il s'agit d'un sous-groupe",
+          "options": {
+            "no_parent": "Aucun groupe parent",
+            "group_with_type": "{name} ({type})"
+          }
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Entrez la description du groupe",
+          "help_text": "Description optionnelle du groupe (max 500 caractères)"
+        },
+        "contain_users": {
+          "label": "Peut contenir des utilisateurs",
+          "help_text": "Si ce groupe peut contenir des membres utilisateurs"
+        },
+        "contain_items": {
+          "label": "Peut contenir des éléments",
+          "help_text": "Si ce groupe peut contenir des éléments d'actifs"
+        },
+        "comment": {
+          "label": "Commentaire",
+          "placeholder": "Entrez des commentaires supplémentaires",
+          "help_text": "Commentaires optionnels sur le groupe (max 1000 caractères)"
+        }
+      }
+    },
+    "user": {
+      "create": {
+        "title": "Créer un utilisateur",
+        "description": "Créer un nouvel utilisateur dans le système"
+      },
+      "fields": {
+        "email": {
+          "label": "Email",
+          "placeholder": "Entrez l'adresse email",
+          "help_text": "Adresse email de l'utilisateur (doit être unique)",
+          "errors": {
+            "required": "L'email est requis",
+            "invalid": "Veuillez entrer une adresse email valide"
+          }
+        },
+        "username": {
+          "label": "Nom d'utilisateur",
+          "placeholder": "Entrez le nom d'utilisateur",
+          "help_text": "Nom d'utilisateur unique",
+          "errors": {
+            "required": "Le nom d'utilisateur est requis"
+          }
+        },
+        "password": {
+          "label": "Mot de passe",
+          "placeholder": "Entrez le mot de passe",
+          "help_text": "Mot de passe de l'utilisateur (minimum 8 caractères recommandé)",
+          "errors": {
+            "required": "Le mot de passe est requis"
+          }
+        },
+        "full_name": {
+          "label": "Nom complet",
+          "placeholder": "Entrez le nom complet",
+          "help_text": "Nom complet de l'utilisateur (optionnel)"
+        },
+        "status": {
+          "label": "Statut",
+          "placeholder": "Sélectionnez le statut de l'utilisateur",
+          "help_text": "Statut du compte utilisateur",
+          "options": {
+            "active": "Actif",
+            "inactive": "Inactif",
+            "deleted": "Supprimé"
+          }
+        },
+        "language": {
+          "label": "Langue",
+          "placeholder": "Sélectionnez la langue",
+          "help_text": "Langue préférée de l'utilisateur",
+          "options": {
+            "en": "Anglais",
+            "fr": "Français",
+            "es": "Espagnol",
+            "de": "Allemand"
+          }
+        },
+        "theme": {
+          "label": "Thème",
+          "placeholder": "Sélectionnez le thème",
+          "help_text": "Thème préféré de l'utilisateur",
+          "options": {
+            "light": "Clair",
+            "dark": "Sombre"
+          }
+        },
+        "location": {
+          "label": "Localisation",
+          "placeholder": "Entrez la localisation",
+          "help_text": "Localisation physique de l'utilisateur (optionnel)"
+        },
+        "phone": {
+          "label": "Téléphone",
+          "placeholder": "Entrez le numéro de téléphone",
+          "help_text": "Numéro de téléphone principal (optionnel)"
+        },
+        "secondary_phone": {
+          "label": "Téléphone secondaire",
+          "placeholder": "Entrez le numéro de téléphone secondaire",
+          "help_text": "Numéro de téléphone secondaire (optionnel)"
+        },
+        "timezone": {
+          "label": "Fuseau horaire",
+          "placeholder": "Sélectionnez le fuseau horaire",
+          "help_text": "Fuseau horaire de l'utilisateur",
+          "options": {
+            "utc": "UTC",
+            "america_new_york": "Amérique/New_York",
+            "europe_london": "Europe/Londres",
+            "europe_paris": "Europe/Paris",
+            "asia_tokyo": "Asie/Tokyo"
+          }
+        },
+        "valid_from": {
+          "label": "Valide à partir de",
+          "placeholder": "Sélectionnez la date de début",
+          "help_text": "Date à partir de laquelle le compte utilisateur est valide (optionnel)"
+        },
+        "valid_until": {
+          "label": "Valide jusqu'au",
+          "placeholder": "Sélectionnez la date de fin",
+          "help_text": "Date jusqu'à laquelle le compte utilisateur est valide (optionnel)"
+        },
+        "administartive_number": {
+          "label": "Numéro administratif",
+          "placeholder": "Entrez le numéro administratif",
+          "help_text": "Numéro de référence administratif (optionnel)"
+        },
+        "roles": {
+          "label": "Rôles",
+          "placeholder": "Sélectionnez les rôles",
+          "help_text": "Rôles et permissions de l'utilisateur",
+          "options": {
+            "role_name": "{name} - {description}"
+          }
+        }
+      }
+    }
   }
 } 

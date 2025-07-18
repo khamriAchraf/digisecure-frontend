@@ -59,8 +59,8 @@ export function Navbar() {
     <nav className={classes.navbar}>
       <div className={classes.header}>
         <Group justify="space-between">
-          <Image src="/next.svg" alt="logo" width={120} height={120} />
-          <Code fw={700}>v3.1.2</Code>
+          <Image src="/logo.png" alt="logo" width={120} height={120} />
+          <Code fw={700}>v0.1.0</Code>
         </Group>
       </div>
 

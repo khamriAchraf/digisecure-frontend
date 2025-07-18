@@ -16,8 +16,11 @@
   },
   "administration": {
     "users": "Users",
+    "user": "User",
     "groups": "Groups",
+    "group": "Group",
     "roles": "Roles",
+    "role": "Role",
     "dictionaries": "Dictionaries"
   },
   "security": {
@@ -43,6 +46,7 @@
     "password": "Password",
     "confirmPassword": "Confirm Password",
     "submit": "Submit",
+    "submitting": "Submitting...",
     "back": "Back",
     "next": "Next",
     "previous": "Previous",
@@ -89,7 +93,8 @@
     "real-time": "Real Time",
     "settings": "Settings",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "new": "New"
   },
   "datatable": {
     "searchPlaceholder": "Search...",
@@ -145,5 +150,187 @@
     "settingsReset": "Table settings reset to defaults",
     "noCustomConfig": "No custom configuration to reset - already using defaults",
     "usingCustomConfig": "Using custom column configuration"
+  },
+  "forms": {
+    "errors": {
+      "loadFailed": "Failed to load form definition.",
+      "required": "This field is required",
+      "minLength": "Must be at least {count} characters",
+      "maxLength": "Must be at most {count} characters",
+      "invalid": "Invalid format"
+    },
+    "group": {
+      "create": {
+        "title": "Create Group",
+        "description": "Create a new group in the system"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter group name",
+          "help_text": "Group name must be unique and between 1-100 characters",
+          "errors": {
+            "required": "Group name is required",
+            "min_length": "Group name must be at least {count} characters",
+            "max_length": "Group name must be at most {count} characters"
+          }
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Select group type",
+          "help_text": "Type of group (optional)",
+          "options": {
+            "skill": "Skill Group",
+            "org": "Organization Group",
+            "notification": "Notification Group"
+          }
+        },
+        "parent_id": {
+          "label": "Parent Group",
+          "placeholder": "Select parent group (optional)",
+          "help_text": "Parent group if this is a subgroup",
+          "options": {
+            "no_parent": "No parent group",
+            "group_with_type": "{name} ({type})"
+          }
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter group description",
+          "help_text": "Optional description of the group (max 500 characters)"
+        },
+        "contain_users": {
+          "label": "Can contain users",
+          "help_text": "Whether this group can contain user members"
+        },
+        "contain_items": {
+          "label": "Can contain items",
+          "help_text": "Whether this group can contain asset items"
+        },
+        "comment": {
+          "label": "Comment",
+          "placeholder": "Enter any additional comments",
+          "help_text": "Optional comments about the group (max 1000 characters)"
+        }
+      }
+    },
+    "user": {
+      "create": {
+        "title": "Create User",
+        "description": "Create a new user in the system"
+      },
+      "fields": {
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter email address",
+          "help_text": "User's email address (must be unique)",
+          "errors": {
+            "required": "Email is required",
+            "invalid": "Please enter a valid email address"
+          }
+        },
+        "username": {
+          "label": "Username",
+          "placeholder": "Enter username",
+          "help_text": "Unique username for the user",
+          "errors": {
+            "required": "Username is required"
+          }
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter password",
+          "help_text": "User's password (minimum 8 characters recommended)",
+          "errors": {
+            "required": "Password is required"
+          }
+        },
+        "full_name": {
+          "label": "Full Name",
+          "placeholder": "Enter full name",
+          "help_text": "User's full name (optional)"
+        },
+        "status": {
+          "label": "Status",
+          "placeholder": "Select user status",
+          "help_text": "User account status",
+          "options": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "deleted": "Deleted"
+          }
+        },
+        "language": {
+          "label": "Language",
+          "placeholder": "Select language",
+          "help_text": "User's preferred language",
+          "options": {
+            "en": "English",
+            "fr": "French",
+            "es": "Spanish",
+            "de": "German"
+          }
+        },
+        "theme": {
+          "label": "Theme",
+          "placeholder": "Select theme",
+          "help_text": "User's preferred theme",
+          "options": {
+            "light": "Light",
+            "dark": "Dark"
+          }
+        },
+        "location": {
+          "label": "Location",
+          "placeholder": "Enter location",
+          "help_text": "User's physical location (optional)"
+        },
+        "phone": {
+          "label": "Phone",
+          "placeholder": "Enter phone number",
+          "help_text": "Primary phone number (optional)"
+        },
+        "secondary_phone": {
+          "label": "Secondary Phone",
+          "placeholder": "Enter secondary phone number",
+          "help_text": "Secondary phone number (optional)"
+        },
+        "timezone": {
+          "label": "Timezone",
+          "placeholder": "Select timezone",
+          "help_text": "User's timezone",
+          "options": {
+            "utc": "UTC",
+            "america_new_york": "America/New_York",
+            "europe_london": "Europe/London",
+            "europe_paris": "Europe/Paris",
+            "asia_tokyo": "Asia/Tokyo"
+          }
+        },
+        "valid_from": {
+          "label": "Valid From",
+          "placeholder": "Select start date",
+          "help_text": "Date from which the user account is valid (optional)"
+        },
+        "valid_until": {
+          "label": "Valid Until",
+          "placeholder": "Select end date",
+          "help_text": "Date until which the user account is valid (optional)"
+        },
+        "administartive_number": {
+          "label": "Administrative Number",
+          "placeholder": "Enter administrative number",
+          "help_text": "Administrative reference number (optional)"
+        },
+        "roles": {
+          "label": "Roles",
+          "placeholder": "Select roles",
+          "help_text": "User roles and permissions",
+          "options": {
+            "role_name": "{name} - {description}"
+          }
+        }
+      }
+    }
   }
 } 

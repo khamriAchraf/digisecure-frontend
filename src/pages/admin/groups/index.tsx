@@ -2,9 +2,11 @@ import { Container } from '@mantine/core';
 import { Group } from '../../../../types/models';
 import { DataTable, useDataTable } from '../../../../components/DataTable/index';
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { t } from '../../../../i18n';
 
 export default function AdminGroupsPage() {
+  const router = useRouter();
   const {
     data,
     paginatedData,
@@ -40,8 +42,7 @@ export default function AdminGroupsPage() {
   };
 
   const handleCreate = () => {
-    console.log('Create new group');
-    // Implement create functionality
+    router.push('/admin/groups/new');
   };
 
   const handleExport = () => {

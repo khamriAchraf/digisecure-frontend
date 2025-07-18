@@ -164,8 +164,8 @@ export interface CreateUserRequest {
   status?: UserStatus;
   valid_until?: string;
   valid_from?: string;
-  role_ids?: number[];
-  group_ids?: number[];
+  administartive_number?: string;
+  roles?: number[];
 }
 
 export interface UpdateUserRequest {
@@ -183,6 +183,26 @@ export interface UpdateUserRequest {
   valid_from?: string;
   role_ids?: number[];
   group_ids?: number[];
+}
+
+export interface CreateGroupRequest {
+  name: string;
+  description?: string;
+  type?: string;
+  contain_users?: boolean;
+  contain_items?: boolean;
+  comment?: string;
+  parent_id?: number;
+}
+
+export interface UpdateGroupRequest {
+  name?: string;
+  description?: string;
+  type?: string;
+  contain_users?: boolean;
+  contain_items?: boolean;
+  comment?: string;
+  parent_id?: number;
 }
 
 export interface CreateAssetRequest {

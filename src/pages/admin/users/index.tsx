@@ -3,8 +3,10 @@ import { User } from '../../../../types/models';
 import { DataTable, useDataTable } from '../../../../components/DataTable/index';
 import { useEffect } from 'react';
 import { t } from '../../../../i18n';
+import { useRouter } from 'next/router';
 
 export default function AdminUsersPage() {
+  const router = useRouter();
   const {
     data,
     paginatedData,
@@ -41,8 +43,7 @@ export default function AdminUsersPage() {
   };
 
   const handleCreate = () => {
-    console.log('Create new user');
-    // Implement create functionality
+    router.push('/admin/users/new');
   };
 
   const handleExport = () => {
