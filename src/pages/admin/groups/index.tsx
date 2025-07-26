@@ -26,9 +26,8 @@ export default function AdminGroupsPage() {
     console.log('paginatedData', paginatedData);
   }, [paginatedData]);
 
-  const handleView = (group: Group) => {
-    console.log('View group:', group);
-    // Implement view functionality
+  const handleRowClick = (group: Group) => {
+    router.push(`/admin/groups/${group.id}`);
   };
 
   const handleEdit = (group: Group) => {
@@ -64,8 +63,8 @@ export default function AdminGroupsPage() {
         onSearchChange={setSearch}
         onFilterChange={setFilters}
         onRefresh={refresh}
-        onView={handleView}
         onEdit={handleEdit}
+        onRowClick={handleRowClick}
         onDelete={handleDelete}
         onCreate={handleCreate}
         onExport={handleExport}

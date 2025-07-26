@@ -1,4 +1,4 @@
-import { Container, Title, Stack, Button, Group } from '@mantine/core';
+import { Container, Title, Stack, Button, Group, ActionIcon } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { Breadcrumbs } from '../../../../components/Breadcrumbs';
@@ -13,7 +13,7 @@ export default function CreateGroupPage() {
   const router = useRouter();
   const { t } = useTranslation();
   const { data: session } = useSession();
-  
+
   const createGroupMutation = useCreateGroup({
     onSuccess: (group) => {
       console.log('Group created successfully:', group);
@@ -46,15 +46,15 @@ export default function CreateGroupPage() {
         }
 
         const groupsData = await response.json();
-        
+
         // Transform groups data to UIFieldOption format
         const options: Array<{
           value: string;
           label_key: string;
           label_params?: Record<string, any>;
         }> = [
-          { value: '', label_key: 'forms.group.fields.parent_id.options.no_parent' }
-        ];
+            { value: '', label_key: 'forms.group.fields.parent_id.options.no_parent' }
+          ];
 
         // Add existing groups as options
         if (groupsData.data && Array.isArray(groupsData.data)) {
@@ -87,15 +87,15 @@ export default function CreateGroupPage() {
 
   const handleSubmit = async (values: Record<string, any>) => {
     console.log('Form submitted with values:', values);
-    
+
     // Clean up form values - convert empty strings to null for optional fields
     const cleanValues = Object.fromEntries(
       Object.entries(values).map(([key, value]) => [
-        key, 
+        key,
         value === '' ? null : value
       ])
     );
-    
+
     // Prepare the request body according to the API specification
     const requestBody = {
       name: cleanValues.name,
@@ -106,9 +106,9 @@ export default function CreateGroupPage() {
       comment: cleanValues.comment || null,
       parent_id: cleanValues.parent_id ? parseInt(cleanValues.parent_id) : null,
     };
-    
+
     console.log('Request body:', requestBody);
-    
+
     // Use the mutation hook
     await createGroupMutation.mutate(requestBody);
   };
@@ -117,20 +117,21 @@ export default function CreateGroupPage() {
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
-        <Group justify="space-between" align="center">
-          <Title order={2}>{t("forms.group.create.title")}</Title>
-          <Button
+        <Group align="center">
+          <ActionIcon
             variant="light"
-            leftSection={<IconArrowLeft size={16} />}
             onClick={handleBack}
+            aria-label={t('common.back')}
+            size="lg"
           >
-            {t('common.back')}
-          </Button>
+            <IconArrowLeft size={20} />
+          </ActionIcon>
+          <Title order={2}>{t("forms.group.create.title")}</Title>
         </Group>
 
         {/* Dynamic Form */}
-        <DynamicForm 
-          resourceType="group" 
+        <DynamicForm
+          resourceType="group"
           onSubmit={handleSubmit}
           isSubmitting={createGroupMutation.isLoading}
           onRefreshOptions={handleRefreshOptions}

@@ -1,11 +1,12 @@
 import { Container } from '@mantine/core';
-import { Role } from '../../../../types/models';
+import { Group } from '../../../../types/models';
 import { DataTable, useDataTable } from '../../../../components/DataTable/index';
 import { useEffect } from 'react';
-import { t } from '../../../../i18n';
 import { useRouter } from 'next/router';
+import { t } from '../../../../i18n';
+import { Computer } from '../../../../types/models';
 
-export default function AdminRolesPage() {
+export default function ComputersPage() {
   const router = useRouter();
   const {
     data,
@@ -18,42 +19,41 @@ export default function AdminRolesPage() {
     setSearch,
     setFilters,
     refresh,
-  } = useDataTable<Role>({
-    dataType: 'roles',
+  } = useDataTable<Computer>({
+    dataType: 'computers',
   });
 
   useEffect(() => {
     console.log('paginatedData', paginatedData);
   }, [paginatedData]);
 
-  const handleView = (role: Role) => {
-    console.log('View role:', role);
-    // Implement view functionality
+  const handleRowClick = (computer: Computer) => {
+    router.push(`/assets/computers/${computer.id}`);
   };
 
-  const handleEdit = (role: Role) => {
-    console.log('Edit role:', role);
+  const handleEdit = (computer: Computer) => {
+    console.log('Edit computer:', computer);
     // Implement edit functionality
   };
 
-  const handleDelete = (role: Role) => {
-    console.log('Delete role:', role);
+  const handleDelete = (computer: Computer) => {
+    console.log('Delete computer:', computer);
     // Implement delete functionality
   };
 
   const handleCreate = () => {
-    router.push('/admin/roles/new');
+    router.push('/assets/computers/new');
   };
 
   const handleExport = () => {
-    console.log('Export roles');
+    console.log('Export computers');
     // Implement export functionality
   };
 
   return (
     <Container size="xl" py="md">
-      <DataTable<Role>
-        dataType="roles"
+      <DataTable<Computer>
+        dataType="computers"
         data={paginatedData?.data || data}
         paginatedData={paginatedData}
         isLoading={isLoading}
@@ -64,13 +64,13 @@ export default function AdminRolesPage() {
         onSearchChange={setSearch}
         onFilterChange={setFilters}
         onRefresh={refresh}
-        onView={handleView}
         onEdit={handleEdit}
+        onRowClick={handleRowClick}
         onDelete={handleDelete}
         onCreate={handleCreate}
         onExport={handleExport}
         selectable={true}
-        title={t('datatable.roles')}
+        title={t('datatable.computers')}
         showSearch={true}
         showFilters={true}
         showActions={true}
@@ -82,4 +82,4 @@ export default function AdminRolesPage() {
       />
     </Container>
   );
-} 
+}

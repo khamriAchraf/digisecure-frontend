@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { useUsers, useRoles, useGroups, useAssets, useAssetTypes, useManufacturers, useLocations } from '../../src/fetchers';
+import { useUsers, useRoles, useGroups, useAssetTypes, useManufacturers, useLocations, useComputers, useVirtualMachines } from '../../src/fetchers';
 import { DataType, getDataTableConfig } from './config';
 import { PaginatedResponse } from '../../types/models';
 import { t } from '../../i18n';
@@ -121,7 +121,8 @@ export function useDataTable<T extends { id: number | string }>({
     users: useUsers,
     roles: useRoles,
     groups: useGroups,
-    assets: useAssets,
+    computers: useComputers,
+    virtual_machines: useVirtualMachines,
     asset_types: useAssetTypes,
     manufacturers: useManufacturers,
     locations: useLocations,

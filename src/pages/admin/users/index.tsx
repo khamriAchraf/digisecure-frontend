@@ -27,9 +27,8 @@ export default function AdminUsersPage() {
   }, [paginatedData]);
 
 
-  const handleView = (user: User) => {
-    console.log('View user:', user);
-    // Implement view functionality
+  const handleRowClick = (user: User) => {
+    router.push(`/admin/users/${user.id}`);
   };
 
   const handleEdit = (user: User) => {
@@ -65,8 +64,8 @@ export default function AdminUsersPage() {
         onSearchChange={setSearch}
         onFilterChange={setFilters}
         onRefresh={refresh}
-        onView={handleView}
         onEdit={handleEdit}
+        onRowClick={handleRowClick}
         onDelete={handleDelete}
         onCreate={handleCreate}
         onExport={handleExport}

@@ -1,0 +1,578 @@
+{
+  "navigation": {
+    "dashboard": "لوحة التحكم",
+    "assets": "الأصول",
+    "administration": "الإدارة",
+    "analytics": "التحليلات",
+    "contracts": "العقود",
+    "settings": "الإعدادات",
+    "security": "الأمان"
+  },
+  "assets": {
+    "computers": "الحواسيب",
+    "network_devices": "الأجهزة الشبكية",
+    "virtual_machines": "الأجهزة الافتراضية",
+    "software": "البرمجيات"
+  },
+  "administration": {
+    "users": "المستخدمون",
+    "user": "المستخدم",
+    "groups": "المجموعات",
+    "group": "المجموعة",
+    "roles": "الأدوار",
+    "role": "الدور",
+    "dictionaries": "القواميس"
+  },
+  "security": {
+    "enable2FA": "تفعيل المصادقة الثنائية",
+    "changePassword": "تغيير كلمة المرور",
+    "recoveryCodes": "رموز الاسترداد"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "actions": "الإجراءات",
+    "status": "الحالة",
+    "date": "التاريخ",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "submit": "إرسال",
+    "submitting": "جاري الإرسال...",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "close": "إغلاق",
+    "open": "فتح",
+    "yes": "نعم",
+    "no": "لا",
+    "success": "نجح",
+    "error": "خطأ",
+    "warning": "تحذير",
+    "info": "معلومات",
+    "redirecting": "جاري إعادة التوجيه...",
+    "add": "إضافة",
+    "remove": "إزالة",
+    "noOptions": "لا توجد خيارات متاحة"
+  },
+  "auth": {
+    "login": "تسجيل الدخول",
+    "register": "التسجيل",
+    "logout": "تسجيل الخروج",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "rememberMe": "تذكرني",
+    "dontHaveAccount": "ليس لديك حساب؟",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "signUp": "إنشاء حساب",
+    "signIn": "تسجيل الدخول",
+    "welcomeBack": "مرحباً بعودتك!",
+    "signInToAccount": "سجل الدخول إلى حسابك",
+    "passwordPlaceholder": "كلمة المرور الخاصة بك",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+  },
+  "language": {
+    "english": "الإنجليزية",
+    "french": "الفرنسية",
+    "arabic": "العربية",
+    "selectLanguage": "اختر اللغة"
+  },
+  "breadcrumbs": {
+    "home": "الرئيسية",
+    "assets": "الأصول",
+    "admin": "الإدارة",
+    "users": "المستخدمون",
+    "groups": "المجموعات",
+    "roles": "الأدوار",
+    "dictionaries": "القواميس",
+    "forecasts": "التوقعات",
+    "outlook": "الآفاق",
+    "real-time": "الوقت الفعلي",
+    "settings": "الإعدادات",
+    "login": "تسجيل الدخول",
+    "register": "التسجيل",
+    "new": "جديد"
+  },
+  "datatable": {
+    "searchPlaceholder": "بحث...",
+    "filters": "المرشحات",
+    "clearFilters": "مسح المرشحات",
+    "clearAll": "مسح الكل",
+    "applyFilters": "تطبيق المرشحات",
+    "tableSettings": "إعدادات الجدول",
+    "configureTable": "قم بتكوين خيارات عرض الجدول وسلوكه.",
+    "visibleColumns": "الأعمدة المرئية",
+    "columnVisibilityNote": "يمكن تكوين رؤية الأعمدة في ملف تكوين الجدول.",
+    "itemsPerPage": "العناصر في الصفحة",
+    "showing": "عرض",
+    "to": "إلى",
+    "of": "من",
+    "items": "عناصر",
+    "item": "عنصر",
+    "noDataFound": "لم يتم العثور على بيانات",
+    "refresh": "تحديث",
+    "export": "تصدير",
+    "view": "عرض",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "filterBy": "تصفية حسب",
+    "actions": "الإجراءات",
+    "id": "الرقم التعريفي",
+    "fullName": "الاسم الكامل",
+    "phone": "الهاتف",
+    "location": "الموقع",
+    "description": "الوصف",
+    "builtIn": "مدمج",
+    "type": "النوع",
+    "containsUsers": "يحتوي على مستخدمين",
+    "containsItems": "يحتوي على عناصر",
+    "serialNumber": "الرقم التسلسلي",
+    "inventoryNumber": "رقم المخزون",
+    "manufacturer": "الشركة المصنعة",
+    "address": "العنوان",
+    "town": "المدينة",
+    "country": "البلد",
+    "postalCode": "الرمز البريدي",
+    "comment": "تعليق",
+    "na": "غير متوفر",
+    "users": "إدارة المستخدمين",
+    "groups": "إدارة المجموعات",
+    "roles": "إدارة الأدوار",
+    "columnVisibility": "رؤية الأعمدة",
+    "selectColumns": "اختر الأعمدة المراد عرضها",
+    "resetToDefaults": "إعادة تعيين إلى الافتراضي",
+    "saveSettings": "حفظ الإعدادات",
+    "columnVisibilityHelp": "حدد الأعمدة التي تريد رؤيتها في هذا الجدول. يجب تحديد عمود واحد على الأقل.",
+    "settingsSaved": "تم حفظ إعدادات الجدول بنجاح",
+    "settingsReset": "تم إعادة تعيين إعدادات الجدول إلى الافتراضي",
+    "noCustomConfig": "لا توجد تكوين مخصص لإعادة تعيينه - يستخدم القيم الافتراضية بالفعل",
+    "usingCustomConfig": "استخدام تكوين أعمدة مخصص",
+    "cpu": "المعالج (CPU)",
+    "ram": "الذاكرة (RAM)",
+    "storage": "التخزين",
+    "os": "نظام التشغيل",
+    "macAddress": "عنوان MAC",
+    "ipAddress": "عنوان IP",
+    "model": "الطراز",
+    "hostname": "اسم المضيف",
+    "assignedTo": "مخصص إلى",
+    "group": "المجموعة"
+  },
+  "forms": {
+    "errors": {
+      "loadFailed": "فشل في تحميل تعريف النموذج.",
+      "required": "هذا الحقل مطلوب",
+      "minLength": "يجب أن يحتوي على {count} أحرف على الأقل",
+      "maxLength": "يجب أن يحتوي على {count} أحرف كحد أقصى",
+      "invalid": "تنسيق غير صحيح"
+    },
+    "tabs": {
+      "general": "عام",
+      "preferences": "التفضيلات",
+      "groups": "المجموعات",
+      "users": "المستخدمين",
+      "assets": "الأصول",
+      "specifications": "المواصفات",
+      "network": "الشبكة",
+      "security": "الأمان"
+    },
+    "group": {
+      "create": {
+        "title": "إنشاء مجموعة",
+        "description": "إنشاء مجموعة جديدة في النظام"
+      },
+      "edit": {
+        "title": "تعديل المجموعة: {name}",
+        "description": "تعديل معلومات المجموعة وعلاقاتها"
+      },
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "أدخل اسم المجموعة",
+          "help_text": "اسم المجموعة يجب أن يكون فريداً وبين 1-100 حرف",
+          "errors": {
+            "required": "اسم المجموعة مطلوب",
+            "min_length": "اسم المجموعة يجب أن يحتوي على {count} أحرف على الأقل",
+            "max_length": "اسم المجموعة يجب أن يحتوي على {count} أحرف كحد أقصى"
+          }
+        },
+        "type": {
+          "label": "النوع",
+          "placeholder": "اختر نوع المجموعة",
+          "help_text": "نوع المجموعة (اختياري)",
+          "options": {
+            "skill": "مجموعة المهارات",
+            "org": "مجموعة المنظمة",
+            "notification": "مجموعة الإشعارات"
+          }
+        },
+        "parent_id": {
+          "label": "المجموعة الأم",
+          "placeholder": "اختر المجموعة الأم (اختياري)",
+          "help_text": "المجموعة الأم إذا كانت هذه مجموعة فرعية",
+          "options": {
+            "no_parent": "لا توجد مجموعة أم",
+            "group_with_type": "{name} ({type})"
+          }
+        },
+        "description": {
+          "label": "الوصف",
+          "placeholder": "أدخل وصف المجموعة",
+          "help_text": "وصف اختياري للمجموعة (حد أقصى 500 حرف)"
+        },
+        "contain_users": {
+          "label": "يمكن أن تحتوي على مستخدمين",
+          "help_text": "ما إذا كانت هذه المجموعة يمكن أن تحتوي على أعضاء مستخدمين"
+        },
+        "contain_items": {
+          "label": "يمكن أن تحتوي على عناصر",
+          "help_text": "ما إذا كانت هذه المجموعة يمكن أن تحتوي على عناصر الأصول"
+        },
+        "comment": {
+          "label": "تعليق",
+          "placeholder": "أدخل أي تعليقات إضافية",
+          "help_text": "تعليقات اختيارية حول المجموعة (حد أقصى 1000 حرف)"
+        },
+        "users": {
+          "label": "المستخدمين المخصصين لهذه المجموعة",
+          "help_text": "المستخدمين المخصصين لهذه المجموعة"
+        },
+        "assets": {
+          "label": "الأصول المخصصة لهذه المجموعة",
+          "help_text": "الأصول المخصصة لهذه المجموعة"
+        }
+      }
+    },
+    "user": {
+      "create": {
+        "title": "إنشاء مستخدم",
+        "description": "إنشاء مستخدم جديد في النظام"
+      },
+      "edit": {
+        "title": "تعديل المستخدم: {name}",
+        "description": "تعديل معلومات المستخدم وعلاقاته"
+      },
+      "fields": {
+        "email": {
+          "label": "البريد الإلكتروني",
+          "placeholder": "أدخل عنوان البريد الإلكتروني",
+          "help_text": "عنوان البريد الإلكتروني للمستخدم (يجب أن يكون فريداً)",
+          "errors": {
+            "required": "البريد الإلكتروني مطلوب",
+            "invalid": "يرجى إدخال عنوان بريد إلكتروني صحيح"
+          }
+        },
+        "username": {
+          "label": "اسم المستخدم",
+          "placeholder": "أدخل اسم المستخدم",
+          "help_text": "اسم مستخدم فريد للمستخدم",
+          "errors": {
+            "required": "اسم المستخدم مطلوب"
+          }
+        },
+        "password": {
+          "label": "كلمة المرور",
+          "placeholder": "أدخل كلمة المرور",
+          "help_text": "كلمة مرور المستخدم (يُنصح بحد أدنى 8 أحرف)",
+          "errors": {
+            "required": "كلمة المرور مطلوبة"
+          }
+        },
+        "full_name": {
+          "label": "الاسم الكامل",
+          "placeholder": "أدخل الاسم الكامل",
+          "help_text": "الاسم الكامل للمستخدم (اختياري)"
+        },
+        "status": {
+          "label": "الحالة",
+          "placeholder": "اختر حالة المستخدم",
+          "help_text": "حالة حساب المستخدم",
+          "options": {
+            "active": "نشط",
+            "inactive": "غير نشط",
+            "deleted": "محذوف"
+          }
+        },
+        "language": {
+          "label": "اللغة",
+          "placeholder": "اختر اللغة",
+          "help_text": "اللغة المفضلة للمستخدم",
+          "options": {
+            "en": "الإنجليزية",
+            "fr": "الفرنسية",
+            "ar": "العربية",
+            "es": "الإسبانية",
+            "de": "الألمانية"
+          }
+        },
+        "theme": {
+          "label": "المظهر",
+          "placeholder": "اختر المظهر",
+          "help_text": "المظهر المفضل للمستخدم",
+          "options": {
+            "light": "فاتح",
+            "dark": "داكن"
+          }
+        },
+        "location": {
+          "label": "الموقع",
+          "placeholder": "أدخل الموقع",
+          "help_text": "الموقع المادي للمستخدم (اختياري)"
+        },
+        "phone": {
+          "label": "الهاتف",
+          "placeholder": "أدخل رقم الهاتف",
+          "help_text": "رقم الهاتف الأساسي (اختياري)"
+        },
+        "secondary_phone": {
+          "label": "الهاتف الثانوي",
+          "placeholder": "أدخل رقم الهاتف الثانوي",
+          "help_text": "رقم الهاتف الثانوي (اختياري)"
+        },
+        "timezone": {
+          "label": "المنطقة الزمنية",
+          "placeholder": "اختر المنطقة الزمنية",
+          "help_text": "المنطقة الزمنية للمستخدم",
+          "options": {
+            "utc": "التوقيت العالمي المنسق",
+            "america_new_york": "أمريكا/نيويورك",
+            "europe_london": "أوروبا/لندن",
+            "europe_paris": "أوروبا/باريس",
+            "asia_tokyo": "آسيا/طوكيو"
+          }
+        },
+        "valid_from": {
+          "label": "صالح من",
+          "placeholder": "اختر تاريخ البداية",
+          "help_text": "التاريخ الذي يصبح فيه حساب المستخدم صالحاً (اختياري)"
+        },
+        "valid_until": {
+          "label": "صالح حتى",
+          "placeholder": "اختر تاريخ الانتهاء",
+          "help_text": "التاريخ الذي ينتهي عنده صلاحية حساب المستخدم (اختياري)"
+        },
+        "administartive_number": {
+          "label": "الرقم الإداري",
+          "placeholder": "أدخل الرقم الإداري",
+          "help_text": "رقم مرجعي إداري (اختياري)"
+        },
+        "role_id": {
+          "label": "الدور",
+          "placeholder": "اختر دوراً",
+          "help_text": "دور المستخدم وصلاحياته",
+          "options": {
+            "role_name": "{name} - {description}",
+            "no_role": "لا يوجد دور"
+          }
+        }
+      }
+    },
+    "role": {
+      "create": {
+        "title": "إنشاء دور",
+        "description": "إنشاء دور جديد في النظام"
+      },
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "أدخل اسم الدور",
+          "help_text": "اسم الدور يجب أن يكون فريداً وبين 1-100 حرف",
+          "errors": {
+            "required": "اسم الدور مطلوب",
+            "min_length": "اسم الدور يجب أن يحتوي على {count} أحرف على الأقل",
+            "max_length": "اسم الدور يجب أن يحتوي على {count} أحرف كحد أقصى"
+          }
+        },
+        "description": {
+          "label": "الوصف",
+          "placeholder": "أدخل وصف الدور",
+          "help_text": "وصف اختياري للدور (حد أقصى 500 حرف)"
+        }
+      }
+    },
+    "computer": {
+      "create": {
+        "title": "إنشاء حاسوب",
+        "description": "إنشاء حاسوب جديد في النظام"
+      },
+      "edit": {
+        "title": "تعديل الحاسوب: {name}",
+        "description": "تعديل معلومات الحاسوب وعلاقاته"
+      },
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "أدخل اسم الحاسوب",
+          "help_text": "اسم الحاسوب.",
+          "errors": {
+            "required": "اسم الحاسوب مطلوب."
+          }
+        },
+        "serial_number": {
+          "label": "الرقم التسلسلي",
+          "placeholder": "أدخل الرقم التسلسلي",
+          "help_text": "الرقم التسلسلي الخاص بالشركة المصنعة لهذا الحاسوب."
+        },
+        "inventory_number": {
+          "label": "رقم المخزون",
+          "placeholder": "أدخل رقم المخزون",
+          "help_text": "رقم المخزون الداخلي لهذا الحاسوب."
+        },
+        "status": {
+          "label": "الحالة",
+          "placeholder": "اختر الحالة",
+          "help_text": "الحالة الحالية للحاسوب.",
+          "options": {
+            "active": "نشط",
+            "inactive": "غير نشط",
+            "maintenance": "صيانة",
+            "retired": "متقاعد"
+          }
+        },
+        "purchase_date": {
+          "label": "تاريخ الشراء",
+          "placeholder": "اختر تاريخ الشراء",
+          "help_text": "تاريخ شراء الحاسوب."
+        },
+        "warranty_expiry": {
+          "label": "انتهاء الضمان",
+          "placeholder": "اختر تاريخ انتهاء الضمان",
+          "help_text": "تاريخ انتهاء ضمان الحاسوب."
+        },
+        "model": {
+          "label": "الطراز",
+          "placeholder": "أدخل الطراز",
+          "help_text": "طراز الحاسوب."
+        },
+        "cpu": {
+          "label": "المعالج (CPU)",
+          "placeholder": "أدخل المعالج",
+          "help_text": "مواصفات المعالج."
+        },
+        "ram": {
+          "label": "الذاكرة (RAM)",
+          "placeholder": "أدخل الذاكرة",
+          "help_text": "مواصفات الذاكرة."
+        },
+        "storage": {
+          "label": "التخزين",
+          "placeholder": "أدخل التخزين",
+          "help_text": "مواصفات التخزين."
+        },
+        "os": {
+          "label": "نظام التشغيل",
+          "placeholder": "أدخل نظام التشغيل",
+          "help_text": "نظام التشغيل المثبت."
+        },
+        "hostname": {
+          "label": "اسم المضيف",
+          "placeholder": "أدخل اسم المضيف",
+          "help_text": "اسم المضيف على الشبكة."
+        },
+        "ip_address": {
+          "label": "عنوان IP",
+          "placeholder": "أدخل عنوان IP",
+          "help_text": "عنوان IP على الشبكة."
+        },
+        "mac_address": {
+          "label": "عنوان MAC",
+          "placeholder": "أدخل عنوان MAC",
+          "help_text": "عنوان MAC على الشبكة."
+        },
+        "manufacturer_id": {
+          "label": "الشركة المصنعة",
+          "placeholder": "اختر الشركة المصنعة",
+          "help_text": "الشركة المصنعة للحاسوب.",
+          "options": {
+            "no_manufacturer": "لا يوجد شركة مصنعة",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "الموقع",
+          "placeholder": "اختر الموقع",
+          "help_text": "موقع الحاسوب.",
+          "options": {
+            "no_location": "لا يوجد موقع",
+            "location_name": "{name} {description}"
+          }
+        },
+        "group_id": {
+          "label": "المجموعة",
+          "placeholder": "اختر المجموعة",
+          "help_text": "المجموعة التي ينتمي إليها هذا الحاسوب.",
+          "options": {
+            "no_group": "لا توجد مجموعة",
+            "group_name": "{name} ({type})"
+          }
+        },
+        "assigned_to": {
+          "label": "مخصص إلى",
+          "placeholder": "اختر المستخدم",
+          "help_text": "المستخدم الذي تم تخصيص هذا الحاسوب له.",
+          "options": {
+            "no_user": "لا يوجد مستخدم",
+            "user_name": "{name}"
+          }
+        },
+        "groups": {
+          "label": "المجموعات",
+          "placeholder": "اختر المجموعات",
+          "help_text": "المجموعات التي ينتمي إليها هذا الحاسوب.",
+          "options": {
+            "no_group": "لا توجد مجموعة",
+            "group_name": "{name} ({type})"
+          }
+        },
+        "confidentiality_level": {
+          "label": "مستوى السرية",
+          "placeholder": "اختر مستوى السرية",
+          "help_text": "مستوى السرية لهذا الحاسوب.",
+          "options": {
+            "Public": "عام",
+            "Internal": "داخلي",
+            "Confidential": "سري",
+            "Secret": "سري للغاية"
+          }
+        },
+        "integrity_level": {
+          "label": "مستوى النزاهة",
+          "placeholder": "اختر مستوى النزاهة",
+          "help_text": "مستوى النزاهة لهذا الحاسوب.",
+          "options": {
+            "High": "عالي",
+            "Medium": "متوسط",
+            "Low": "منخفض"
+          }
+        },
+        "availability_level": {
+          "label": "مستوى التوفر",
+          "placeholder": "اختر مستوى التوفر",
+          "help_text": "مستوى التوفر لهذا الحاسوب.",
+          "options": {
+            "High": "عالي",
+            "Medium": "متوسط",
+            "Low": "منخفض"
+          }
+        }
+      }
+    }
+  },
+  "relationships": {
+    "groups": "المجموعات",
+    "users": "المستخدمون",
+    "roles": "الأدوار",
+    "assets": "الأصول"
+  },
+  "relationshipWidget": {
+    "selectPlaceholder": "اختر {item} للإضافة...",
+    "emptyMessage": "لا يوجد {item} مُخصص"
+  }
+} 

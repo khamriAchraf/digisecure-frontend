@@ -11,6 +11,8 @@ declare module "next-auth" {
       id: string;
       email: string;
       name?: string | null;
+      role_id: number;
+      permissions: string[];
     };
   }
 
@@ -30,6 +32,8 @@ declare module "next-auth/jwt" {
     user?: {
       id: string;
       email: string;
+      role_id: number;
+      permissions: string[];
     };
   }
 }
@@ -37,6 +41,8 @@ declare module "next-auth/jwt" {
 interface JwtPayload {
   sub: string;
   email: string;
+  role_id: number;
+  permissions: string[];
   exp: number;
   [key: string]: any;
 }
@@ -81,7 +87,12 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = (user as any).access_token;
         token.refreshToken = (user as any).refresh_token;
         token.accessTokenExpires = decoded.exp * 1000; // epoch ms
-        token.user = { id: decoded.sub, email: decoded.email };
+        token.user = { 
+          id: decoded.sub, 
+          email: decoded.email,
+          role_id: decoded.role_id,
+          permissions: decoded.permissions
+        };
 
         return token;
       }
@@ -113,6 +124,12 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = data.access_token;
         token.refreshToken = data.refresh_token;
         token.accessTokenExpires = decoded.exp * 1000;
+        token.user = {
+          id: decoded.sub,
+          email: decoded.email,
+          role_id: decoded.role_id,
+          permissions: decoded.permissions
+        };
         token.error = undefined;
 
         return token;
@@ -123,7 +140,12 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      session.user = token.user as { id: string; email: string };
+      session.user = token.user as { 
+        id: string; 
+        email: string; 
+        role_id: number; 
+        permissions: string[] 
+      };
       // expose only short-lived access token to the browser
       session.accessToken = token.accessToken as string;
       session.error = token.error as string | undefined;

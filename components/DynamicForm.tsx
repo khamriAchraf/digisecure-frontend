@@ -16,6 +16,7 @@ import QuickCreateSelect from './QuickCreateSelect';
 import { useForm } from '@mantine/form';
 import { useResourceSchema } from '@/fetchers';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useDynamicOptions } from '@/hooks/useDynamicOptions';
 
 // Helper types mirroring the backend UI schema
 interface UIFieldOption {
@@ -89,8 +90,9 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 }) => {
   const { data: schemaResp, isLoading, isError } = useResourceSchema(resourceType);
   const { t } = useTranslation();
-  const [dynamicOptions, setDynamicOptions] = useState<Record<string, UIFieldOption[]>>({});
-  const [refreshingOptions, setRefreshingOptions] = useState<Record<string, boolean>>({});
+  // Fallback store for legacy onRefreshOptions prop (kept for backward-compat)
+  const [legacyOptions, setLegacyOptions] = useState<Record<string, UIFieldOption[]>>({});
+  const [legacyRefreshing, setLegacyRefreshing] = useState<Record<string, boolean>>({});
 
   // Build initial values & validation object (always do this, even if loading)
   const initialValues: Record<string, any> = {};
@@ -147,14 +149,14 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   const refreshFieldOptions = useCallback(async (fieldName: string) => {
     if (!onRefreshOptions) return;
     
-    setRefreshingOptions((prev: Record<string, boolean>) => ({ ...prev, [fieldName]: true }));
+    setLegacyRefreshing((prev: Record<string, boolean>) => ({ ...prev, [fieldName]: true }));
     try {
       const newOptions = await onRefreshOptions(fieldName);
-      setDynamicOptions((prev: Record<string, UIFieldOption[]>) => ({ ...prev, [fieldName]: newOptions }));
+      setLegacyOptions((prev: Record<string, UIFieldOption[]>) => ({ ...prev, [fieldName]: newOptions }));
     } catch (error) {
       console.error(`Failed to refresh options for field ${fieldName}:`, error);
     } finally {
-      setRefreshingOptions((prev: Record<string, boolean>) => ({ ...prev, [fieldName]: false }));
+      setLegacyRefreshing((prev: Record<string, boolean>) => ({ ...prev, [fieldName]: false }));
     }
   }, [onRefreshOptions]);
 
@@ -217,6 +219,76 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 
   // Helper renderer based on widget type
   const renderField = (key: string, field: UIField) => {
+    // Child components for dynamic selects so we can safely use hooks
+
+    const SelectField: React.FC = () => {
+      const { options: srcOptions, isLoading: srcLoading, refresh: srcRefresh } = useDynamicOptions(key);
+
+      const options = srcOptions ?? legacyOptions[key] ?? field.options ?? [];
+      const isRefreshing = srcLoading || legacyRefreshing[key];
+
+      // Decide which refresh function to use when QuickCreate modal closes
+      const refreshFn = srcOptions ? srcRefresh : () => refreshFieldOptions(key);
+
+      if (field.quick_create_resource) {
+        return (
+          <QuickCreateSelect
+            label={t(field.label_key ?? key)}
+            placeholder={t(field.placeholder_key ?? '')}
+            description={t(field.help_text_key ?? '')}
+            data={options.map((o) => ({
+              value: String(o.value),
+              label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
+            }))}
+            value={form.values[key] as string | null}
+            onChange={(val) => form.setFieldValue(key, val)}
+            resourceType={field.quick_create_resource!}
+            onCreated={refreshFn}
+            loading={isRefreshing}
+          />
+        );
+      }
+
+      return (
+        <Select
+          key={key}
+          label={t(field.label_key ?? key)}
+          placeholder={t(field.placeholder_key ?? '')}
+          description={t(field.help_text_key ?? '')}
+          {...form.getInputProps(key as any)}
+          data={options.map((o) => ({
+            value: String(o.value),
+            label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
+          }))}
+          allowDeselect
+          rightSection={isRefreshing ? <Loader size="xs" /> : undefined}
+        />
+      );
+    };
+
+    const MultiSelectField: React.FC = () => {
+      const { options: srcOptions, isLoading: srcLoading } = useDynamicOptions(key);
+      const options = srcOptions ?? legacyOptions[key] ?? field.options ?? [];
+      const isRefreshing = srcLoading || legacyRefreshing[key];
+
+      return (
+        <MultiSelect
+          key={key}
+          label={t(field.label_key ?? key)}
+          placeholder={t(field.placeholder_key ?? '')}
+          description={t(field.help_text_key ?? '')}
+          {...form.getInputProps(key as any)}
+          value={Array.isArray(form.values[key]) ? (form.values[key] as string[]) : []}
+          data={options.map((o) => ({
+            value: String(o.value),
+            label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
+          }))}
+          searchable
+          rightSection={isRefreshing ? <Loader size="xs" /> : undefined}
+        />
+      );
+    };
+ 
     const commonProps = {
       key,
       label: t(field.label_key ?? key),
@@ -224,7 +296,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
       description: t(field.help_text_key ?? ''),
       ...form.getInputProps(key as any),
     } as const;
-
+ 
     switch (field.widget) {
       case 'text':
         return <TextInput {...commonProps} />;
@@ -237,55 +309,9 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
       case 'textarea':
         return <Textarea {...commonProps} minRows={3} />;
       case 'select':
-        const options = dynamicOptions[key] || field.options || [];
-        const isRefreshing = refreshingOptions[key];
-
-        if (field.quick_create_resource && onRefreshOptions) {
-          return (
-            <QuickCreateSelect
-              label={commonProps.label as string}
-              placeholder={commonProps.placeholder as string}
-              description={commonProps.description as string}
-              data={options.map((o) => ({
-                value: String(o.value),
-                label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
-              }))}
-              value={commonProps.value as string | null}
-              onChange={commonProps.onChange as any}
-              resourceType={field.quick_create_resource}
-              onCreated={() => refreshFieldOptions(key)}
-              loading={isRefreshing}
-            />
-          );
-        }
-
-        return (
-          <Select
-            {...commonProps}
-            data={options.map((o) => ({ 
-              value: String(o.value), 
-              label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key)
-            }))}
-            allowDeselect
-            rightSection={isRefreshing ? <Loader size="xs" /> : undefined}
-          />
-        );
+        return <SelectField />;
       case 'multi-select':
-        const multiOptions = dynamicOptions[key] || field.options || [];
-        const isMultiRefreshing = refreshingOptions[key];
-        
-        return (
-          <MultiSelect
-            {...commonProps}
-            value={Array.isArray(commonProps.value) ? commonProps.value : []}
-            data={multiOptions.map((o) => ({ 
-              value: String(o.value), 
-              label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key)
-            }))}
-            searchable
-            rightSection={isMultiRefreshing ? <Loader size="xs" /> : undefined}
-          />
-        );
+        return <MultiSelectField />;
       case 'datetime-local':
         return <TextInput {...commonProps} type="datetime-local" />;
       case 'checkbox':
@@ -307,7 +333,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   const orderedFields = Object.entries(fields).sort((a, b) => a[1].order - b[1].order);
 
   return (
-    <form onSubmit={form.onSubmit(onSubmit)} className={className}>
+    <form 
+      onSubmit={(e) => {
+        e.stopPropagation();
+        form.onSubmit(onSubmit)(e);
+      }} 
+      className={className}
+    >
       <Stack>
         <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
           {orderedFields.map(([key, field]) => renderField(key, field))}

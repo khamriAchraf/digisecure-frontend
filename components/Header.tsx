@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { UserButton } from './UserButton';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
   opened: boolean;
@@ -29,6 +30,7 @@ export function Header({ opened, toggle }: HeaderProps) {
         <Breadcrumbs />
       </Group>
       <Group>
+        <ThemeToggle />
         <LanguageSwitcher />
         <div>
           {session && (

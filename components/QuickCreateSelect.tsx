@@ -16,6 +16,7 @@ interface QuickCreateSelectProps {
   resourceType: string; // resource type for quick create form (e.g., 'manufacturer', 'group')
   onCreated: () => void; // called after a new item is created to refresh parent options
   loading?: boolean;
+  readOnly?: boolean;
 }
 
 const QuickCreateSelect: React.FC<QuickCreateSelectProps> = ({
@@ -28,6 +29,7 @@ const QuickCreateSelect: React.FC<QuickCreateSelectProps> = ({
   resourceType,
   onCreated,
   loading,
+  readOnly,
 }) => {
   const [opened, { open, close }] = useDisclosure(false);
 
@@ -77,6 +79,7 @@ const QuickCreateSelect: React.FC<QuickCreateSelectProps> = ({
           style={{ flex: 1 }}
           rightSection={loading ? <Loader size="xs" /> : undefined}
           allowDeselect
+          readOnly={readOnly}
         />
         <ActionIcon 
           variant="light" 
@@ -87,6 +90,7 @@ const QuickCreateSelect: React.FC<QuickCreateSelectProps> = ({
           }} 
           mt={loading ? 28 : 22} 
           aria-label="Quick create"
+          disabled={readOnly}
         >
           <IconPlus size={16} />
         </ActionIcon>
@@ -96,15 +100,17 @@ const QuickCreateSelect: React.FC<QuickCreateSelectProps> = ({
         opened={opened} 
         onClose={close} 
         title={`Create new ${resourceType}`} 
-        size="md"
+        size="xl"
         closeOnClickOutside={false}
         closeOnEscape={false}
       >
-        <DynamicForm 
-          resourceType={resourceType} 
-          onSubmit={handleModalSubmit} 
-          isSubmitting={quickCreateMutation.isLoading} 
-        />
+        <div onClick={(e) => e.stopPropagation()}>
+          <DynamicForm 
+            resourceType={resourceType} 
+            onSubmit={handleModalSubmit} 
+            isSubmitting={quickCreateMutation.isLoading} 
+          />
+        </div>
       </Modal>
     </>
   );

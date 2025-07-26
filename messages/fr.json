@@ -9,10 +9,10 @@
     "security": "Sécurité"
   },
   "assets": {
-    "overview": "Vue d'ensemble",
-    "forecasts": "Prévisions",
-    "outlook": "Perspectives",
-    "realTime": "Temps réel"
+    "computers": "Ordinateurs",
+    "network_devices": "Périphériques réseau",
+    "virtual_machines": "Machines virtuelles",
+    "software": "Logiciels"
   },
   "administration": {
     "users": "Utilisateurs",
@@ -58,7 +58,10 @@
     "error": "Erreur",
     "warning": "Avertissement",
     "info": "Information",
-    "redirecting": "Redirection..."
+    "redirecting": "Redirection...",
+    "add": "Ajouter",
+    "remove": "Supprimer",
+    "noOptions": "Aucune option disponible"
   },
   "auth": {
     "login": "Connexion",
@@ -78,6 +81,7 @@
   "language": {
     "english": "Anglais",
     "french": "Français",
+    "arabic": "Arabe",
     "selectLanguage": "Sélectionner la langue"
   },
   "breadcrumbs": {
@@ -149,7 +153,18 @@
     "settingsSaved": "Paramètres du tableau enregistrés avec succès",
     "settingsReset": "Paramètres du tableau réinitialisés",
     "noCustomConfig": "Aucune configuration personnalisée à réinitialiser - utilise déjà les valeurs par défaut",
-    "usingCustomConfig": "Utilisation d'une configuration de colonnes personnalisée"
+    "usingCustomConfig": "Utilisation d'une configuration de colonnes personnalisée",
+    "cpu": "Processeur",
+    "ram": "Mémoire RAM",
+    "storage": "Stockage",
+    "os": "Système d'exploitation",
+    "macAddress": "Adresse MAC",
+    "ipAddress": "Adresse IP",
+    "model": "Modèle",
+    "hostname": "Nom d'hôte",
+    "assignedTo": "Assigné à",
+    "group": "Groupe",
+    "computers": "Ordinateurs"
   },
   "forms": {
     "errors": {
@@ -159,10 +174,24 @@
       "maxLength": "Doit contenir au plus {count} caractères",
       "invalid": "Format invalide"
     },
+    "tabs": {
+      "general": "Général",
+      "preferences": "Préférences",
+      "groups": "Groupes",
+      "users": "Utilisateurs",
+      "assets": "Actifs",
+      "specifications": "Spécifications",
+      "network": "Réseau",
+      "security": "Sécurité"
+    },
     "group": {
       "create": {
         "title": "Créer un groupe",
         "description": "Créer un nouveau groupe dans le système"
+      },
+      "edit": {
+        "title": "Modifier le groupe : {name}",
+        "description": "Modifier les informations et relations du groupe"
       },
       "fields": {
         "name": {
@@ -211,6 +240,14 @@
           "label": "Commentaire",
           "placeholder": "Entrez des commentaires supplémentaires",
           "help_text": "Commentaires optionnels sur le groupe (max 1000 caractères)"
+        },
+        "users": {
+          "label": "Utilisateurs assignés à ce groupe",
+          "help_text": "Utilisateurs assignés à ce groupe"
+        },
+        "assets": {
+          "label": "Actifs assignés à ce groupe",
+          "help_text": "Actifs assignés à ce groupe"
         }
       }
     },
@@ -218,6 +255,10 @@
       "create": {
         "title": "Créer un utilisateur",
         "description": "Créer un nouvel utilisateur dans le système"
+      },
+      "edit": {
+        "title": "Modifier l'utilisateur : {name}",
+        "description": "Modifier les informations et relations de l'utilisateur"
       },
       "fields": {
         "email": {
@@ -267,6 +308,7 @@
           "options": {
             "en": "Anglais",
             "fr": "Français",
+            "ar": "Arabe",
             "es": "Espagnol",
             "de": "Allemand"
           }
@@ -318,19 +360,220 @@
           "help_text": "Date jusqu'à laquelle le compte utilisateur est valide (optionnel)"
         },
         "administartive_number": {
-          "label": "Numéro administratif",
+          "label": "Numéro Administratif",
           "placeholder": "Entrez le numéro administratif",
           "help_text": "Numéro de référence administratif (optionnel)"
         },
-        "roles": {
-          "label": "Rôles",
-          "placeholder": "Sélectionnez les rôles",
-          "help_text": "Rôles et permissions de l'utilisateur",
+        "role_id": {
+          "label": "Rôle",
+          "placeholder": "Sélectionnez un rôle",
+          "help_text": "Rôle et permissions de l'utilisateur",
           "options": {
-            "role_name": "{name} - {description}"
+            "role_name": "{name} - {description}",
+            "no_role": "Aucun rôle"
+          }
+        }
+      }
+    },
+    "role": {
+      "create": {
+        "title": "Créer un rôle",
+        "description": "Créer un nouveau rôle dans le système"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom du rôle",
+          "help_text": "Le nom du rôle doit être unique et contenir entre 1 et 100 caractères",
+          "errors": {
+            "required": "Le nom du rôle est requis",
+            "min_length": "Le nom du rôle doit contenir au moins {count} caractères",
+            "max_length": "Le nom du rôle doit contenir au plus {count} caractères"
+          }
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Entrez la description du rôle",
+          "help_text": "Description optionnelle du rôle (max 500 caractères)"
+        }
+      }
+    },
+    "computer": {
+      "create": {
+        "title": "Créer un ordinateur",
+        "description": "Créer un nouvel ordinateur dans le système"
+      },
+      "edit": {
+        "title": "Modifier l'ordinateur : {name}",
+        "description": "Modifier les informations et relations de l'ordinateur"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom de l'ordinateur",
+          "help_text": "Le nom de l'ordinateur.",
+          "errors": {
+            "required": "Le nom de l'ordinateur est requis."
+          }
+        },
+        "serial_number": {
+          "label": "Numéro de série",
+          "placeholder": "Entrez le numéro de série",
+          "help_text": "Le numéro de série du fabricant pour cet ordinateur."
+        },
+        "inventory_number": {
+          "label": "Numéro d'inventaire",
+          "placeholder": "Entrez le numéro d'inventaire",
+          "help_text": "Le numéro d'inventaire interne pour cet ordinateur."
+        },
+        "status": {
+          "label": "Statut",
+          "placeholder": "Sélectionnez le statut",
+          "help_text": "Statut actuel de l'ordinateur.",
+          "options": {
+            "active": "Actif",
+            "inactive": "Inactif",
+            "maintenance": "Maintenance",
+            "retired": "Retiré"
+          }
+        },
+        "purchase_date": {
+          "label": "Date d'achat",
+          "placeholder": "Sélectionnez la date d'achat",
+          "help_text": "Date d'achat de l'ordinateur."
+        },
+        "warranty_expiry": {
+          "label": "Expiration de la garantie",
+          "placeholder": "Sélectionnez la date d'expiration de la garantie",
+          "help_text": "Date d'expiration de la garantie de l'ordinateur."
+        },
+        "model": {
+          "label": "Modèle",
+          "placeholder": "Entrez le modèle",
+          "help_text": "Le modèle de l'ordinateur."
+        },
+        "cpu": {
+          "label": "Processeur",
+          "placeholder": "Entrez le processeur",
+          "help_text": "La spécification du processeur."
+        },
+        "ram": {
+          "label": "RAM",
+          "placeholder": "Entrez la RAM",
+          "help_text": "La spécification de la mémoire RAM."
+        },
+        "storage": {
+          "label": "Stockage",
+          "placeholder": "Entrez le stockage",
+          "help_text": "La spécification du stockage."
+        },
+        "os": {
+          "label": "Système d'exploitation",
+          "placeholder": "Entrez le système d'exploitation",
+          "help_text": "Le système d'exploitation installé."
+        },
+        "hostname": {
+          "label": "Nom d'hôte",
+          "placeholder": "Entrez le nom d'hôte",
+          "help_text": "Le nom d'hôte réseau."
+        },
+        "ip_address": {
+          "label": "Adresse IP",
+          "placeholder": "Entrez l'adresse IP",
+          "help_text": "L'adresse IP réseau."
+        },
+        "mac_address": {
+          "label": "Adresse MAC",
+          "placeholder": "Entrez l'adresse MAC",
+          "help_text": "L'adresse MAC réseau."
+        },
+        "manufacturer_id": {
+          "label": "Fabricant",
+          "placeholder": "Sélectionnez le fabricant",
+          "help_text": "Le fabricant de l'ordinateur.",
+          "options": {
+            "no_manufacturer": "Aucun fabricant",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "Localisation",
+          "placeholder": "Sélectionnez la localisation",
+          "help_text": "La localisation de l'ordinateur.",
+          "options": {
+            "no_location": "Aucune localisation",
+            "location_name": "{name} {description}"
+          }
+        },
+        "group_id": {
+          "label": "Groupe",
+          "placeholder": "Sélectionnez le groupe",
+          "help_text": "Le groupe auquel appartient cet ordinateur.",
+          "options": {
+            "no_group": "Aucun groupe",
+            "group_name": "{name} ({type})"
+          }
+        },
+        "assigned_to": {
+          "label": "Assigné à",
+          "placeholder": "Sélectionnez l'utilisateur",
+          "help_text": "L'utilisateur auquel cet ordinateur est assigné.",
+          "options": {
+            "no_user": "Aucun utilisateur",
+            "user_name": "{name}"
+          }
+        },
+        "groups": {
+          "label": "Groupes",
+          "placeholder": "Sélectionnez les groupes",
+          "help_text": "Les groupes auxquels appartient cet ordinateur.",
+          "options": {
+            "no_group": "Aucun groupe",
+            "group_name": "{name} ({type})"
+          }
+        },
+        "confidentiality_level": {
+          "label": "Niveau de confidentialité",
+          "placeholder": "Sélectionnez le niveau de confidentialité",
+          "help_text": "Le niveau de confidentialité de cet ordinateur.",
+          "options": {
+            "Public": "Public",
+            "Internal": "Interne",
+            "Confidential": "Confidentiel",
+            "Secret": "Secret"
+          }
+        },
+        "integrity_level": {
+          "label": "Niveau d'intégrité",
+          "placeholder": "Sélectionnez le niveau d'intégrité",
+          "help_text": "Le niveau d'intégrité de cet ordinateur.",
+          "options": {
+            "High": "Élevé",
+            "Medium": "Moyen",
+            "Low": "Faible"
+          }
+        },
+        "availability_level": {
+          "label": "Niveau de disponibilité",
+          "placeholder": "Sélectionnez le niveau de disponibilité",
+          "help_text": "Le niveau de disponibilité de cet ordinateur.",
+          "options": {
+            "High": "Élevé",
+            "Medium": "Moyen",
+            "Low": "Faible"
           }
         }
       }
     }
+  },
+  "relationships": {
+    "groups": "Groupes",
+    "users": "Utilisateurs",
+    "roles": "Rôles",
+    "assets": "Actifs"
+  },
+  "relationshipWidget": {
+    "selectPlaceholder": "Sélectionner {item} à ajouter...",
+    "emptyMessage": "Aucun {item} assigné"
   }
 } 

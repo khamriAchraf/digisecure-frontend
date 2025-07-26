@@ -109,7 +109,7 @@ function UsersPage() {
 
 ## Multilingual Support
 
-The DataTable component fully supports internationalization with English and French translations. All UI text, column labels, and messages are automatically translated based on the current locale.
+The DataTable component fully supports internationalization with English, French, and Arabic translations. All UI text, column labels, and messages are automatically translated based on the current locale.
 
 ### Translation Keys
 
@@ -125,6 +125,7 @@ The DataTable component automatically updates when the language changes without 
 
 - **English (en)**: Default language
 - **French (fr)**: Full translation support
+- **Arabic (ar)**: Full translation support with RTL layout
 
 ### Adding New Languages
 

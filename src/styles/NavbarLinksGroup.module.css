@@ -11,6 +11,12 @@
       color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
     }
   }
+
+  .controlActive {
+    background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-blue-9));
+    color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-1));
+    border-left: 3px solid var(--mantine-color-blue-6);
+  }
   
   .link {
     font-weight: 500;
@@ -27,6 +33,13 @@
       background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
       color: light-dark(var(--mantine-color-black), var(--mantine-color-dark-0));
     }
+  }
+
+  .linkActive {
+    background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-blue-9));
+    color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-1));
+    border-left: 3px solid var(--mantine-color-blue-6);
+    font-weight: 600;
   }
   
   .chevron {

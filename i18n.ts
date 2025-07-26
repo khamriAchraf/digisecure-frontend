@@ -1,5 +1,5 @@
 // Supported locales
-export const locales = ['en', 'fr'] as const;
+export const locales = ['en', 'fr', 'ar'] as const;
 export const defaultLocale = 'en' as const;
 
 export type Locale = (typeof locales)[number];
@@ -7,10 +7,12 @@ export type Locale = (typeof locales)[number];
 // Import messages
 import enMessages from './messages/en.json';
 import frMessages from './messages/fr.json';
+import arMessages from './messages/ar.json';
 
 const messages = {
   en: enMessages,
   fr: frMessages,
+  ar: arMessages,
 };
 
 // Get the current locale (you can store this in localStorage, context, etc.)

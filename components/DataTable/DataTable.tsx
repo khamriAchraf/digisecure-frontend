@@ -34,6 +34,7 @@ import {
   IconDownload,
   IconRefresh,
   IconSettings,
+  IconUpload,
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { DataTableConfig, getDataTableConfig, DataType } from './config';
@@ -41,6 +42,31 @@ import { PaginatedResponse } from '../../types/models';
 import { TableColumn } from '../../types/utils';
 import { t } from '../../i18n';
 import { useVisibleColumns } from './useVisibleColumns';
+import { useHasPermission, PERMISSIONS } from '../../src/hooks/usePermissions';
+
+// Helper function to get create permission for a data type
+const getCreatePermission = (dataType: DataType): string => {
+  switch (dataType) {
+    case 'users':
+      return PERMISSIONS.USER_CREATE;
+    case 'roles':
+      return PERMISSIONS.ROLE_CREATE;
+    case 'groups':
+      return PERMISSIONS.GROUP_CREATE;
+    case 'computers':
+      return PERMISSIONS.COMPUTER_CREATE;
+    case 'virtual_machines':
+        return PERMISSIONS.VIRTUAL_MACHINE_CREATE;
+    case 'asset_types':
+    case 'manufacturers':
+    case 'locations':
+      // These reference data types use reference data permissions
+      return PERMISSIONS.REFERENCE_DATA_CREATE;
+    default:
+      console.warn(`No permission mapping found for data type: "${dataType}"`);
+      return '';
+  }
+};
 
 // Props interface for the DataTable component
 export interface DataTableProps<T> {
@@ -68,6 +94,9 @@ export interface DataTableProps<T> {
   onDelete?: (item: T) => void;
   onCreate?: () => void;
   onExport?: () => void;
+
+  // Optional handler triggered when a table row is clicked
+  onRowClick?: (item: T) => void;
 
   // Selection
   selectable?: boolean;
@@ -121,6 +150,7 @@ export function DataTable<T extends { id: number | string }>({
   onDelete,
   onCreate,
   onExport,
+  onRowClick,
   selectable = false,
   selectedItems = [],
   onSelectionChange,
@@ -150,6 +180,10 @@ export function DataTable<T extends { id: number | string }>({
     resetVisibility,
     hasCustomConfig,
   } = useVisibleColumns(dataType, config.columns);
+
+  // Check if user has create permission for this data type
+  const createPermission = getCreatePermission(dataType);
+  const hasCreatePermission = useHasPermission(createPermission);
 
   // State management
   const [state, setState] = useState<DataTableState<T>>({
@@ -370,7 +404,7 @@ export function DataTable<T extends { id: number | string }>({
 
       <Group>
 
-        {showCreateButton && onCreate && (
+        {showCreateButton && onCreate && hasCreatePermission && (
           <Button
             leftSection={<IconPlus size={16} />}
             onClick={onCreate}
@@ -382,7 +416,7 @@ export function DataTable<T extends { id: number | string }>({
 
         {showExportButton && onExport && (
           <Button
-            leftSection={<IconDownload size={16} />}
+            leftSection={<IconUpload size={16} />}
             onClick={onExport}
             variant="light"
             size="sm"
@@ -507,7 +541,11 @@ export function DataTable<T extends { id: number | string }>({
           </Table.Tr>
         ) : (
           processedData.map((item) => (
-            <Table.Tr key={item.id}>
+            <Table.Tr
+              key={item.id}
+              onClick={() => onRowClick?.(item)}
+              style={onRowClick ? { cursor: 'pointer' } : undefined}
+            >
               {selectable && (
                 <Table.Td>
                   <Checkbox
@@ -527,7 +565,7 @@ export function DataTable<T extends { id: number | string }>({
                 <Table.Td>
                   <Menu>
                     <Menu.Target>
-                      <ActionIcon variant="light" size="sm">
+                      <ActionIcon variant="light" size="sm" onClick={(e) => e.stopPropagation()}>
                         <IconDotsVertical size={14} />
                       </ActionIcon>
                     </Menu.Target>

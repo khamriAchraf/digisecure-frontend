@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSession, getSession, signOut } from 'next-auth/react';
-import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location } from '../types/models';
+import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine } from '../types/models';
 import { PaginationParams, PersistedTableConfig } from '../types/utils';
 
 // Base URL for the backend API – change this to match your backend configuration
@@ -98,6 +98,8 @@ export const useUsers = (params?: {
   return usePaginatedData<User>(`${API_BASE}/users`, params);
 };
 
+
+
 // Roles fetcher
 export const useRoles = (params?: {
   page?: number;
@@ -122,7 +124,123 @@ export const useGroups = (params?: {
   return usePaginatedData<Group>(`${API_BASE}/groups`, params);
 };
 
+// Single User fetcher
+// ------------------------------------------------------------
+// Retrieves details of a single user along with their nested
+// relationships such as role and groups.
+export const useUser = (id?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  // Do not execute until we actually have an ID
+  const key = id ? `${API_BASE}/users/${id}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<User>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      shouldRetryOnError: false, // 404 should surface as error
+    },
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+};
+
+// ------------------------------------------------------------
+// Single Group fetcher
+export const useGroup = (id?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const key = id ? `${API_BASE}/groups/${id}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<Group>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      shouldRetryOnError: false,
+    },
+  );
+
+  return { data, isLoading, isError: error, mutate } as const;
+};
+
 // Assets fetcher
+export const useComputers = (params?: {
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
+  search?: string;
+  filters?: Record<string, any>;
+}) => {
+  return usePaginatedData<Computer>(`${API_BASE}/assets/computers`, params);
+};
+
+// Single Computer fetcher
+export const useComputer = (computerId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const key = computerId ? `${API_BASE}/assets/computers/${computerId}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<Computer>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      shouldRetryOnError: false,
+    },
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+};
+
+// Assets fetcher
+export const useVirtualMachines = (params?: {
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
+  search?: string;
+  filters?: Record<string, any>;
+}) => {
+  return usePaginatedData<VirtualMachine>(`${API_BASE}/assets/virtual_machines`, params);
+};
+
+// Single VirtualMachine fetcher
+export const useVirtualMachine = (vmId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const key = vmId ? `${API_BASE}/assets/virtual_machines/${vmId}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<VirtualMachine>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      shouldRetryOnError: false,
+    },
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+};
+
+// Generic Assets fetcher (all asset types)
 export const useAssets = (params?: {
   page?: number;
   per_page?: number;
@@ -155,7 +273,7 @@ export const useManufacturers = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Manufacturer>(`${API_BASE}/manufacturers`, params);
+  return usePaginatedData<Manufacturer>(`${API_BASE}/reference_data/manufacturers`, params);
 };
 
 // Locations fetcher
@@ -167,7 +285,7 @@ export const useLocations = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Location>(`${API_BASE}/locations`, params);
+  return usePaginatedData<Location>(`${API_BASE}/reference_data/locations`, params);
 };
 
 // Legacy useUsers hook for backward compatibility
@@ -325,3 +443,41 @@ export const useResourceSchema = (resourceType?: string) => {
     mutate,
   } as const;
 }; 
+
+/**
+ * Fetch JSON schema describing how to edit a resource of the given type.
+ * Result is cached aggressively because schemas change very rarely.
+ *
+ * @param resourceType – e.g. "group", "user" …
+ */
+export const useResourceEditSchema = (resourceType?: string) => {
+  // Do not make the request until we actually have a resource type
+  const key = resourceType ? `${API_BASE}/schemas/${resourceType}/edit` : null;
+
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const {
+    data,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR<ResourceSchemaResponse>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      // Schemas barely ever change – cache for 7 days and don’t revalidate on focus/reconnect
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      dedupingInterval: 1000 * 60 * 60 * 24 * 7, // 7 days
+      keepPreviousData: true,
+    },
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+};

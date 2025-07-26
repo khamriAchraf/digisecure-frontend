@@ -1,6 +1,6 @@
 # Multilingual Support
 
-This app supports multiple languages (currently English and French) with a simple translation system that doesn't affect routing.
+This app supports multiple languages (currently English, French, and Arabic) with a simple translation system that doesn't affect routing.
 
 ## How it works
 
@@ -16,6 +16,7 @@ The multilingual system uses:
 ├── messages/
 │   ├── en.json          # English translations
 │   └── fr.json          # French translations
+│   └── ar.json          # Arabic translations
 ├── src/
 │   ├── contexts/
 │   │   └── LanguageContext.tsx  # Language state management
@@ -78,9 +79,10 @@ return <div>{t('mySection.newKey')}</div>;
 1. Create a new translation file: `messages/es.json`
 2. Add the locale to the configuration in `i18n.ts`:
 ```tsx
-export const locales = ['en', 'fr', 'es'] as const;
+export const locales = ['en', 'fr', 'ar', 'es'] as const;
 ```
 3. Update the LanguageSwitcher component to include the new language
+4. For RTL languages (like Arabic), the app automatically handles text direction
 
 ### 4. Translation with variables
 
@@ -110,6 +112,7 @@ The breadcrumbs component automatically uses translations for common route segme
 // URLs like /admin/users will show translated breadcrumbs
 // Home > Administration > Users (English)
 // Accueil > Administration > Utilisateurs (French)
+// الرئيسية > الإدارة > المستخدمون (Arabic)
 ```
 
 To add new breadcrumb translations, add them to the `breadcrumbs` section in both language files:
@@ -137,8 +140,9 @@ The app is wrapped with `LanguageProvider` in `_app.tsx` to provide translation 
 1. **Use nested keys** for organization: `navigation.dashboard` instead of `dashboard`
 2. **Keep translations consistent** across all language files
 3. **Use descriptive keys** that make sense in context
-4. **Test both languages** when adding new features
+4. **Test all languages** when adding new features
 5. **Consider cultural differences** in translations (date formats, number formats, etc.)
+6. **For RTL languages**, ensure proper text direction and layout considerations
 
 ## Adding More Languages
 
@@ -152,13 +156,15 @@ import esMessages from '../../messages/es.json';
 const messages = {
   en: enMessages,
   fr: frMessages,
+  ar: arMessages,
   es: esMessages, // Add this
 };
 ```
 3. Update `i18n.ts`:
 ```tsx
-export const locales = ['en', 'fr', 'es'] as const;
+export const locales = ['en', 'fr', 'ar', 'es'] as const;
 ```
 4. Update `LanguageSwitcher.tsx` to include Spanish option
+5. For RTL languages, the app automatically handles text direction via the `dir` attribute
 
 The system is designed to be easily extensible for future languages! 

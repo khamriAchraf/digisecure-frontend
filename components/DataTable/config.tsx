@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableColumn } from '../../types/utils';
-import { User, Role, Group, Asset, AssetType, Manufacturer, Location } from '../../types/models';
-import { IconUser, IconShield, IconUsers, IconDeviceDesktop, IconCategory, IconBuilding, IconMapPin } from '@tabler/icons-react';
+import { User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine } from '../../types/models';
+import { IconUser, IconShield, IconUsers, IconDeviceDesktop, IconCategory, IconBuilding, IconMapPin, IconDeviceLaptop } from '@tabler/icons-react';
 
 // Base configuration interface
 export interface DataTableConfig<T> {
@@ -391,18 +391,68 @@ export const createLocationConfig = (t: (key: string) => string): DataTableConfi
   pageSizeOptions: [5, 10, 20, 50, 100],
 });
 
+// Computer configuration factory
+export const createComputerConfig = (t: (key: string) => string): DataTableConfig<Computer> => ({
+  type: 'computers',
+  icon: IconDeviceDesktop,
+  columns: [
+    { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
+    { key: 'name', label: t('common.name'), sortable: true, filterable: true },
+    { key: 'serial_number', label: t('datatable.serialNumber'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'inventory_number', label: t('datatable.inventoryNumber'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'status', label: t('common.status'), sortable: true, filterable: true, render: (value: any) => (<span style={{ color: value === 'active' ? 'green' : value === 'maintenance' ? 'orange' : 'red', fontWeight: 'bold' }}>{value?.charAt(0).toUpperCase() + value?.slice(1) || t('datatable.na')}</span>) },
+    { key: 'cpu', label: t('datatable.cpu'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'ram', label: t('datatable.ram'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'storage', label: t('datatable.storage'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'os', label: t('datatable.os'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'mac_address', label: t('datatable.macAddress'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'ip_address', label: t('datatable.ipAddress'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'model', label: t('datatable.model'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'hostname', label: t('datatable.hostname'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
+    { key: 'manufacturer', label: t('datatable.manufacturer'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
+    { key: 'location', label: t('datatable.location'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
+    { key: 'group', label: t('datatable.group'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
+    { key: 'assigned_user', label: t('datatable.assignedTo'), sortable: false, filterable: true, render: (value: any) => value?.full_name || value?.username || t('datatable.na') },
+  ],
+  searchableFields: ['name', 'serial_number', 'inventory_number', 'status', 'cpu', 'ram', 'storage', 'os', 'mac_address', 'ip_address', 'model', 'hostname'],
+  sortableFields: ['id', 'name', 'serial_number', 'inventory_number', 'status', 'cpu', 'ram', 'storage', 'os', 'mac_address', 'ip_address', 'model', 'hostname'],
+  defaultSort: { field: 'name', order: 'asc' },
+  defaultPageSize: 20,
+  pageSizeOptions: [5, 10, 20, 50, 100],
+});
+
+// Virtual Machine configuration factory
+export const createVirtualMachineConfig = (t: (key: string) => string): DataTableConfig<VirtualMachine> => ({
+    type: 'virtual_machines',
+    icon: IconDeviceLaptop,
+    columns: [
+      { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
+      { key: 'name', label: t('common.name'), sortable: true, filterable: true },
+      { key: 'status', label: t('common.status'), sortable: true, filterable: true, render: (value: any) => (<span style={{ color: value === 'active' ? 'green' : value === 'maintenance' ? 'orange' : 'red', fontWeight: 'bold' }}>{value?.charAt(0).toUpperCase() + value?.slice(1) || t('datatable.na')}</span>) },
+      { key: 'group', label: t('datatable.group'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
+      { key: 'assigned_user', label: t('datatable.assignedTo'), sortable: false, filterable: true, render: (value: any) => value?.full_name || value?.username || t('datatable.na') },
+    ],
+    searchableFields: ['name'],
+    sortableFields: ['id', 'name', 'status', 'cpu_cores', 'memory_mb', 'storage_gb', 'os_type', 'ip_address', 'power_state', 'hypervisor_type'],
+    defaultSort: { field: 'name', order: 'asc' },
+    defaultPageSize: 20,
+    pageSizeOptions: [5, 10, 20, 50, 100],
+  });
+
 // Configuration registry factory
 export const createDataTableConfigs = (t: (key: string) => string) => ({
   users: createUserConfig(t),
   roles: createRoleConfig(t),
   groups: createGroupConfig(t),
   assets: createAssetConfig(t),
+  computers: createComputerConfig(t),
+  virtual_machines: createVirtualMachineConfig(t),
   asset_types: createAssetTypeConfig(t),
   manufacturers: createManufacturerConfig(t),
   locations: createLocationConfig(t),
 });
 
-export type DataType = 'users' | 'roles' | 'groups' | 'assets' | 'asset_types' | 'manufacturers' | 'locations';
+export type DataType = 'users' | 'roles' | 'groups' | 'computers' | 'asset_types' | 'manufacturers' | 'locations' | 'virtual_machines';
 
 // Helper function to get configuration for a data type
 export function getDataTableConfig<T>(type: DataType, t: (key: string) => string): DataTableConfig<T> {
@@ -412,6 +462,6 @@ export function getDataTableConfig<T>(type: DataType, t: (key: string) => string
 
 // Helper function to check if a data type is supported
 export function isSupportedDataType(type: string): type is DataType {
-  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'assets', 'asset_types', 'manufacturers', 'locations'];
+  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'computers', 'asset_types', 'manufacturers', 'locations', 'virtual_machines'];
   return supportedTypes.includes(type as DataType);
 } 

@@ -8,7 +8,8 @@ export const LanguageSwitcher: React.FC = () => {
 
   const languages = [
     { code: 'en', name: t('language.english') },
-    { code: 'fr', name: t('language.french') }
+    { code: 'fr', name: t('language.french') },
+    { code: 'ar', name: t('language.arabic') }
   ];
 
   return (
@@ -24,7 +25,7 @@ export const LanguageSwitcher: React.FC = () => {
         {languages.map((language) => (
           <Menu.Item
             key={language.code}
-            onClick={() => setLocale(language.code as 'en' | 'fr')}
+            onClick={() => setLocale(language.code as 'en' | 'fr' | 'ar')}
             style={{
               fontWeight: locale === language.code ? 'bold' : 'normal'
             }}

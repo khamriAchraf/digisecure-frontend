@@ -9,10 +9,10 @@
     "security": "Security"
   },
   "assets": {
-    "overview": "Overview",
-    "forecasts": "Forecasts",
-    "outlook": "Outlook",
-    "realTime": "Real time"
+    "computers": "Computers",
+    "network_devices": "Network Devices",
+    "virtual_machines": "Virtual Machines",
+    "software": "Software"
   },
   "administration": {
     "users": "Users",
@@ -58,7 +58,10 @@
     "error": "Error",
     "warning": "Warning",
     "info": "Information",
-    "redirecting": "Redirecting..."
+    "redirecting": "Redirecting...",
+    "add": "Add",
+    "remove": "Remove",
+    "noOptions": "No options available"
   },
   "auth": {
     "login": "Login",
@@ -78,6 +81,7 @@
   "language": {
     "english": "English",
     "french": "French",
+    "arabic": "Arabic",
     "selectLanguage": "Select Language"
   },
   "breadcrumbs": {
@@ -149,7 +153,17 @@
     "settingsSaved": "Table settings saved successfully",
     "settingsReset": "Table settings reset to defaults",
     "noCustomConfig": "No custom configuration to reset - already using defaults",
-    "usingCustomConfig": "Using custom column configuration"
+    "usingCustomConfig": "Using custom column configuration",
+    "cpu": "CPU",
+    "ram": "RAM",
+    "storage": "Storage",
+    "os": "Operating System",
+    "macAddress": "MAC Address",
+    "ipAddress": "IP Address",
+    "model": "Model",
+    "hostname": "Hostname",
+    "assignedTo": "Assigned To",
+    "group": "Group"
   },
   "forms": {
     "errors": {
@@ -159,10 +173,24 @@
       "maxLength": "Must be at most {count} characters",
       "invalid": "Invalid format"
     },
-    "group": {
+    "tabs": {
+      "general": "General",
+      "preferences": "Preferences",
+      "groups": "Groups",
+      "users": "Users",
+      "assets": "Assets",
+      "specifications": "Specifications",
+      "network": "Network",
+      "security": "Security"
+    },
+    "group": {  
       "create": {
         "title": "Create Group",
         "description": "Create a new group in the system"
+      },
+      "edit": {
+        "title": "Edit Group: {name}",
+        "description": "Edit group information and relationships"
       },
       "fields": {
         "name": {
@@ -211,6 +239,14 @@
           "label": "Comment",
           "placeholder": "Enter any additional comments",
           "help_text": "Optional comments about the group (max 1000 characters)"
+        },
+        "users": {
+          "label": "Users assigned to this group",
+          "help_text": "Users assigned to this group"
+        },
+        "assets": {
+          "label": "Assets assigned to this group",
+          "help_text": "Assets assigned to this group"
         }
       }
     },
@@ -218,6 +254,10 @@
       "create": {
         "title": "Create User",
         "description": "Create a new user in the system"
+      },
+      "edit": {
+        "title": "Edit User: {name}",
+        "description": "Edit user information and relationships"
       },
       "fields": {
         "email": {
@@ -267,6 +307,7 @@
           "options": {
             "en": "English",
             "fr": "French",
+            "ar": "Arabic",
             "es": "Spanish",
             "de": "German"
           }
@@ -322,15 +363,216 @@
           "placeholder": "Enter administrative number",
           "help_text": "Administrative reference number (optional)"
         },
-        "roles": {
-          "label": "Roles",
-          "placeholder": "Select roles",
-          "help_text": "User roles and permissions",
+        "role_id": {
+          "label": "Role",
+          "placeholder": "Select a role",
+          "help_text": "User role and permissions",
           "options": {
-            "role_name": "{name} - {description}"
+            "role_name": "{name} - {description}",
+            "no_role": "No role"
+          }
+        }
+      }
+    },
+    "role": {
+      "create": {
+        "title": "Create Role",
+        "description": "Create a new role in the system"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter role name",
+          "help_text": "Role name must be unique and between 1-100 characters",
+          "errors": {
+            "required": "Role name is required",
+            "min_length": "Role name must be at least {count} characters",
+            "max_length": "Role name must be at most {count} characters"
+          }
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter role description",
+          "help_text": "Optional description of the role (max 500 characters)"
+        }
+      }
+    },
+    "computer": {
+      "create": {
+        "title": "Create Computer",
+        "description": "Create a new computer in the system"
+      },
+      "edit": {
+        "title": "Edit Computer: {name}",
+        "description": "Edit computer information and relationships"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter computer name",
+          "help_text": "The name of the computer.",
+          "errors": {
+            "required": "Computer name is required."
+          }
+        },
+        "serial_number": {
+          "label": "Serial Number",
+          "placeholder": "Enter serial number",
+          "help_text": "The manufacturer's serial number for this computer."
+        },
+        "inventory_number": {
+          "label": "Inventory Number",
+          "placeholder": "Enter inventory number",
+          "help_text": "The internal inventory number for this computer."
+        },
+        "status": {
+          "label": "Status",
+          "placeholder": "Select status",
+          "help_text": "Current status of the computer.",
+          "options": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "maintenance": "Maintenance",
+            "retired": "Retired"
+          }
+        },
+        "purchase_date": {
+          "label": "Purchase Date",
+          "placeholder": "Select purchase date",
+          "help_text": "Date the computer was purchased."
+        },
+        "warranty_expiry": {
+          "label": "Warranty Expiry",
+          "placeholder": "Select warranty expiry date",
+          "help_text": "Date the computer's warranty expires."
+        },
+        "model": {
+          "label": "Model",
+          "placeholder": "Enter model",
+          "help_text": "The model of the computer."
+        },
+        "cpu": {
+          "label": "CPU",
+          "placeholder": "Enter CPU",
+          "help_text": "The CPU specification."
+        },
+        "ram": {
+          "label": "RAM",
+          "placeholder": "Enter RAM",
+          "help_text": "The RAM specification."
+        },
+        "storage": {
+          "label": "Storage",
+          "placeholder": "Enter storage",
+          "help_text": "The storage specification."
+        },
+        "os": {
+          "label": "Operating System",
+          "placeholder": "Enter operating system",
+          "help_text": "The installed operating system."
+        },
+        "hostname": {
+          "label": "Hostname",
+          "placeholder": "Enter hostname",
+          "help_text": "The network hostname."
+        },
+        "ip_address": {
+          "label": "IP Address",
+          "placeholder": "Enter IP address",
+          "help_text": "The network IP address."
+        },
+        "mac_address": {
+          "label": "MAC Address",
+          "placeholder": "Enter MAC address",
+          "help_text": "The network MAC address."
+        },
+        "manufacturer_id": {
+          "label": "Manufacturer",
+          "placeholder": "Select manufacturer",
+          "help_text": "The manufacturer of the computer.",
+          "options": {
+            "no_manufacturer": "No manufacturer",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "Location",
+          "placeholder": "Select location",
+          "help_text": "The location of the computer.",
+          "options": {
+            "no_location": "No location",
+            "location_name": "{name} {description}"
+          }
+        },
+        "group_id": {
+          "label": "Group",
+          "placeholder": "Select group",
+          "help_text": "The group this computer belongs to.",
+          "options": {
+            "no_group": "No group",
+            "group_name": "{name} ({type})"
+          }
+        },
+        "assigned_to": {
+          "label": "Assigned To",
+          "placeholder": "Select user",
+          "help_text": "The user this computer is assigned to.",
+          "options": {
+            "no_user": "No user",
+            "user_name": "{name}"
+          }
+        },
+        "groups": {
+          "label": "Groups",
+          "placeholder": "Select groups",
+          "help_text": "The groups this computer belongs to.",
+          "options": {
+            "no_group": "No group",
+            "group_name": "{name} ({type})"
+          }
+        },
+        "confidentiality_level": {
+          "label": "Confidentiality Level",
+          "placeholder": "Select confidentiality level",
+          "help_text": "The confidentiality level of this computer.",
+          "options": {
+            "Public": "Public",
+            "Internal": "Internal",
+            "Confidential": "Confidential",
+            "Secret": "Secret"
+          }
+        },
+        "integrity_level": {
+          "label": "Integrity Level",
+          "placeholder": "Select integrity level",
+          "help_text": "The integrity level of this computer.",
+          "options": {
+            "High": "High",
+            "Medium": "Medium",
+            "Low": "Low"
+          }
+        },
+        "availability_level": {
+          "label": "Availability Level",
+          "placeholder": "Select availability level",
+          "help_text": "The availability level of this computer.",
+          "options": {
+            "High": "High",
+            "Medium": "Medium",
+            "Low": "Low"
           }
         }
       }
     }
+  },
+  "relationships": {
+    "groups": "Groups",
+    "users": "Users",
+    "roles": "Roles",
+    "assets": "Assets"
+  },
+  "relationshipWidget": {
+    "selectPlaceholder": "Select {item} to add...",
+    "emptyMessage": "No {item} assigned"
   }
 } 

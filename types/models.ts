@@ -35,7 +35,8 @@ export interface User extends BaseModel {
   status: UserStatus;
   valid_until?: string; // ISO date string
   valid_from?: string; // ISO date string
-  roles?: Role[];
+  role_id?: number;
+  role?: Role;
   groups?: Group[];
   refresh_tokens?: RefreshToken[];
 }
@@ -66,8 +67,98 @@ export interface Group extends BaseModel {
   comment?: string;
   parent_id?: number;
   users?: User[];
+  assets?: Asset[];
   parent?: Group;
   children?: Group[];
+}
+
+export interface Computer extends Asset {
+  cpu?: string;
+  ram?: string;
+  storage?: string;
+  os?: string;
+  mac_address?: string;
+  ip_address?: string;
+  model?: string;
+  hostname?: string;
+  groups?: Group[];
+}
+
+export interface VirtualMachine extends Asset {
+    // Virtualization platform details
+    hypervisor_type?: string;  // VMware, Hyper-V, KVM, Xen, VirtualBox
+    hypervisor_version?: string;
+    vm_platform?: string;  // vSphere, ESXi, Hyper-V Server, etc.
+    
+    // VM specifications
+    cpu_cores?: number;
+    memory_mb?: number;
+    storage_gb?: number;
+    os_type?: string;  // Windows, Linux, macOS
+    os_version?: string;
+    os_architecture?: string;  // x86_64, ARM64, etc.
+    
+    // Network configuration
+    ip_address?: string;
+    mac_address?: string;
+    network_segment?: string;  // DMZ, Internal, PCI, etc.
+    vlan_id?: string;
+    
+    // Security and compliance fields
+    pci_scope?: string;  // In Scope, Out of Scope
+    cardholder_data_environment?: string;  // CDE, Connected-to, Out-of-Scope
+    encryption_status?: string;  // Encrypted, Not Encrypted, Partial
+    encryption_type?: string;  // AES-256, AES-128, etc.
+    backup_encryption?: string;  // Yes, No, N/A
+    
+    // Access control and monitoring
+    admin_access_restricted?: string;  // Yes, No
+    multi_factor_auth_enabled?: string;  // Yes, No
+    logging_enabled?: string;  // Yes, No
+    monitoring_tool?: string;  // SIEM, IDS/IPS, etc.
+    
+    // Patch and vulnerability management
+    last_patch_date?: string;  // ISO date string
+    patch_level?: string;
+    vulnerability_scan_date?: string;  // ISO date string
+    vulnerability_status?: string;  // Compliant, Non-Compliant, Pending
+    
+    // Backup and disaster recovery
+    backup_frequency?: string;  // Daily, Weekly, Monthly
+    last_backup_date?: string;  // ISO date string
+    backup_retention_days?: number;
+    disaster_recovery_plan?: string;  // Yes, No, N/A
+    
+    // Virtualization security
+    isolation_level?: string;  // High, Medium, Low
+    resource_isolation?: string;  // Yes, No
+    network_isolation?: string;  // Yes, No
+    storage_isolation?: string;  // Yes, No
+    
+    // Compliance tracking
+    pci_assessment_date?: string;  // ISO date string
+    pci_compliance_status?: string;  // Compliant, Non-Compliant, In Progress
+    next_assessment_date?: string;  // ISO date string
+    compliance_notes?: string;
+    
+    // VM lifecycle
+    power_state?: string;  // Running, Stopped, Suspended
+    creation_date?: string;  // ISO date string
+    last_modified?: string;  // ISO datetime string
+    scheduled_decommission_date?: string;  // ISO date string
+    
+    // Resource allocation
+    cpu_allocation_percent?: number;
+    memory_allocation_percent?: number;
+    storage_allocation_percent?: number;
+    
+    // High availability and redundancy
+    ha_enabled?: string;  // Yes, No
+    redundancy_level?: string;  // None, N+1, N+2
+    failover_capability?: string;  // Yes, No
+    
+    // Relationships
+    groups?: Group[];
 }
 
 // Asset related types
@@ -81,7 +172,6 @@ export interface Asset extends BaseModel {
   purchase_date?: string; // ISO date string
   warranty_expiry?: string; // ISO date string
   location_id?: number; // Foreign key to Location
-  group_id?: number; // Foreign key to Group
   assigned_to?: number; // Foreign key to User
   created_at: string; // ISO datetime string
   updated_at: string; // ISO datetime string
@@ -165,7 +255,7 @@ export interface CreateUserRequest {
   valid_until?: string;
   valid_from?: string;
   administartive_number?: string;
-  roles?: number[];
+  role_id?: number;
 }
 
 export interface UpdateUserRequest {
@@ -181,8 +271,13 @@ export interface UpdateUserRequest {
   status?: UserStatus;
   valid_until?: string;
   valid_from?: string;
-  role_ids?: number[];
+  role_id?: number;
   group_ids?: number[];
+}
+
+export interface CreateRoleRequest {
+  name: string;
+  description?: string;
 }
 
 export interface CreateGroupRequest {
@@ -236,7 +331,7 @@ export interface UpdateAssetRequest {
 // Filter and query types
 export interface UserFilters {
   status?: UserStatus;
-  role?: string;
+  role_id?: number;
   group?: string;
   search?: string;
 }

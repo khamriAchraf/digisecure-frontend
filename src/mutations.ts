@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSession, getSession, signOut } from 'next-auth/react';
 import { API_BASE } from './fetchers';
-import { Group, CreateGroupRequest } from '../types/models';
+import { Group, CreateGroupRequest, Role, CreateRoleRequest } from '../types/models';
 
 // Generic mutation client that handles JSON requests, transparently refreshes the
 // access token on 401 and signs the user out if refresh also fails.
@@ -141,6 +141,100 @@ export const useDeleteGroup = (options?: {
   );
 };
 
+
+export const useAddAssetToGroup = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ groupId, assetId }: { groupId: number; assetId: number }) => {
+      return mutationClient(
+        `${API_BASE}/groups/${groupId}/assets/${assetId}`,
+        'POST',
+        undefined,
+        session?.accessToken
+      );
+    },
+    options
+  );
+};
+
+export const useRemoveAssetFromGroup = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ groupId, assetId }: { groupId: number; assetId: number }) => {
+      return mutationClient(
+        `${API_BASE}/groups/${groupId}/assets/${assetId}`,
+        'DELETE',
+        undefined,
+        session?.accessToken
+      );
+    },
+    options
+  );
+};
+
+
+// Group-User relationship mutations
+export const useAddUserToGroup = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ groupId, userId }: { groupId: number; userId: number }) => {
+      return mutationClient(
+        `${API_BASE}/groups/${groupId}/users/${userId}`,
+        'POST',
+        undefined,
+        session?.accessToken
+      );
+    },
+    options
+  );
+};
+
+export const useRemoveUserFromGroup = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ groupId, userId }: { groupId: number; userId: number }) => {
+      return mutationClient(
+        `${API_BASE}/groups/${groupId}/users/${userId}`,
+        'DELETE',
+        undefined,
+        session?.accessToken
+      );
+    },
+    options
+  );
+};
+
+// Roles mutations
+export const useCreateRole = (options?: {
+  onSuccess?: (role: Role) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<Role>(
+    async (roleData: CreateRoleRequest) => {
+      return mutationClient(`${API_BASE}/roles/`, 'POST', roleData, session?.accessToken);
+    },
+    options
+  );
+};
+
 // Users mutations
 export const useCreateUser = (options?: {
   onSuccess?: (user: any) => void;
@@ -227,6 +321,93 @@ export const useDeleteAsset = (options?: {
   );
 };
 
+// Computers mutations
+export const useCreateComputer = (options?: {
+  onSuccess?: (computer: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async (computerData: any) => {
+      return mutationClient(`${API_BASE}/assets/computers/`, 'POST', computerData, session?.accessToken);
+    },
+    options
+  );
+};
+
+export const useUpdateComputer = (options?: {
+  onSuccess?: (computer: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async ({ id, ...computerData }: { id: number } & any) => {
+      return mutationClient(`${API_BASE}/assets/computers/${id}`, 'PUT', computerData, session?.accessToken);
+    },
+    options
+  );
+};
+
+export const useDeleteComputer = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async (id: number) => {
+      return mutationClient(`${API_BASE}/assets/computers/${id}`, 'DELETE', undefined, session?.accessToken);
+    },
+    options
+  );
+};
+
+// Virtual Machines mutations
+export const useCreateVirtualMachine = (options?: {
+  onSuccess?: (virtualMachine: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async (virtualMachineData: any) => {
+      return mutationClient(`${API_BASE}/assets/virtual_machines/`, 'POST', virtualMachineData, session?.accessToken);
+    },
+    options
+  );
+};
+
+export const useUpdateVirtualMachine = (options?: {
+  onSuccess?: (virtualMachine: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async ({ id, ...virtualMachineData }: { id: number } & any) => {
+      return mutationClient(`${API_BASE}/assets/virtual_machines/${id}`, 'PUT', virtualMachineData, session?.accessToken);
+    },
+    options
+  );
+};
+
+export const useDeleteVirtualMachine = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async (id: number) => {
+      return mutationClient(`${API_BASE}/assets/virtual_machines/${id}`, 'DELETE', undefined, session?.accessToken);
+    },
+    options
+  );
+};
+
+
 // Generic quick create mutation for any resource type
 export const useQuickCreate = (resourceType: string, options?: {
   onSuccess?: (data: any) => void;
@@ -241,6 +422,8 @@ export const useQuickCreate = (resourceType: string, options?: {
     options
   );
 };
+
+
 
 // Export the mutation client for direct use if needed
 export { mutationClient }; 

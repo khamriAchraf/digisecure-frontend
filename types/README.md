@@ -118,7 +118,7 @@ const assetColumns: TableColumn<Asset>[] = [
 
 The types maintain the same relationships as the backend models:
 
-- **User** ↔ **Role** (many-to-many via user_roles)
+- **User** → **Role** (foreign key `role_id`)
 - **User** ↔ **Group** (many-to-many via user_groups)
 - **Role** ↔ **Permission** (many-to-many via role_permissions)
 - **Asset** → **AssetType** (foreign key)

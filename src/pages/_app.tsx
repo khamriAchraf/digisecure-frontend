@@ -11,16 +11,29 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Navbar } from '../../components/Navbar';
 import { Header } from '../../components/Header';
-import { LanguageProvider } from '../contexts/LanguageContext';
+import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
+import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
 
 const theme = createTheme({
   /** Put your mantine theme override here */
+  primaryColor: 'blue',
+  fontFamily: 'Inter, sans-serif',
+  components: {
+    AppShell: {
+      styles: {
+        main: {
+          background: 'var(--mantine-color-body)',
+        },
+      },
+    },
+  },
 });
 
 function AppContent({ Component, pageProps }: AppProps) {
   const [opened, { toggle }] = useDisclosure();
   const { data: session, status } = useSession();
   const router = useRouter();
+  const { locale } = useLanguage();
 
   // Handle authentication redirects
   useEffect(() => {
@@ -72,13 +85,25 @@ function AppContent({ Component, pageProps }: AppProps) {
   return <div>Loading...</div>;
 }
 
+function AppWithDirection(props: AppProps) {
+  const { locale } = useLanguage();
+  
+  return (
+    <MantineProvider theme={theme}>
+      <ThemeProvider>
+        <div dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <AppContent {...props} />
+        </div>
+      </ThemeProvider>
+    </MantineProvider>
+  );
+}
+
 export default function App(props: AppProps) {
   return (
     <LanguageProvider>
       <SessionProvider session={props.pageProps.session}>
-        <MantineProvider theme={theme}>
-          <AppContent {...props} />
-        </MantineProvider>
+        <AppWithDirection {...props} />
       </SessionProvider>
     </LanguageProvider>
   );
