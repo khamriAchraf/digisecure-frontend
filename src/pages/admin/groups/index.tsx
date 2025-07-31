@@ -1,9 +1,10 @@
 import { Container } from '@mantine/core';
 import { Group } from '../../../../types/models';
 import { DataTable, useDataTable } from '../../../../components/DataTable/index';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { t } from '../../../../i18n';
+import Head from 'next/head';
 
 export default function AdminGroupsPage() {
   const router = useRouter();
@@ -50,6 +51,10 @@ export default function AdminGroupsPage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('datatable.groups')} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <DataTable<Group>
         dataType="groups"
@@ -80,5 +85,6 @@ export default function AdminGroupsPage() {
         showExportButton={true}
       />
     </Container>
+    </React.Fragment>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableColumn } from '../../types/utils';
-import { User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine } from '../../types/models';
-import { IconUser, IconShield, IconUsers, IconDeviceDesktop, IconCategory, IconBuilding, IconMapPin, IconDeviceLaptop } from '@tabler/icons-react';
+import { User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine, NetworkDevice, Software } from '../../types/models';
+import { IconUser, IconShield, IconUsers, IconDeviceDesktop, IconCategory, IconBuilding, IconMapPin, IconDeviceLaptop, IconApps } from '@tabler/icons-react';
 
 // Base configuration interface
 export interface DataTableConfig<T> {
@@ -421,6 +421,41 @@ export const createComputerConfig = (t: (key: string) => string): DataTableConfi
   pageSizeOptions: [5, 10, 20, 50, 100],
 });
 
+// Software configuration factory
+export const createSoftwareConfig = (t:(k:string)=>string): DataTableConfig<Software>=>({
+  type:'software',
+  icon: IconApps,
+  columns:[
+    {key:'id',label:t('datatable.id'),sortable:true,width:80},
+    {key:'name',label:t('common.name'),sortable:true,filterable:true},
+    {key:'vendor',label:t('datatable.vendor'),sortable:true,filterable:true,render:(v:any)=>v||t('datatable.na')},
+    {key:'software_type',label:t('datatable.softwareType'),sortable:true,filterable:true,render:(v:any)=>v||t('datatable.na')},
+  ],
+  searchableFields:['name','vendor','software_type'],
+  sortableFields:['id','name','vendor','software_type'],
+  defaultSort:{field:'name',order:'asc'},
+  defaultPageSize:20,
+  pageSizeOptions:[5,10,20,50,100],
+});
+
+// Network Device configuration factory
+export const createNetworkDeviceConfig = (t: (key: string) => string): DataTableConfig<NetworkDevice> => ({
+    type: 'network_devices',
+    icon: IconDeviceDesktop,
+    columns: [
+      { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
+      { key: 'name', label: t('common.name'), sortable: true, filterable: true },
+      { key: 'device_type', label: t('datatable.deviceType'), sortable: true, filterable: true, render: (v:any)=>v||t('datatable.na') },
+      { key: 'ip_address', label: t('datatable.ipAddress'), sortable: true, filterable: true, render:(v:any)=>v||t('datatable.na')},
+      { key: 'status', label: t('common.status'), sortable: true, filterable: true, render:(v:any)=>v||t('datatable.na')},
+    ],
+    searchableFields: ['name','device_type','ip_address','status'],
+    sortableFields: ['id','name','device_type','ip_address','status'],
+    defaultSort: { field: 'name', order: 'asc' },
+    defaultPageSize: 20,
+    pageSizeOptions: [5,10,20,50,100],
+});
+
 // Virtual Machine configuration factory
 export const createVirtualMachineConfig = (t: (key: string) => string): DataTableConfig<VirtualMachine> => ({
     type: 'virtual_machines',
@@ -446,13 +481,15 @@ export const createDataTableConfigs = (t: (key: string) => string) => ({
   groups: createGroupConfig(t),
   assets: createAssetConfig(t),
   computers: createComputerConfig(t),
+  network_devices: createNetworkDeviceConfig(t),
+  software: createSoftwareConfig(t),
   virtual_machines: createVirtualMachineConfig(t),
   asset_types: createAssetTypeConfig(t),
   manufacturers: createManufacturerConfig(t),
   locations: createLocationConfig(t),
 });
 
-export type DataType = 'users' | 'roles' | 'groups' | 'computers' | 'asset_types' | 'manufacturers' | 'locations' | 'virtual_machines';
+export type DataType = 'users' | 'roles' | 'groups' | 'computers' | 'network_devices' | 'software' | 'asset_types' | 'manufacturers' | 'locations' | 'virtual_machines';
 
 // Helper function to get configuration for a data type
 export function getDataTableConfig<T>(type: DataType, t: (key: string) => string): DataTableConfig<T> {
@@ -462,6 +499,6 @@ export function getDataTableConfig<T>(type: DataType, t: (key: string) => string
 
 // Helper function to check if a data type is supported
 export function isSupportedDataType(type: string): type is DataType {
-  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'computers', 'asset_types', 'manufacturers', 'locations', 'virtual_machines'];
+  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'computers', 'network_devices', 'software', 'asset_types', 'manufacturers', 'locations', 'virtual_machines'];
   return supportedTypes.includes(type as DataType);
 } 

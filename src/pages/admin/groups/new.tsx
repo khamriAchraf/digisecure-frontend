@@ -4,15 +4,16 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import { Breadcrumbs } from '../../../../components/Breadcrumbs';
 import { useTranslation } from '../../../hooks/useTranslation';
 import DynamicForm from '../../../../components/DynamicForm';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { API_BASE } from '../../../../src/fetchers';
 import { useCreateGroup } from '../../../../src/mutations';
+import Head from 'next/head';
 
 export default function CreateGroupPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { data: session } = useSession();
+  const { data: session } = useSession(); 
 
   const createGroupMutation = useCreateGroup({
     onSuccess: (group) => {
@@ -114,6 +115,10 @@ export default function CreateGroupPage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('forms.group.create.title')} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
@@ -138,5 +143,6 @@ export default function CreateGroupPage() {
         />
       </Stack>
     </Container>
+    </React.Fragment>
   );
 } 

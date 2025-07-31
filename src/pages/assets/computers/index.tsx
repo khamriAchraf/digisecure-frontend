@@ -1,10 +1,11 @@
 import { Container } from '@mantine/core';
 import { Group } from '../../../../types/models';
 import { DataTable, useDataTable } from '../../../../components/DataTable/index';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { t } from '../../../../i18n';
 import { Computer } from '../../../../types/models';
+import Head from 'next/head';
 
 export default function ComputersPage() {
   const router = useRouter();
@@ -51,6 +52,10 @@ export default function ComputersPage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('datatable.computers')} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <DataTable<Computer>
         dataType="computers"
@@ -81,5 +86,6 @@ export default function ComputersPage() {
         showExportButton={true}
       />
     </Container>
+    </React.Fragment>
   );
 }

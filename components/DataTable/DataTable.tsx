@@ -53,8 +53,12 @@ const getCreatePermission = (dataType: DataType): string => {
       return PERMISSIONS.ROLE_CREATE;
     case 'groups':
       return PERMISSIONS.GROUP_CREATE;
+    case 'network_devices':
+      return PERMISSIONS.NETWORK_DEVICE_CREATE;
     case 'computers':
       return PERMISSIONS.COMPUTER_CREATE;
+    case 'software':
+      return PERMISSIONS.SOFTWARE_CREATE;
     case 'virtual_machines':
         return PERMISSIONS.VIRTUAL_MACHINE_CREATE;
     case 'asset_types':

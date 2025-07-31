@@ -1,9 +1,10 @@
 import { Container } from '@mantine/core';
 import { User } from '../../../../types/models';
 import { DataTable, useDataTable } from '../../../../components/DataTable/index';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { t } from '../../../../i18n';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export default function AdminUsersPage() {
   const router = useRouter();
@@ -51,35 +52,40 @@ export default function AdminUsersPage() {
   };
 
   return (
-    <Container size="xl" py="md">
-      <DataTable<User>
-        dataType="users"
-        data={paginatedData?.data || data}
-        paginatedData={paginatedData}
-        isLoading={isLoading}
-        error={error?.message}
-        onPageChange={setPage}
-        onPageSizeChange={setPageSize}
-        onSortChange={setSort}
-        onSearchChange={setSearch}
-        onFilterChange={setFilters}
-        onRefresh={refresh}
-        onEdit={handleEdit}
-        onRowClick={handleRowClick}
-        onDelete={handleDelete}
-        onCreate={handleCreate}
-        onExport={handleExport}
-        selectable={true}
-        title={t('datatable.users')}
-        showSearch={true}
-        showFilters={true}
-        showActions={true}
-        showPagination={true}
-        showPageSizeSelector={true}
-        showRefreshButton={true}
-        showCreateButton={true}
-        showExportButton={true}
-      />
-    </Container>
+    <React.Fragment>
+      <Head>
+        <title>{t('datatable.users')} - Digi Secure</title>
+      </Head>
+      <Container size="xl" py="md">
+        <DataTable<User>
+          dataType="users"
+          data={paginatedData?.data || data}
+          paginatedData={paginatedData}
+          isLoading={isLoading}
+          error={error?.message}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+          onSortChange={setSort}
+          onSearchChange={setSearch}
+          onFilterChange={setFilters}
+          onRefresh={refresh}
+          onEdit={handleEdit}
+          onRowClick={handleRowClick}
+          onDelete={handleDelete}
+          onCreate={handleCreate}
+          onExport={handleExport}
+          selectable={true}
+          title={t('datatable.users')}
+          showSearch={true}
+          showFilters={true}
+          showActions={true}
+          showPagination={true}
+          showPageSizeSelector={true}
+          showRefreshButton={true}
+          showCreateButton={true}
+          showExportButton={true}
+        />
+      </Container>
+    </React.Fragment>
   );
 }

@@ -84,6 +84,136 @@ export interface Computer extends Asset {
   groups?: Group[];
 }
 
+export interface NetworkDevice extends Asset {
+    device_type?: string;
+    model?: string;
+    ip_address?: string;
+    mac_address?: string;
+    port_count?: number;
+    connection_type?: string;
+    management_ip?: string;
+    firmware_version?: string;
+
+    // Physical security
+    rack_location?: string;
+    physical_lock?: string;
+    tamper_evident?: string;
+
+    // Network security
+    vlan?: string;
+    segmentation?: string;
+    firewall_enabled?: boolean;
+    ids_ips_enabled?: boolean;
+    remote_access_enabled?: boolean;
+    remote_access_method?: string;
+    remote_access_restriction?: string;
+
+    // Authentication and access control
+    admin_username?: string;
+    admin_password_set?: boolean;
+    password_last_changed?: string;
+    multi_factor_auth_enabled?: boolean;
+    default_accounts_disabled?: boolean;
+
+    // Logging and monitoring
+    logging_enabled?: boolean;
+    log_retention_days?: number;
+    syslog_server?: string;
+    snmp_enabled?: boolean;
+    snmp_version?: string;
+    monitoring_tool?: string;
+
+    // Patch and vulnerability management
+    last_patch_date?: string;
+    patch_level?: string;
+    vulnerability_scan_date?: string;
+    vulnerability_status?: string;
+
+    // Encryption
+    management_encryption?: boolean;
+    encryption_type?: string;
+    data_in_transit_encryption?: boolean;
+
+    // Compliance tracking
+    pci_assessment_date?: string;
+    pci_compliance_status?: string;
+    next_assessment_date?: string;
+    compliance_notes?: string;
+
+    // Device lifecycle
+    power_state?: string;
+    creation_date?: string;
+    last_modified?: string;
+    scheduled_decommission_date?: string;
+
+    // Redundancy and high availability
+    ha_enabled?: boolean;
+    redundancy_level?: string;
+    failover_capability?: boolean;
+    groups?: Group[];
+}
+
+export interface Software extends BaseModel {
+    name: string;
+    vendor?: string;
+    description?: string;
+    software_type?: string;
+
+    handles_cardholder_data?: boolean;
+    stores_cardholder_data?: boolean;
+    transmits_cardholder_data?: boolean;
+    processes_cardholder_data?: boolean;
+
+    encryption_enabled?: boolean;
+    encryption_type?: string;
+    encryption_key_management?: string;
+    secure_communication?: boolean;
+    communication_protocol?: string;
+
+    authentication_required?: boolean;
+    multi_factor_auth_supported?: boolean;
+    role_based_access_control?: boolean;
+    session_timeout_enabled?: boolean;
+    session_timeout_minutes?: number;
+
+    audit_logging_enabled?: boolean;
+    log_retention_days?: number;
+    log_integrity_protection?: boolean;
+    centralized_logging?: boolean;
+
+    last_vulnerability_scan?: string;
+    vulnerability_status?: string;
+    known_vulnerabilities?: string;
+    patch_management_enabled?: boolean;
+    last_patch_date?: string;
+    patch_level?: string;
+    auto_update_enabled?: boolean;
+
+    network_access_required?: boolean;
+    firewall_rules_required?: string;
+    vpn_required?: boolean;
+    network_segmentation?: string;
+
+    data_classification?: string;
+    data_retention_policy?: string;
+    data_backup_enabled?: boolean;
+    data_encryption_at_rest?: boolean;
+
+    pci_compliance_status?: string;
+    pci_assessment_date?: string;
+    next_assessment_date?: string;
+    compliance_notes?: string;
+
+    end_of_life_date?: string;
+    end_of_support_date?: string;
+    replacement_planned?: boolean;
+    replacement_software_id?: number;
+
+    minimum_requirements?: string;
+    recommended_requirements?: string;
+    resource_usage_monitoring?: boolean;
+}
+
 export interface VirtualMachine extends Asset {
     // Virtualization platform details
     hypervisor_type?: string;  // VMware, Hyper-V, KVM, Xen, VirtualBox

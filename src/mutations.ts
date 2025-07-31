@@ -321,6 +321,43 @@ export const useDeleteAsset = (options?: {
   );
 };
 
+// Software mutations
+export const useCreateSoftware = (options?: {onSuccess?: (s:any)=>void; onError?: (e:any)=>void;})=>{
+  const {data:session}=useSession();
+  return useMutation(async(data:any)=>mutationClient(`${API_BASE}/assets/software/`,'POST',data,session?.accessToken),options);
+};
+export const useUpdateSoftware = (options?: {onSuccess?:(s:any)=>void; onError?:(e:any)=>void;})=>{
+  const {data:session}=useSession();
+  return useMutation(async({id,...data}:{id:number}&any)=>mutationClient(`${API_BASE}/assets/software/${id}`,'PUT',data,session?.accessToken),options);
+};
+export const useDeleteSoftware = (options?: {onSuccess?:()=>void; onError?:(e:any)=>void;})=>{
+  const {data:session}=useSession();
+  return useMutation<void>(async(id:number)=>mutationClient(`${API_BASE}/assets/software/${id}`,'DELETE',undefined,session?.accessToken),options);
+};
+
+// Network Devices mutations
+export const useCreateNetworkDevice = (options?: { onSuccess?: (nd:any)=>void; onError?: (e:any)=>void;}) => {
+  const { data: session } = useSession();
+  return useMutation(
+    async (data:any)=> mutationClient(`${API_BASE}/assets/network_devices/`,'POST',data,session?.accessToken),
+    options
+  );
+};
+export const useUpdateNetworkDevice = (options?: { onSuccess?: (nd:any)=>void; onError?: (e:any)=>void;})=>{
+  const { data: session } = useSession();
+  return useMutation(
+    async ({id,...data}:{id:number}&any)=>mutationClient(`${API_BASE}/assets/network_devices/${id}`,'PUT',data,session?.accessToken),
+    options
+  );
+};
+export const useDeleteNetworkDevice = (options?: { onSuccess?: () => void; onError?: (e:any)=>void;})=>{
+  const { data: session } = useSession();
+  return useMutation<void>(
+    async (id:number)=>mutationClient(`${API_BASE}/assets/network_devices/${id}`,'DELETE',undefined,session?.accessToken),
+    options
+  );
+};
+
 // Computers mutations
 export const useCreateComputer = (options?: {
   onSuccess?: (computer: any) => void;

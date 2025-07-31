@@ -160,11 +160,17 @@
     "os": "Système d'exploitation",
     "macAddress": "Adresse MAC",
     "ipAddress": "Adresse IP",
+    "deviceType": "Type de périphérique",
     "model": "Modèle",
     "hostname": "Nom d'hôte",
     "assignedTo": "Assigné à",
     "group": "Groupe",
-    "computers": "Ordinateurs"
+    "computers": "Ordinateurs",
+    "virtual_machine": "Machine virtuelle",
+    "virtual_machines": "Machines virtuelles",
+    "network_device": "Périphérique réseau",
+    "network_devices": "Périphériques réseau",
+    "software": "Logiciels"
   },
   "forms": {
     "errors": {
@@ -182,7 +188,14 @@
       "assets": "Actifs",
       "specifications": "Spécifications",
       "network": "Réseau",
-      "security": "Sécurité"
+      "security": "Sécurité",
+      "virtualization": "Virtualisation",
+      "compliance": "Conformité",
+      "pci_compliance": "Conformité PCI",
+      "backup": "Sauvegarde",
+      "authentication": "Authentification",
+      "monitoring": "Surveillance",
+      "lifecycle": "Cycle de vie"
     },
     "group": {
       "create": {
@@ -562,6 +575,1024 @@
             "Medium": "Moyen",
             "Low": "Faible"
           }
+        }
+      }
+    },
+    "virtual_machine": {
+      "create": {
+        "title": "Créer une machine virtuelle",
+        "description": "Créer une nouvelle machine virtuelle dans le système"
+      },
+      "edit": {
+        "title": "Modifier la machine virtuelle : {name}",
+        "description": "Modifier les informations et relations de la machine virtuelle"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom de la machine virtuelle",
+          "help_text": "Le nom de la machine virtuelle.",
+          "errors": {
+            "required": "Le nom de la machine virtuelle est requis."
+          }
+        },
+        "serial_number": {
+          "label": "Numéro de série",
+          "placeholder": "Entrez le numéro de série",
+          "help_text": "Le numéro de série pour cette machine virtuelle."
+        },
+        "inventory_number": {
+          "label": "Numéro d'inventaire",
+          "placeholder": "Entrez le numéro d'inventaire",
+          "help_text": "Le numéro d'inventaire interne pour cette machine virtuelle."
+        },
+        "assigned_to": {
+          "label": "Assigné à",
+          "placeholder": "Sélectionnez l'utilisateur",
+          "help_text": "L'utilisateur auquel cette machine virtuelle est assignée.",
+          "options": {
+            "no_user": "Aucun utilisateur",
+            "user_name": "{name}"
+          }
+        },
+        "status": {
+          "label": "Statut",
+          "placeholder": "Sélectionnez le statut",
+          "help_text": "Statut actuel de la machine virtuelle.",
+          "options": {
+            "active": "Actif",
+            "inactive": "Inactif",
+            "maintenance": "Maintenance",
+            "retired": "Retiré"
+          }
+        },
+        "purchase_date": {
+          "label": "Date d'achat",
+          "placeholder": "Sélectionnez la date d'achat",
+          "help_text": "Date d'achat de la machine virtuelle."
+        },
+        "warranty_expiry": {
+          "label": "Expiration de la garantie",
+          "placeholder": "Sélectionnez la date d'expiration de la garantie",
+          "help_text": "Date d'expiration de la garantie de la machine virtuelle."
+        },
+        "manufacturer_id": {
+          "label": "Fabricant",
+          "placeholder": "Sélectionnez le fabricant",
+          "help_text": "Le fabricant de la machine virtuelle.",
+          "options": {
+            "no_manufacturer": "Aucun fabricant",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "Localisation",
+          "placeholder": "Sélectionnez la localisation",
+          "help_text": "La localisation de la machine virtuelle.",
+          "options": {
+            "no_location": "Aucune localisation",
+            "location_name": "{name} {description}"
+          }
+        },
+        "hypervisor_type": {
+          "label": "Type d'hyperviseur",
+          "placeholder": "Sélectionnez le type d'hyperviseur",
+          "help_text": "Type d'hyperviseur utilisé pour cette machine virtuelle.",
+          "options": {
+            "vmware": "VMware",
+            "hyperv": "Hyper-V",
+            "kvm": "KVM",
+            "xen": "Xen",
+            "virtualbox": "VirtualBox"
+          }
+        },
+        "hypervisor_version": {
+          "label": "Version de l'hyperviseur",
+          "placeholder": "Entrez la version de l'hyperviseur",
+          "help_text": "Version du logiciel hyperviseur."
+        },
+        "vm_platform": {
+          "label": "Plateforme VM",
+          "placeholder": "Entrez la plateforme VM",
+          "help_text": "Plateforme ou environnement où la VM s'exécute."
+        },
+        "power_state": {
+          "label": "État d'alimentation",
+          "placeholder": "Sélectionnez l'état d'alimentation",
+          "help_text": "État d'alimentation actuel de la machine virtuelle.",
+          "options": {
+            "running": "En cours d'exécution",
+            "stopped": "Arrêté",
+            "suspended": "Suspendu"
+          }
+        },
+        "creation_date": {
+          "label": "Date de création",
+          "placeholder": "Sélectionnez la date de création",
+          "help_text": "Date de création de la machine virtuelle."
+        },
+        "scheduled_decommission_date": {
+          "label": "Date de déclassement prévue",
+          "placeholder": "Sélectionnez la date de déclassement",
+          "help_text": "Date prévue pour le déclassement de la machine virtuelle."
+        },
+        "ha_enabled": {
+          "label": "Haute disponibilité activée",
+          "placeholder": "Sélectionnez le statut HA",
+          "help_text": "Si la haute disponibilité est activée pour cette VM.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "redundancy_level": {
+          "label": "Niveau de redondance",
+          "placeholder": "Sélectionnez le niveau de redondance",
+          "help_text": "Niveau de redondance configuré pour cette VM.",
+          "options": {
+            "none": "Aucun",
+            "n_plus_1": "N+1",
+            "n_plus_2": "N+2"
+          }
+        },
+        "failover_capability": {
+          "label": "Capacité de basculement",
+          "placeholder": "Sélectionnez la capacité de basculement",
+          "help_text": "Si la capacité de basculement est activée.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "confidentiality_level": {
+          "label": "Niveau de confidentialité",
+          "placeholder": "Sélectionnez le niveau de confidentialité",
+          "help_text": "Le niveau de confidentialité de cette machine virtuelle.",
+          "options": {
+            "Public": "Public",
+            "Internal": "Interne",
+            "Confidential": "Confidentiel",
+            "Secret": "Secret"
+          }
+        },
+        "integrity_level": {
+          "label": "Niveau d'intégrité",
+          "placeholder": "Sélectionnez le niveau d'intégrité",
+          "help_text": "Le niveau d'intégrité de cette machine virtuelle.",
+          "options": {
+            "High": "Élevé",
+            "Medium": "Moyen",
+            "Low": "Faible"
+          }
+        },
+        "availability_level": {
+          "label": "Niveau de disponibilité",
+          "placeholder": "Sélectionnez le niveau de disponibilité",
+          "help_text": "Le niveau de disponibilité de cette machine virtuelle.",
+          "options": {
+            "High": "Élevé",
+            "Medium": "Moyen",
+            "Low": "Faible"
+          }
+        },
+        "encryption_status": {
+          "label": "Statut de chiffrement",
+          "placeholder": "Sélectionnez le statut de chiffrement",
+          "help_text": "Statut de chiffrement actuel de la machine virtuelle.",
+          "options": {
+            "encrypted": "Chiffré",
+            "not_encrypted": "Non chiffré",
+            "partial": "Partiel"
+          }
+        },
+        "encryption_type": {
+          "label": "Type de chiffrement",
+          "placeholder": "Entrez le type de chiffrement",
+          "help_text": "Type de chiffrement utilisé pour cette machine virtuelle."
+        },
+        "admin_access_restricted": {
+          "label": "Accès administrateur restreint",
+          "placeholder": "Sélectionnez le statut d'accès administrateur",
+          "help_text": "Si l'accès administratif est restreint.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "multi_factor_auth_enabled": {
+          "label": "Authentification multi-facteurs activée",
+          "placeholder": "Sélectionnez le statut MFA",
+          "help_text": "Si l'authentification multi-facteurs est activée.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "logging_enabled": {
+          "label": "Journalisation activée",
+          "placeholder": "Sélectionnez le statut de journalisation",
+          "help_text": "Si la journalisation est activée pour cette machine virtuelle.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "monitoring_tool": {
+          "label": "Outil de surveillance",
+          "placeholder": "Entrez le nom de l'outil de surveillance",
+          "help_text": "Nom de l'outil de surveillance utilisé pour cette VM."
+        },
+        "isolation_level": {
+          "label": "Niveau d'isolation",
+          "placeholder": "Sélectionnez le niveau d'isolation",
+          "help_text": "Niveau d'isolation pour cette machine virtuelle.",
+          "options": {
+            "high": "Élevé",
+            "medium": "Moyen",
+            "low": "Faible"
+          }
+        },
+        "resource_isolation": {
+          "label": "Isolation des ressources",
+          "placeholder": "Sélectionnez le statut d'isolation des ressources",
+          "help_text": "Si l'isolation des ressources est activée.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "network_isolation": {
+          "label": "Isolation réseau",
+          "placeholder": "Sélectionnez le statut d'isolation réseau",
+          "help_text": "Si l'isolation réseau est activée.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "storage_isolation": {
+          "label": "Isolation du stockage",
+          "placeholder": "Sélectionnez le statut d'isolation du stockage",
+          "help_text": "Si l'isolation du stockage est activée.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "cpu_cores": {
+          "label": "Cœurs CPU",
+          "placeholder": "Entrez le nombre de cœurs CPU",
+          "help_text": "Nombre de cœurs CPU alloués à cette machine virtuelle."
+        },
+        "memory_mb": {
+          "label": "Mémoire (Mo)",
+          "placeholder": "Entrez la mémoire en Mo",
+          "help_text": "Quantité de mémoire allouée à cette machine virtuelle en Mo."
+        },
+        "storage_gb": {
+          "label": "Stockage (Go)",
+          "placeholder": "Entrez le stockage en Go",
+          "help_text": "Quantité de stockage allouée à cette machine virtuelle en Go."
+        },
+        "os_type": {
+          "label": "Type de système d'exploitation",
+          "placeholder": "Sélectionnez le type d'OS",
+          "help_text": "Type de système d'exploitation installé sur cette machine virtuelle.",
+          "options": {
+            "windows": "Windows",
+            "linux": "Linux",
+            "macos": "macOS"
+          }
+        },
+        "os_version": {
+          "label": "Version du système d'exploitation",
+          "placeholder": "Entrez la version de l'OS",
+          "help_text": "Version du système d'exploitation installé."
+        },
+        "os_architecture": {
+          "label": "Architecture du système d'exploitation",
+          "placeholder": "Sélectionnez l'architecture de l'OS",
+          "help_text": "Architecture du système d'exploitation.",
+          "options": {
+            "x86_64": "x86_64",
+            "arm64": "ARM64",
+            "i386": "i386"
+          }
+        },
+        "model": {
+          "label": "Modèle",
+          "placeholder": "Entrez le modèle",
+          "help_text": "Le modèle de la machine virtuelle."
+        },
+        "cpu": {
+          "label": "Processeur",
+          "placeholder": "Entrez la spécification du processeur",
+          "help_text": "La spécification du processeur pour cette machine virtuelle."
+        },
+        "ram": {
+          "label": "RAM",
+          "placeholder": "Entrez la spécification de la RAM",
+          "help_text": "La spécification de la RAM pour cette machine virtuelle."
+        },
+        "storage": {
+          "label": "Stockage",
+          "placeholder": "Entrez la spécification du stockage",
+          "help_text": "La spécification du stockage pour cette machine virtuelle."
+        },
+        "os": {
+          "label": "Système d'exploitation",
+          "placeholder": "Entrez le système d'exploitation",
+          "help_text": "Le système d'exploitation installé sur cette machine virtuelle."
+        },
+        "hostname": {
+          "label": "Nom d'hôte",
+          "placeholder": "Entrez le nom d'hôte",
+          "help_text": "Le nom d'hôte réseau pour cette machine virtuelle."
+        },
+        "cpu_allocation_percent": {
+          "label": "Allocation CPU (%)",
+          "placeholder": "Entrez le pourcentage d'allocation CPU",
+          "help_text": "Pourcentage de ressources CPU allouées à cette VM."
+        },
+        "memory_allocation_percent": {
+          "label": "Allocation mémoire (%)",
+          "placeholder": "Entrez le pourcentage d'allocation mémoire",
+          "help_text": "Pourcentage de ressources mémoire allouées à cette VM."
+        },
+        "storage_allocation_percent": {
+          "label": "Allocation stockage (%)",
+          "placeholder": "Entrez le pourcentage d'allocation stockage",
+          "help_text": "Pourcentage de ressources de stockage allouées à cette VM."
+        },
+        "network_segment": {
+          "label": "Segment réseau",
+          "placeholder": "Sélectionnez le segment réseau",
+          "help_text": "Segment réseau où cette machine virtuelle est déployée.",
+          "options": {
+            "dmz": "DMZ",
+            "internal": "Interne",
+            "pci": "PCI",
+            "management": "Gestion"
+          }
+        },
+        "vlan_id": {
+          "label": "ID VLAN",
+          "placeholder": "Entrez l'ID VLAN",
+          "help_text": "Identifiant VLAN pour cette machine virtuelle."
+        },
+        "ip_address": {
+          "label": "Adresse IP",
+          "placeholder": "Entrez l'adresse IP",
+          "help_text": "Adresse IP assignée à cette machine virtuelle."
+        },
+        "mac_address": {
+          "label": "Adresse MAC",
+          "placeholder": "Entrez l'adresse MAC",
+          "help_text": "Adresse MAC de l'interface réseau de la machine virtuelle."
+        },
+        "pci_scope": {
+          "label": "Portée PCI",
+          "placeholder": "Sélectionnez la portée PCI",
+          "help_text": "Si cette machine virtuelle est dans la portée PCI.",
+          "options": {
+            "in_scope": "Dans la portée",
+            "out_of_scope": "Hors de la portée"
+          }
+        },
+        "cardholder_data_environment": {
+          "label": "Environnement de données des titulaires de cartes",
+          "placeholder": "Sélectionnez le statut CDE",
+          "help_text": "Classification de l'environnement de données des titulaires de cartes.",
+          "options": {
+            "cde": "CDE",
+            "connected_to": "Connecté à",
+            "out_of_scope": "Hors de la portée"
+          }
+        },
+        "pci_assessment_date": {
+          "label": "Date d'évaluation PCI",
+          "placeholder": "Sélectionnez la date d'évaluation PCI",
+          "help_text": "Date de la dernière évaluation PCI."
+        },
+        "pci_compliance_status": {
+          "label": "Statut de conformité PCI",
+          "placeholder": "Sélectionnez le statut de conformité PCI",
+          "help_text": "Statut de conformité PCI actuel.",
+          "options": {
+            "compliant": "Conforme",
+            "non_compliant": "Non conforme",
+            "in_progress": "En cours"
+          }
+        },
+        "next_assessment_date": {
+          "label": "Date de prochaine évaluation",
+          "placeholder": "Sélectionnez la date de prochaine évaluation",
+          "help_text": "Date de la prochaine évaluation prévue."
+        },
+        "compliance_notes": {
+          "label": "Notes de conformité",
+          "placeholder": "Entrez les notes de conformité",
+          "help_text": "Notes supplémentaires liées à la conformité."
+        },
+        "last_patch_date": {
+          "label": "Date du dernier correctif",
+          "placeholder": "Sélectionnez la date du dernier correctif",
+          "help_text": "Date d'application du dernier correctif."
+        },
+        "patch_level": {
+          "label": "Niveau de correctif",
+          "placeholder": "Entrez le niveau de correctif",
+          "help_text": "Niveau de correctif actuel de la machine virtuelle."
+        },
+        "vulnerability_scan_date": {
+          "label": "Date de scan de vulnérabilité",
+          "placeholder": "Sélectionnez la date de scan de vulnérabilité",
+          "help_text": "Date du dernier scan de vulnérabilité."
+        },
+        "vulnerability_status": {
+          "label": "Statut de vulnérabilité",
+          "placeholder": "Sélectionnez le statut de vulnérabilité",
+          "help_text": "Statut de vulnérabilité actuel.",
+          "options": {
+            "compliant": "Conforme",
+            "non_compliant": "Non conforme",
+            "pending": "En attente"
+          }
+        },
+        "backup_frequency": {
+          "label": "Fréquence de sauvegarde",
+          "placeholder": "Sélectionnez la fréquence de sauvegarde",
+          "help_text": "Fréquence des sauvegardes pour cette machine virtuelle.",
+          "options": {
+            "daily": "Quotidienne",
+            "weekly": "Hebdomadaire",
+            "monthly": "Mensuelle"
+          }
+        },
+        "last_backup_date": {
+          "label": "Date de dernière sauvegarde",
+          "placeholder": "Sélectionnez la date de dernière sauvegarde",
+          "help_text": "Date de la dernière sauvegarde."
+        },
+        "backup_retention_days": {
+          "label": "Rétention de sauvegarde (jours)",
+          "placeholder": "Entrez les jours de rétention de sauvegarde",
+          "help_text": "Nombre de jours de conservation des sauvegardes."
+        },
+        "backup_encryption": {
+          "label": "Chiffrement de sauvegarde",
+          "placeholder": "Sélectionnez le statut de chiffrement de sauvegarde",
+          "help_text": "Si les sauvegardes sont chiffrées.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non",
+            "na": "N/A"
+          }
+        },
+        "disaster_recovery_plan": {
+          "label": "Plan de reprise après sinistre",
+          "placeholder": "Sélectionnez le statut du plan DR",
+          "help_text": "Si un plan de reprise après sinistre existe.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non",
+            "na": "N/A"
+          }
+        },
+        "group_id": {
+          "label": "Groupe",
+          "placeholder": "Sélectionnez le groupe",
+          "help_text": "Le groupe auquel appartient cette machine virtuelle.",
+          "options": {
+            "no_group": "Aucun groupe",
+            "group_name": "{name} ({type})"
+          }
+        }
+      }
+    },
+    "network_device": {
+      "create": {
+        "title": "Créer un périphérique réseau",
+        "description": "Créer un nouveau périphérique réseau dans le système"
+      },
+      "edit": {
+        "title": "Modifier le périphérique réseau : {name}",
+        "description": "Modifier les informations et relations du périphérique réseau"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom du périphérique réseau",
+          "help_text": "Le nom du périphérique réseau.",
+          "errors": {
+            "required": "Le nom du périphérique réseau est requis."
+          }
+        },
+        "serial_number": {
+          "label": "Numéro de série",
+          "placeholder": "Entrez le numéro de série",
+          "help_text": "Le numéro de série pour ce périphérique réseau."
+        },
+        "inventory_number": {
+          "label": "Numéro d'inventaire",
+          "placeholder": "Entrez le numéro d'inventaire",
+          "help_text": "Le numéro d'inventaire interne pour ce périphérique réseau."
+        },
+        "assigned_to": {
+          "label": "Assigné à",
+          "placeholder": "Sélectionnez l'utilisateur",
+          "help_text": "L'utilisateur auquel ce périphérique réseau est assigné.",
+          "options": {
+            "no_user": "Aucun utilisateur",
+            "user_name": "{name}"
+          }
+        },
+        "status": {
+          "label": "Statut",
+          "placeholder": "Sélectionnez le statut",
+          "help_text": "Statut actuel du périphérique réseau.",
+          "options": {
+            "active": "Actif",
+            "inactive": "Inactif",
+            "maintenance": "Maintenance",
+            "retired": "Retiré"
+          }
+        },
+        "purchase_date": {
+          "label": "Date d'achat",
+          "placeholder": "Sélectionnez la date d'achat",
+          "help_text": "Date d'achat du périphérique réseau."
+        },
+        "warranty_expiry": {
+          "label": "Expiration de la garantie",
+          "placeholder": "Sélectionnez la date d'expiration de la garantie",
+          "help_text": "Date d'expiration de la garantie du périphérique réseau."
+        },
+        "manufacturer_id": {
+          "label": "Fabricant",
+          "placeholder": "Sélectionnez le fabricant",
+          "help_text": "Le fabricant du périphérique réseau.",
+          "options": {
+            "no_manufacturer": "Aucun fabricant",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "Localisation",
+          "placeholder": "Sélectionnez la localisation",
+          "help_text": "La localisation du périphérique réseau.",
+          "options": {
+            "no_location": "Aucune localisation",
+            "location_name": "{name} {description}"
+          }
+        },
+        "device_type": {
+          "label": "Type d'appareil",
+          "placeholder": "Sélectionnez le type d'appareil",
+          "help_text": "Type de périphérique réseau.",
+          "options": {
+            "switch": "Commutateur",
+            "router": "Routeur",
+            "access_point": "Point d'accès",
+            "firewall": "Pare-feu"
+          }
+        },
+        "model": {
+          "label": "Modèle",
+          "placeholder": "Entrez le modèle",
+          "help_text": "Le modèle du périphérique réseau."
+        },
+        "firmware_version": {
+          "label": "Version du firmware",
+          "placeholder": "Entrez la version du firmware",
+          "help_text": "Version actuelle du firmware de l'appareil."
+        },
+        "ip_address": {
+          "label": "Adresse IP",
+          "placeholder": "Entrez l'adresse IP",
+          "help_text": "Adresse IP principale du périphérique réseau."
+        },
+        "management_ip": {
+          "label": "IP de gestion",
+          "placeholder": "Entrez l'adresse IP de gestion",
+          "help_text": "Adresse IP de gestion pour l'administration de l'appareil."
+        },
+        "mac_address": {
+          "label": "Adresse MAC",
+          "placeholder": "Entrez l'adresse MAC",
+          "help_text": "Adresse MAC du périphérique réseau."
+        },
+        "port_count": {
+          "label": "Nombre de ports",
+          "placeholder": "Entrez le nombre de ports",
+          "help_text": "Nombre de ports réseau sur l'appareil."
+        },
+        "connection_type": {
+          "label": "Type de connexion",
+          "placeholder": "Sélectionnez le type de connexion",
+          "help_text": "Type de connexion réseau.",
+          "options": {
+            "ethernet": "Ethernet",
+            "wifi": "WiFi",
+            "fiber": "Fibre"
+          }
+        },
+        "vlan": {
+          "label": "VLAN",
+          "placeholder": "Entrez les informations VLAN",
+          "help_text": "Configuration VLAN pour cet appareil."
+        },
+        "segmentation": {
+          "label": "Segmentation réseau",
+          "placeholder": "Sélectionnez la segmentation réseau",
+          "help_text": "Classification de segmentation réseau.",
+          "options": {
+            "pci": "PCI",
+            "guest": "Invité",
+            "internal": "Interne",
+            "dmz": "DMZ"
+          }
+        },
+        "confidentiality_level": {
+          "label": "Niveau de confidentialité",
+          "placeholder": "Sélectionnez le niveau de confidentialité",
+          "help_text": "Le niveau de confidentialité de ce périphérique réseau.",
+          "options": {
+            "Public": "Public",
+            "Internal": "Interne",
+            "Confidential": "Confidentiel",
+            "Secret": "Secret"
+          }
+        },
+        "integrity_level": {
+          "label": "Niveau d'intégrité",
+          "placeholder": "Sélectionnez le niveau d'intégrité",
+          "help_text": "Le niveau d'intégrité de ce périphérique réseau.",
+          "options": {
+            "High": "Élevé",
+            "Medium": "Moyen",
+            "Low": "Faible"
+          }
+        },
+        "availability_level": {
+          "label": "Niveau de disponibilité",
+          "placeholder": "Sélectionnez le niveau de disponibilité",
+          "help_text": "Le niveau de disponibilité de ce périphérique réseau.",
+          "options": {
+            "High": "Élevé",
+            "Medium": "Moyen",
+            "Low": "Faible"
+          }
+        },
+        "rack_location": {
+          "label": "Emplacement en rack",
+          "placeholder": "Entrez l'emplacement en rack",
+          "help_text": "Emplacement physique en rack de l'appareil."
+        },
+        "physical_lock": {
+          "label": "Verrouillage physique",
+          "placeholder": "Sélectionnez le statut de verrouillage physique",
+          "help_text": "Si l'appareil est physiquement sécurisé.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "tamper_evident": {
+          "label": "Anti-effraction",
+          "placeholder": "Sélectionnez le statut anti-effraction",
+          "help_text": "Si des sceaux anti-effraction sont en place.",
+          "options": {
+            "yes": "Oui",
+            "no": "Non"
+          }
+        },
+        "firewall_enabled": {
+          "label": "Pare-feu activé",
+          "help_text": "Si la fonctionnalité pare-feu est activée."
+        },
+        "ids_ips_enabled": {
+          "label": "IDS/IPS activé",
+          "help_text": "Si la détection/prévention d'intrusion est activée."
+        },
+        "remote_access_enabled": {
+          "label": "Accès distant activé",
+          "help_text": "Si l'accès distant est activé."
+        },
+        "remote_access_method": {
+          "label": "Méthode d'accès distant",
+          "placeholder": "Sélectionnez la méthode d'accès distant",
+          "help_text": "Méthode utilisée pour l'accès distant.",
+          "options": {
+            "ssh": "SSH",
+            "telnet": "Telnet",
+            "https": "HTTPS",
+            "http": "HTTP"
+          }
+        },
+        "remote_access_restriction": {
+          "label": "Restriction d'accès distant",
+          "placeholder": "Entrez les restrictions d'accès",
+          "help_text": "Restrictions sur l'accès distant."
+        },
+        "management_encryption": {
+          "label": "Chiffrement de gestion",
+          "help_text": "Si le trafic de gestion est chiffré."
+        },
+        "encryption_type": {
+          "label": "Type de chiffrement",
+          "placeholder": "Entrez le type de chiffrement",
+          "help_text": "Type de chiffrement utilisé."
+        },
+        "data_in_transit_encryption": {
+          "label": "Chiffrement des données en transit",
+          "help_text": "Si les données en transit sont chiffrées."
+        },
+        "admin_username": {
+          "label": "Nom d'utilisateur administrateur",
+          "placeholder": "Entrez le nom d'utilisateur administrateur",
+          "help_text": "Nom d'utilisateur administratif pour l'appareil."
+        },
+        "admin_password_set": {
+          "label": "Mot de passe administrateur défini",
+          "help_text": "Si le mot de passe administrateur est configuré."
+        },
+        "password_last_changed": {
+          "label": "Dernier changement de mot de passe",
+          "placeholder": "Sélectionnez la date de changement de mot de passe",
+          "help_text": "Date du dernier changement de mot de passe administrateur."
+        },
+        "multi_factor_auth_enabled": {
+          "label": "Authentification multi-facteurs activée",
+          "help_text": "Si l'authentification multi-facteurs est activée."
+        },
+        "default_accounts_disabled": {
+          "label": "Comptes par défaut désactivés",
+          "help_text": "Si les comptes par défaut sont désactivés."
+        },
+        "logging_enabled": {
+          "label": "Journalisation activée",
+          "help_text": "Si la journalisation est activée."
+        },
+        "log_retention_days": {
+          "label": "Rétention des journaux (jours)",
+          "placeholder": "Entrez les jours de rétention des journaux",
+          "help_text": "Nombre de jours de conservation des journaux."
+        },
+        "syslog_server": {
+          "label": "Serveur Syslog",
+          "placeholder": "Entrez l'adresse du serveur syslog",
+          "help_text": "Serveur syslog pour le transfert des journaux."
+        },
+        "snmp_enabled": {
+          "label": "SNMP activé",
+          "help_text": "Si SNMP est activé."
+        },
+        "snmp_version": {
+          "label": "Version SNMP",
+          "placeholder": "Sélectionnez la version SNMP",
+          "help_text": "Version du protocole SNMP.",
+          "options": {
+            "v1": "v1",
+            "v2c": "v2c",
+            "v3": "v3"
+          }
+        },
+        "monitoring_tool": {
+          "label": "Outil de surveillance",
+          "placeholder": "Entrez le nom de l'outil de surveillance",
+          "help_text": "Nom de l'outil de surveillance utilisé."
+        },
+        "pci_assessment_date": {
+          "label": "Date d'évaluation PCI",
+          "placeholder": "Sélectionnez la date d'évaluation PCI",
+          "help_text": "Date de la dernière évaluation PCI."
+        },
+        "pci_compliance_status": {
+          "label": "Statut de conformité PCI",
+          "placeholder": "Sélectionnez le statut de conformité PCI",
+          "help_text": "Statut de conformité PCI actuel.",
+          "options": {
+            "compliant": "Conforme",
+            "non_compliant": "Non conforme",
+            "in_progress": "En cours"
+          }
+        },
+        "next_assessment_date": {
+          "label": "Date de prochaine évaluation",
+          "placeholder": "Sélectionnez la date de prochaine évaluation",
+          "help_text": "Date de la prochaine évaluation prévue."
+        },
+        "compliance_notes": {
+          "label": "Notes de conformité",
+          "placeholder": "Entrez les notes de conformité",
+          "help_text": "Notes supplémentaires liées à la conformité."
+        },
+        "last_patch_date": {
+          "label": "Date du dernier correctif",
+          "placeholder": "Sélectionnez la date du dernier correctif",
+          "help_text": "Date d'application du dernier correctif."
+        },
+        "patch_level": {
+          "label": "Niveau de correctif",
+          "placeholder": "Entrez le niveau de correctif",
+          "help_text": "Niveau de correctif actuel de l'appareil."
+        },
+        "vulnerability_scan_date": {
+          "label": "Date de scan de vulnérabilité",
+          "placeholder": "Sélectionnez la date de scan de vulnérabilité",
+          "help_text": "Date du dernier scan de vulnérabilité."
+        },
+        "vulnerability_status": {
+          "label": "Statut de vulnérabilité",
+          "placeholder": "Sélectionnez le statut de vulnérabilité",
+          "help_text": "Statut de vulnérabilité actuel.",
+          "options": {
+            "compliant": "Conforme",
+            "non_compliant": "Non conforme",
+            "pending": "En attente"
+          }
+        },
+        "power_state": {
+          "label": "État d'alimentation",
+          "placeholder": "Sélectionnez l'état d'alimentation",
+          "help_text": "État d'alimentation actuel de l'appareil.",
+          "options": {
+            "on": "Allumé",
+            "off": "Éteint",
+            "standby": "Veille"
+          }
+        },
+        "creation_date": {
+          "label": "Date de création",
+          "placeholder": "Sélectionnez la date de création",
+          "help_text": "Date de création de l'appareil."
+        },
+        "scheduled_decommission_date": {
+          "label": "Date de déclassement prévue",
+          "placeholder": "Sélectionnez la date de déclassement",
+          "help_text": "Date prévue pour le déclassement de l'appareil."
+        },
+        "ha_enabled": {
+          "label": "Haute disponibilité activée",
+          "help_text": "Si la haute disponibilité est activée."
+        },
+        "redundancy_level": {
+          "label": "Niveau de redondance",
+          "placeholder": "Sélectionnez le niveau de redondance",
+          "help_text": "Niveau de redondance configuré.",
+          "options": {
+            "none": "Aucun",
+            "n_plus_1": "N+1",
+            "n_plus_2": "N+2"
+          }
+        },
+        "failover_capability": {
+          "label": "Capacité de basculement",
+          "help_text": "Si la capacité de basculement est activée."
+        },
+        "group_id": {
+          "label": "Groupe",
+          "placeholder": "Sélectionnez le groupe",
+          "help_text": "Le groupe auquel appartient ce périphérique réseau.",
+          "options": {
+            "no_group": "Aucun groupe",
+            "group_name": "{name} ({type})"
+          }
+        }
+      }
+    },
+    "software": {
+      "create": {
+        "title": "Créer un logiciel",
+        "description": "Créer un nouveau logiciel dans le système"
+      },
+      "edit": {
+        "title": "Modifier le logiciel : {name}",
+        "description": "Modifier les informations et relations du logiciel"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom du logiciel",
+          "help_text": "Le nom du logiciel.",
+          "errors": {
+            "required": "Le nom du logiciel est requis."
+          }
+        },
+        "vendor": {
+          "label": "Fournisseur",
+          "placeholder": "Entrez le nom du fournisseur",
+          "help_text": "Le fournisseur ou développeur du logiciel."
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Entrez la description du logiciel",
+          "help_text": "Description du logiciel et de son objectif."
+        },
+        "software_type": {
+          "label": "Type de logiciel",
+          "placeholder": "Sélectionnez le type de logiciel",
+          "help_text": "Type de logiciel.",
+          "options": {
+            "application": "Application",
+            "operating_system": "Système d'exploitation",
+            "utility": "Utilitaire",
+            "security_tool": "Outil de sécurité"
+          }
+        },
+        "handles_cardholder_data": {
+          "label": "Gère les données des titulaires de cartes",
+          "help_text": "Si ce logiciel gère les données des titulaires de cartes."
+        },
+        "stores_cardholder_data": {
+          "label": "Stocke les données des titulaires de cartes",
+          "help_text": "Si ce logiciel stocke les données des titulaires de cartes."
+        },
+        "transmits_cardholder_data": {
+          "label": "Transmet les données des titulaires de cartes",
+          "help_text": "Si ce logiciel transmet les données des titulaires de cartes."
+        },
+        "processes_cardholder_data": {
+          "label": "Traite les données des titulaires de cartes",
+          "help_text": "Si ce logiciel traite les données des titulaires de cartes."
+        },
+        "pci_compliance_status": {
+          "label": "Statut de conformité PCI",
+          "placeholder": "Sélectionnez le statut de conformité PCI",
+          "help_text": "Statut de conformité PCI actuel.",
+          "options": {
+            "compliant": "Conforme",
+            "non_compliant": "Non conforme",
+            "in_progress": "En cours"
+          }
+        },
+        "pci_assessment_date": {
+          "label": "Date d'évaluation PCI",
+          "placeholder": "Sélectionnez la date d'évaluation PCI",
+          "help_text": "Date de la dernière évaluation PCI."
+        },
+        "next_assessment_date": {
+          "label": "Date de prochaine évaluation",
+          "placeholder": "Sélectionnez la date de prochaine évaluation",
+          "help_text": "Date de la prochaine évaluation prévue."
+        },
+        "compliance_notes": {
+          "label": "Notes de conformité",
+          "placeholder": "Entrez les notes de conformité",
+          "help_text": "Notes supplémentaires liées à la conformité."
+        },
+        "encryption_enabled": {
+          "label": "Chiffrement activé",
+          "help_text": "Si le chiffrement est activé pour ce logiciel."
+        },
+        "encryption_type": {
+          "label": "Type de chiffrement",
+          "placeholder": "Entrez le type de chiffrement",
+          "help_text": "Type de chiffrement utilisé par le logiciel."
+        },
+        "authentication_required": {
+          "label": "Authentification requise",
+          "help_text": "Si l'authentification est requise pour utiliser ce logiciel."
+        },
+        "multi_factor_auth_supported": {
+          "label": "Authentification multi-facteurs supportée",
+          "help_text": "Si ce logiciel supporte l'authentification multi-facteurs."
+        },
+        "vulnerability_status": {
+          "label": "Statut de vulnérabilité",
+          "placeholder": "Sélectionnez le statut de vulnérabilité",
+          "help_text": "Statut de vulnérabilité actuel.",
+          "options": {
+            "compliant": "Conforme",
+            "non_compliant": "Non conforme",
+            "pending": "En attente"
+          }
+        },
+        "data_classification": {
+          "label": "Classification des données",
+          "placeholder": "Sélectionnez la classification des données",
+          "help_text": "Classification des données gérées par ce logiciel.",
+          "options": {
+            "public": "Public",
+            "internal": "Interne",
+            "confidential": "Confidentiel",
+            "restricted": "Restreint"
+          }
+        },
+        "end_of_life_date": {
+          "label": "Date de fin de vie",
+          "placeholder": "Sélectionnez la date de fin de vie",
+          "help_text": "Date à laquelle le logiciel atteint sa fin de vie."
+        },
+        "end_of_support_date": {
+          "label": "Date de fin de support",
+          "placeholder": "Sélectionnez la date de fin de support",
+          "help_text": "Date à laquelle le support fournisseur se termine pour ce logiciel."
+        },
+        "replacement_planned": {
+          "label": "Remplacement prévu",
+          "help_text": "Si le remplacement de ce logiciel est prévu."
         }
       }
     }

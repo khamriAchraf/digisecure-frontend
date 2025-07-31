@@ -4,10 +4,11 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import { Breadcrumbs } from '../../../../components/Breadcrumbs';
 import { useTranslation } from '../../../hooks/useTranslation';
 import DynamicForm from '../../../../components/DynamicForm';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { API_BASE } from '../../../../src/fetchers';
 import { useCreateUser } from '../../../../src/mutations';
+import Head from 'next/head';
 
 export default function CreateUserPage() {
   const router = useRouter();
@@ -121,6 +122,10 @@ export default function CreateUserPage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('forms.user.create.title')} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
@@ -145,5 +150,6 @@ export default function CreateUserPage() {
         />
       </Stack>
     </Container>
+    </React.Fragment>
   );
 } 

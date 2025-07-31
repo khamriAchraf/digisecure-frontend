@@ -161,9 +161,16 @@
     "macAddress": "MAC Address",
     "ipAddress": "IP Address",
     "model": "Model",
+    "deviceType": "Device Type",
     "hostname": "Hostname",
     "assignedTo": "Assigned To",
-    "group": "Group"
+    "group": "Group",
+    "virtual_machine": "Virtual Machine",
+    "virtual_machines": "Virtual Machines",
+    "network_device": "Network Device",
+    "network_devices": "Network Devices",
+    "software": "Software"
+    
   },
   "forms": {
     "errors": {
@@ -181,7 +188,14 @@
       "assets": "Assets",
       "specifications": "Specifications",
       "network": "Network",
-      "security": "Security"
+      "security": "Security",
+      "virtualization": "Virtualization",
+      "compliance": "Compliance",
+      "pci_compliance": "PCI Compliance",
+      "backup": "Backup",
+      "authentication": "Authentication",
+      "monitoring": "Monitoring",
+      "lifecycle": "Lifecycle"
     },
     "group": {  
       "create": {
@@ -561,6 +575,1024 @@
             "Medium": "Medium",
             "Low": "Low"
           }
+        }
+      }
+    },
+    "virtual_machine": {
+      "create": {
+        "title": "Create Virtual Machine",
+        "description": "Create a new virtual machine in the system"
+      },
+      "edit": {
+        "title": "Edit Virtual Machine: {name}",
+        "description": "Edit virtual machine information and relationships"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter virtual machine name",
+          "help_text": "The name of the virtual machine.",
+          "errors": {
+            "required": "Virtual machine name is required."
+          }
+        },
+        "serial_number": {
+          "label": "Serial Number",
+          "placeholder": "Enter serial number",
+          "help_text": "The serial number for this virtual machine."
+        },
+        "inventory_number": {
+          "label": "Inventory Number",
+          "placeholder": "Enter inventory number",
+          "help_text": "The internal inventory number for this virtual machine."
+        },
+        "assigned_to": {
+          "label": "Assigned To",
+          "placeholder": "Select user",
+          "help_text": "The user this virtual machine is assigned to.",
+          "options": {
+            "no_user": "No user",
+            "user_name": "{name}"
+          }
+        },
+        "status": {
+          "label": "Status",
+          "placeholder": "Select status",
+          "help_text": "Current status of the virtual machine.",
+          "options": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "maintenance": "Maintenance",
+            "retired": "Retired"
+          }
+        },
+        "purchase_date": {
+          "label": "Purchase Date",
+          "placeholder": "Select purchase date",
+          "help_text": "Date the virtual machine was purchased."
+        },
+        "warranty_expiry": {
+          "label": "Warranty Expiry",
+          "placeholder": "Select warranty expiry date",
+          "help_text": "Date the virtual machine's warranty expires."
+        },
+        "manufacturer_id": {
+          "label": "Manufacturer",
+          "placeholder": "Select manufacturer",
+          "help_text": "The manufacturer of the virtual machine.",
+          "options": {
+            "no_manufacturer": "No manufacturer",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "Location",
+          "placeholder": "Select location",
+          "help_text": "The location of the virtual machine.",
+          "options": {
+            "no_location": "No location",
+            "location_name": "{name} {description}"
+          }
+        },
+        "hypervisor_type": {
+          "label": "Hypervisor Type",
+          "placeholder": "Select hypervisor type",
+          "help_text": "Type of hypervisor used for this virtual machine.",
+          "options": {
+            "vmware": "VMware",
+            "hyperv": "Hyper-V",
+            "kvm": "KVM",
+            "xen": "Xen",
+            "virtualbox": "VirtualBox"
+          }
+        },
+        "hypervisor_version": {
+          "label": "Hypervisor Version",
+          "placeholder": "Enter hypervisor version",
+          "help_text": "Version of the hypervisor software."
+        },
+        "vm_platform": {
+          "label": "VM Platform",
+          "placeholder": "Enter VM platform",
+          "help_text": "Platform or environment where the VM runs."
+        },
+        "power_state": {
+          "label": "Power State",
+          "placeholder": "Select power state",
+          "help_text": "Current power state of the virtual machine.",
+          "options": {
+            "running": "Running",
+            "stopped": "Stopped",
+            "suspended": "Suspended"
+          }
+        },
+        "creation_date": {
+          "label": "Creation Date",
+          "placeholder": "Select creation date",
+          "help_text": "Date when the virtual machine was created."
+        },
+        "scheduled_decommission_date": {
+          "label": "Scheduled Decommission Date",
+          "placeholder": "Select decommission date",
+          "help_text": "Planned date for decommissioning the virtual machine."
+        },
+        "ha_enabled": {
+          "label": "High Availability Enabled",
+          "placeholder": "Select HA status",
+          "help_text": "Whether high availability is enabled for this VM.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "redundancy_level": {
+          "label": "Redundancy Level",
+          "placeholder": "Select redundancy level",
+          "help_text": "Level of redundancy configured for this VM.",
+          "options": {
+            "none": "None",
+            "n_plus_1": "N+1",
+            "n_plus_2": "N+2"
+          }
+        },
+        "failover_capability": {
+          "label": "Failover Capability",
+          "placeholder": "Select failover capability",
+          "help_text": "Whether failover capability is enabled.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "confidentiality_level": {
+          "label": "Confidentiality Level",
+          "placeholder": "Select confidentiality level",
+          "help_text": "The confidentiality level of this virtual machine.",
+          "options": {
+            "Public": "Public",
+            "Internal": "Internal",
+            "Confidential": "Confidential",
+            "Secret": "Secret"
+          }
+        },
+        "integrity_level": {
+          "label": "Integrity Level",
+          "placeholder": "Select integrity level",
+          "help_text": "The integrity level of this virtual machine.",
+          "options": {
+            "High": "High",
+            "Medium": "Medium",
+            "Low": "Low"
+          }
+        },
+        "availability_level": {
+          "label": "Availability Level",
+          "placeholder": "Select availability level",
+          "help_text": "The availability level of this virtual machine.",
+          "options": {
+            "High": "High",
+            "Medium": "Medium",
+            "Low": "Low"
+          }
+        },
+        "encryption_status": {
+          "label": "Encryption Status",
+          "placeholder": "Select encryption status",
+          "help_text": "Current encryption status of the virtual machine.",
+          "options": {
+            "encrypted": "Encrypted",
+            "not_encrypted": "Not Encrypted",
+            "partial": "Partial"
+          }
+        },
+        "encryption_type": {
+          "label": "Encryption Type",
+          "placeholder": "Enter encryption type",
+          "help_text": "Type of encryption used for this virtual machine."
+        },
+        "admin_access_restricted": {
+          "label": "Admin Access Restricted",
+          "placeholder": "Select admin access status",
+          "help_text": "Whether administrative access is restricted.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "multi_factor_auth_enabled": {
+          "label": "Multi-Factor Authentication Enabled",
+          "placeholder": "Select MFA status",
+          "help_text": "Whether multi-factor authentication is enabled.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "logging_enabled": {
+          "label": "Logging Enabled",
+          "placeholder": "Select logging status",
+          "help_text": "Whether logging is enabled for this virtual machine.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "monitoring_tool": {
+          "label": "Monitoring Tool",
+          "placeholder": "Enter monitoring tool name",
+          "help_text": "Name of the monitoring tool used for this VM."
+        },
+        "isolation_level": {
+          "label": "Isolation Level",
+          "placeholder": "Select isolation level",
+          "help_text": "Level of isolation for this virtual machine.",
+          "options": {
+            "high": "High",
+            "medium": "Medium",
+            "low": "Low"
+          }
+        },
+        "resource_isolation": {
+          "label": "Resource Isolation",
+          "placeholder": "Select resource isolation status",
+          "help_text": "Whether resource isolation is enabled.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "network_isolation": {
+          "label": "Network Isolation",
+          "placeholder": "Select network isolation status",
+          "help_text": "Whether network isolation is enabled.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "storage_isolation": {
+          "label": "Storage Isolation",
+          "placeholder": "Select storage isolation status",
+          "help_text": "Whether storage isolation is enabled.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "cpu_cores": {
+          "label": "CPU Cores",
+          "placeholder": "Enter number of CPU cores",
+          "help_text": "Number of CPU cores allocated to this virtual machine."
+        },
+        "memory_mb": {
+          "label": "Memory (MB)",
+          "placeholder": "Enter memory in MB",
+          "help_text": "Amount of memory allocated to this virtual machine in MB."
+        },
+        "storage_gb": {
+          "label": "Storage (GB)",
+          "placeholder": "Enter storage in GB",
+          "help_text": "Amount of storage allocated to this virtual machine in GB."
+        },
+        "os_type": {
+          "label": "Operating System Type",
+          "placeholder": "Select OS type",
+          "help_text": "Type of operating system installed on this virtual machine.",
+          "options": {
+            "windows": "Windows",
+            "linux": "Linux",
+            "macos": "macOS"
+          }
+        },
+        "os_version": {
+          "label": "Operating System Version",
+          "placeholder": "Enter OS version",
+          "help_text": "Version of the operating system installed."
+        },
+        "os_architecture": {
+          "label": "Operating System Architecture",
+          "placeholder": "Select OS architecture",
+          "help_text": "Architecture of the operating system.",
+          "options": {
+            "x86_64": "x86_64",
+            "arm64": "ARM64",
+            "i386": "i386"
+          }
+        },
+        "model": {
+          "label": "Model",
+          "placeholder": "Enter model",
+          "help_text": "The model of the virtual machine."
+        },
+        "cpu": {
+          "label": "CPU",
+          "placeholder": "Enter CPU specification",
+          "help_text": "The CPU specification for this virtual machine."
+        },
+        "ram": {
+          "label": "RAM",
+          "placeholder": "Enter RAM specification",
+          "help_text": "The RAM specification for this virtual machine."
+        },
+        "storage": {
+          "label": "Storage",
+          "placeholder": "Enter storage specification",
+          "help_text": "The storage specification for this virtual machine."
+        },
+        "os": {
+          "label": "Operating System",
+          "placeholder": "Enter operating system",
+          "help_text": "The operating system installed on this virtual machine."
+        },
+        "hostname": {
+          "label": "Hostname",
+          "placeholder": "Enter hostname",
+          "help_text": "The network hostname for this virtual machine."
+        },
+        "cpu_allocation_percent": {
+          "label": "CPU Allocation (%)",
+          "placeholder": "Enter CPU allocation percentage",
+          "help_text": "Percentage of CPU resources allocated to this VM."
+        },
+        "memory_allocation_percent": {
+          "label": "Memory Allocation (%)",
+          "placeholder": "Enter memory allocation percentage",
+          "help_text": "Percentage of memory resources allocated to this VM."
+        },
+        "storage_allocation_percent": {
+          "label": "Storage Allocation (%)",
+          "placeholder": "Enter storage allocation percentage",
+          "help_text": "Percentage of storage resources allocated to this VM."
+        },
+        "network_segment": {
+          "label": "Network Segment",
+          "placeholder": "Select network segment",
+          "help_text": "Network segment where this virtual machine is deployed.",
+          "options": {
+            "dmz": "DMZ",
+            "internal": "Internal",
+            "pci": "PCI",
+            "management": "Management"
+          }
+        },
+        "vlan_id": {
+          "label": "VLAN ID",
+          "placeholder": "Enter VLAN ID",
+          "help_text": "VLAN identifier for this virtual machine."
+        },
+        "ip_address": {
+          "label": "IP Address",
+          "placeholder": "Enter IP address",
+          "help_text": "IP address assigned to this virtual machine."
+        },
+        "mac_address": {
+          "label": "MAC Address",
+          "placeholder": "Enter MAC address",
+          "help_text": "MAC address of the virtual machine's network interface."
+        },
+        "pci_scope": {
+          "label": "PCI Scope",
+          "placeholder": "Select PCI scope",
+          "help_text": "Whether this virtual machine is in PCI scope.",
+          "options": {
+            "in_scope": "In Scope",
+            "out_of_scope": "Out of Scope"
+          }
+        },
+        "cardholder_data_environment": {
+          "label": "Cardholder Data Environment",
+          "placeholder": "Select CDE status",
+          "help_text": "Cardholder data environment classification.",
+          "options": {
+            "cde": "CDE",
+            "connected_to": "Connected-to",
+            "out_of_scope": "Out-of-Scope"
+          }
+        },
+        "pci_assessment_date": {
+          "label": "PCI Assessment Date",
+          "placeholder": "Select PCI assessment date",
+          "help_text": "Date of the last PCI assessment."
+        },
+        "pci_compliance_status": {
+          "label": "PCI Compliance Status",
+          "placeholder": "Select PCI compliance status",
+          "help_text": "Current PCI compliance status.",
+          "options": {
+            "compliant": "Compliant",
+            "non_compliant": "Non-Compliant",
+            "in_progress": "In Progress"
+          }
+        },
+        "next_assessment_date": {
+          "label": "Next Assessment Date",
+          "placeholder": "Select next assessment date",
+          "help_text": "Date of the next scheduled assessment."
+        },
+        "compliance_notes": {
+          "label": "Compliance Notes",
+          "placeholder": "Enter compliance notes",
+          "help_text": "Additional notes related to compliance."
+        },
+        "last_patch_date": {
+          "label": "Last Patch Date",
+          "placeholder": "Select last patch date",
+          "help_text": "Date when the last patch was applied."
+        },
+        "patch_level": {
+          "label": "Patch Level",
+          "placeholder": "Enter patch level",
+          "help_text": "Current patch level of the virtual machine."
+        },
+        "vulnerability_scan_date": {
+          "label": "Vulnerability Scan Date",
+          "placeholder": "Select vulnerability scan date",
+          "help_text": "Date of the last vulnerability scan."
+        },
+        "vulnerability_status": {
+          "label": "Vulnerability Status",
+          "placeholder": "Select vulnerability status",
+          "help_text": "Current vulnerability status.",
+          "options": {
+            "compliant": "Compliant",
+            "non_compliant": "Non-Compliant",
+            "pending": "Pending"
+          }
+        },
+        "backup_frequency": {
+          "label": "Backup Frequency",
+          "placeholder": "Select backup frequency",
+          "help_text": "Frequency of backups for this virtual machine.",
+          "options": {
+            "daily": "Daily",
+            "weekly": "Weekly",
+            "monthly": "Monthly"
+          }
+        },
+        "last_backup_date": {
+          "label": "Last Backup Date",
+          "placeholder": "Select last backup date",
+          "help_text": "Date of the last backup."
+        },
+        "backup_retention_days": {
+          "label": "Backup Retention (Days)",
+          "placeholder": "Enter backup retention days",
+          "help_text": "Number of days to retain backups."
+        },
+        "backup_encryption": {
+          "label": "Backup Encryption",
+          "placeholder": "Select backup encryption status",
+          "help_text": "Whether backups are encrypted.",
+          "options": {
+            "yes": "Yes",
+            "no": "No",
+            "na": "N/A"
+          }
+        },
+        "disaster_recovery_plan": {
+          "label": "Disaster Recovery Plan",
+          "placeholder": "Select DR plan status",
+          "help_text": "Whether a disaster recovery plan exists.",
+          "options": {
+            "yes": "Yes",
+            "no": "No",
+            "na": "N/A"
+          }
+        },
+        "group_id": {
+          "label": "Group",
+          "placeholder": "Select group",
+          "help_text": "The group this virtual machine belongs to.",
+          "options": {
+            "no_group": "No group",
+            "group_name": "{name} ({type})"
+          }
+        }
+      }
+    },
+    "network_device": {
+      "create": {
+        "title": "Create Network Device",
+        "description": "Create a new network device in the system"
+      },
+      "edit": {
+        "title": "Edit Network Device: {name}",
+        "description": "Edit network device information and relationships"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter network device name",
+          "help_text": "The name of the network device.",
+          "errors": {
+            "required": "Network device name is required."
+          }
+        },
+        "serial_number": {
+          "label": "Serial Number",
+          "placeholder": "Enter serial number",
+          "help_text": "The serial number for this network device."
+        },
+        "inventory_number": {
+          "label": "Inventory Number",
+          "placeholder": "Enter inventory number",
+          "help_text": "The internal inventory number for this network device."
+        },
+        "assigned_to": {
+          "label": "Assigned To",
+          "placeholder": "Select user",
+          "help_text": "The user this network device is assigned to.",
+          "options": {
+            "no_user": "No user",
+            "user_name": "{name}"
+          }
+        },
+        "status": {
+          "label": "Status",
+          "placeholder": "Select status",
+          "help_text": "Current status of the network device.",
+          "options": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "maintenance": "Maintenance",
+            "retired": "Retired"
+          }
+        },
+        "purchase_date": {
+          "label": "Purchase Date",
+          "placeholder": "Select purchase date",
+          "help_text": "Date the network device was purchased."
+        },
+        "warranty_expiry": {
+          "label": "Warranty Expiry",
+          "placeholder": "Select warranty expiry date",
+          "help_text": "Date the network device's warranty expires."
+        },
+        "manufacturer_id": {
+          "label": "Manufacturer",
+          "placeholder": "Select manufacturer",
+          "help_text": "The manufacturer of the network device.",
+          "options": {
+            "no_manufacturer": "No manufacturer",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "Location",
+          "placeholder": "Select location",
+          "help_text": "The location of the network device.",
+          "options": {
+            "no_location": "No location",
+            "location_name": "{name} {description}"
+          }
+        },
+        "device_type": {
+          "label": "Device Type",
+          "placeholder": "Select device type",
+          "help_text": "Type of network device.",
+          "options": {
+            "switch": "Switch",
+            "router": "Router",
+            "access_point": "Access Point",
+            "firewall": "Firewall"
+          }
+        },
+        "model": {
+          "label": "Model",
+          "placeholder": "Enter model",
+          "help_text": "The model of the network device."
+        },
+        "firmware_version": {
+          "label": "Firmware Version",
+          "placeholder": "Enter firmware version",
+          "help_text": "Current firmware version of the device."
+        },
+        "ip_address": {
+          "label": "IP Address",
+          "placeholder": "Enter IP address",
+          "help_text": "Primary IP address of the network device."
+        },
+        "management_ip": {
+          "label": "Management IP",
+          "placeholder": "Enter management IP address",
+          "help_text": "Management IP address for device administration."
+        },
+        "mac_address": {
+          "label": "MAC Address",
+          "placeholder": "Enter MAC address",
+          "help_text": "MAC address of the network device."
+        },
+        "port_count": {
+          "label": "Port Count",
+          "placeholder": "Enter number of ports",
+          "help_text": "Number of network ports on the device."
+        },
+        "connection_type": {
+          "label": "Connection Type",
+          "placeholder": "Select connection type",
+          "help_text": "Type of network connection.",
+          "options": {
+            "ethernet": "Ethernet",
+            "wifi": "WiFi",
+            "fiber": "Fiber"
+          }
+        },
+        "vlan": {
+          "label": "VLAN",
+          "placeholder": "Enter VLAN information",
+          "help_text": "VLAN configuration for this device."
+        },
+        "segmentation": {
+          "label": "Network Segmentation",
+          "placeholder": "Select network segmentation",
+          "help_text": "Network segmentation classification.",
+          "options": {
+            "pci": "PCI",
+            "guest": "Guest",
+            "internal": "Internal",
+            "dmz": "DMZ"
+          }
+        },
+        "confidentiality_level": {
+          "label": "Confidentiality Level",
+          "placeholder": "Select confidentiality level",
+          "help_text": "The confidentiality level of this network device.",
+          "options": {
+            "Public": "Public",
+            "Internal": "Internal",
+            "Confidential": "Confidential",
+            "Secret": "Secret"
+          }
+        },
+        "integrity_level": {
+          "label": "Integrity Level",
+          "placeholder": "Select integrity level",
+          "help_text": "The integrity level of this network device.",
+          "options": {
+            "High": "High",
+            "Medium": "Medium",
+            "Low": "Low"
+          }
+        },
+        "availability_level": {
+          "label": "Availability Level",
+          "placeholder": "Select availability level",
+          "help_text": "The availability level of this network device.",
+          "options": {
+            "High": "High",
+            "Medium": "Medium",
+            "Low": "Low"
+          }
+        },
+        "rack_location": {
+          "label": "Rack Location",
+          "placeholder": "Enter rack location",
+          "help_text": "Physical rack location of the device."
+        },
+        "physical_lock": {
+          "label": "Physical Lock",
+          "placeholder": "Select physical lock status",
+          "help_text": "Whether the device is physically secured.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "tamper_evident": {
+          "label": "Tamper Evident",
+          "placeholder": "Select tamper evident status",
+          "help_text": "Whether tamper evident seals are in place.",
+          "options": {
+            "yes": "Yes",
+            "no": "No"
+          }
+        },
+        "firewall_enabled": {
+          "label": "Firewall Enabled",
+          "help_text": "Whether firewall functionality is enabled."
+        },
+        "ids_ips_enabled": {
+          "label": "IDS/IPS Enabled",
+          "help_text": "Whether Intrusion Detection/Prevention is enabled."
+        },
+        "remote_access_enabled": {
+          "label": "Remote Access Enabled",
+          "help_text": "Whether remote access is enabled."
+        },
+        "remote_access_method": {
+          "label": "Remote Access Method",
+          "placeholder": "Select remote access method",
+          "help_text": "Method used for remote access.",
+          "options": {
+            "ssh": "SSH",
+            "telnet": "Telnet",
+            "https": "HTTPS",
+            "http": "HTTP"
+          }
+        },
+        "remote_access_restriction": {
+          "label": "Remote Access Restriction",
+          "placeholder": "Enter access restrictions",
+          "help_text": "Restrictions on remote access."
+        },
+        "management_encryption": {
+          "label": "Management Encryption",
+          "help_text": "Whether management traffic is encrypted."
+        },
+        "encryption_type": {
+          "label": "Encryption Type",
+          "placeholder": "Enter encryption type",
+          "help_text": "Type of encryption used."
+        },
+        "data_in_transit_encryption": {
+          "label": "Data in Transit Encryption",
+          "help_text": "Whether data in transit is encrypted."
+        },
+        "admin_username": {
+          "label": "Admin Username",
+          "placeholder": "Enter admin username",
+          "help_text": "Administrative username for the device."
+        },
+        "admin_password_set": {
+          "label": "Admin Password Set",
+          "help_text": "Whether admin password is configured."
+        },
+        "password_last_changed": {
+          "label": "Password Last Changed",
+          "placeholder": "Select password change date",
+          "help_text": "Date when admin password was last changed."
+        },
+        "multi_factor_auth_enabled": {
+          "label": "Multi-Factor Authentication Enabled",
+          "help_text": "Whether multi-factor authentication is enabled."
+        },
+        "default_accounts_disabled": {
+          "label": "Default Accounts Disabled",
+          "help_text": "Whether default accounts are disabled."
+        },
+        "logging_enabled": {
+          "label": "Logging Enabled",
+          "help_text": "Whether logging is enabled."
+        },
+        "log_retention_days": {
+          "label": "Log Retention (Days)",
+          "placeholder": "Enter log retention days",
+          "help_text": "Number of days to retain logs."
+        },
+        "syslog_server": {
+          "label": "Syslog Server",
+          "placeholder": "Enter syslog server address",
+          "help_text": "Syslog server for log forwarding."
+        },
+        "snmp_enabled": {
+          "label": "SNMP Enabled",
+          "help_text": "Whether SNMP is enabled."
+        },
+        "snmp_version": {
+          "label": "SNMP Version",
+          "placeholder": "Select SNMP version",
+          "help_text": "SNMP protocol version.",
+          "options": {
+            "v1": "v1",
+            "v2c": "v2c",
+            "v3": "v3"
+          }
+        },
+        "monitoring_tool": {
+          "label": "Monitoring Tool",
+          "placeholder": "Enter monitoring tool name",
+          "help_text": "Name of the monitoring tool used."
+        },
+        "pci_assessment_date": {
+          "label": "PCI Assessment Date",
+          "placeholder": "Select PCI assessment date",
+          "help_text": "Date of the last PCI assessment."
+        },
+        "pci_compliance_status": {
+          "label": "PCI Compliance Status",
+          "placeholder": "Select PCI compliance status",
+          "help_text": "Current PCI compliance status.",
+          "options": {
+            "compliant": "Compliant",
+            "non_compliant": "Non-Compliant",
+            "in_progress": "In Progress"
+          }
+        },
+        "next_assessment_date": {
+          "label": "Next Assessment Date",
+          "placeholder": "Select next assessment date",
+          "help_text": "Date of the next scheduled assessment."
+        },
+        "compliance_notes": {
+          "label": "Compliance Notes",
+          "placeholder": "Enter compliance notes",
+          "help_text": "Additional notes related to compliance."
+        },
+        "last_patch_date": {
+          "label": "Last Patch Date",
+          "placeholder": "Select last patch date",
+          "help_text": "Date when the last patch was applied."
+        },
+        "patch_level": {
+          "label": "Patch Level",
+          "placeholder": "Enter patch level",
+          "help_text": "Current patch level of the device."
+        },
+        "vulnerability_scan_date": {
+          "label": "Vulnerability Scan Date",
+          "placeholder": "Select vulnerability scan date",
+          "help_text": "Date of the last vulnerability scan."
+        },
+        "vulnerability_status": {
+          "label": "Vulnerability Status",
+          "placeholder": "Select vulnerability status",
+          "help_text": "Current vulnerability status.",
+          "options": {
+            "compliant": "Compliant",
+            "non_compliant": "Non-Compliant",
+            "pending": "Pending"
+          }
+        },
+        "power_state": {
+          "label": "Power State",
+          "placeholder": "Select power state",
+          "help_text": "Current power state of the device.",
+          "options": {
+            "on": "On",
+            "off": "Off",
+            "standby": "Standby"
+          }
+        },
+        "creation_date": {
+          "label": "Creation Date",
+          "placeholder": "Select creation date",
+          "help_text": "Date when the device was created."
+        },
+        "scheduled_decommission_date": {
+          "label": "Scheduled Decommission Date",
+          "placeholder": "Select decommission date",
+          "help_text": "Planned date for decommissioning the device."
+        },
+        "ha_enabled": {
+          "label": "High Availability Enabled",
+          "help_text": "Whether high availability is enabled."
+        },
+        "redundancy_level": {
+          "label": "Redundancy Level",
+          "placeholder": "Select redundancy level",
+          "help_text": "Level of redundancy configured.",
+          "options": {
+            "none": "None",
+            "n_plus_1": "N+1",
+            "n_plus_2": "N+2"
+          }
+        },
+        "failover_capability": {
+          "label": "Failover Capability",
+          "help_text": "Whether failover capability is enabled."
+        },
+        "group_id": {
+          "label": "Group",
+          "placeholder": "Select group",
+          "help_text": "The group this network device belongs to.",
+          "options": {
+            "no_group": "No group",
+            "group_name": "{name} ({type})"
+          }
+        }
+      }
+    },
+    "software": {
+      "create": {
+        "title": "Create Software",
+        "description": "Create a new software in the system"
+      },
+      "edit": {
+        "title": "Edit Software: {name}",
+        "description": "Edit software information and relationships"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter software name",
+          "help_text": "The name of the software.",
+          "errors": {
+            "required": "Software name is required."
+          }
+        },
+        "vendor": {
+          "label": "Vendor",
+          "placeholder": "Enter vendor name",
+          "help_text": "The vendor or developer of the software."
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Enter software description",
+          "help_text": "Description of the software and its purpose."
+        },
+        "software_type": {
+          "label": "Software Type",
+          "placeholder": "Select software type",
+          "help_text": "Type of software.",
+          "options": {
+            "application": "Application",
+            "operating_system": "Operating System",
+            "utility": "Utility",
+            "security_tool": "Security Tool"
+          }
+        },
+        "handles_cardholder_data": {
+          "label": "Handles Cardholder Data",
+          "help_text": "Whether this software handles cardholder data."
+        },
+        "stores_cardholder_data": {
+          "label": "Stores Cardholder Data",
+          "help_text": "Whether this software stores cardholder data."
+        },
+        "transmits_cardholder_data": {
+          "label": "Transmits Cardholder Data",
+          "help_text": "Whether this software transmits cardholder data."
+        },
+        "processes_cardholder_data": {
+          "label": "Processes Cardholder Data",
+          "help_text": "Whether this software processes cardholder data."
+        },
+        "pci_compliance_status": {
+          "label": "PCI Compliance Status",
+          "placeholder": "Select PCI compliance status",
+          "help_text": "Current PCI compliance status.",
+          "options": {
+            "compliant": "Compliant",
+            "non_compliant": "Non-Compliant",
+            "in_progress": "In Progress"
+          }
+        },
+        "pci_assessment_date": {
+          "label": "PCI Assessment Date",
+          "placeholder": "Select PCI assessment date",
+          "help_text": "Date of the last PCI assessment."
+        },
+        "next_assessment_date": {
+          "label": "Next Assessment Date",
+          "placeholder": "Select next assessment date",
+          "help_text": "Date of the next scheduled assessment."
+        },
+        "compliance_notes": {
+          "label": "Compliance Notes",
+          "placeholder": "Enter compliance notes",
+          "help_text": "Additional notes related to compliance."
+        },
+        "encryption_enabled": {
+          "label": "Encryption Enabled",
+          "help_text": "Whether encryption is enabled for this software."
+        },
+        "encryption_type": {
+          "label": "Encryption Type",
+          "placeholder": "Enter encryption type",
+          "help_text": "Type of encryption used by the software."
+        },
+        "authentication_required": {
+          "label": "Authentication Required",
+          "help_text": "Whether authentication is required to use this software."
+        },
+        "multi_factor_auth_supported": {
+          "label": "Multi-Factor Authentication Supported",
+          "help_text": "Whether this software supports multi-factor authentication."
+        },
+        "vulnerability_status": {
+          "label": "Vulnerability Status",
+          "placeholder": "Select vulnerability status",
+          "help_text": "Current vulnerability status.",
+          "options": {
+            "compliant": "Compliant",
+            "non_compliant": "Non-Compliant",
+            "pending": "Pending"
+          }
+        },
+        "data_classification": {
+          "label": "Data Classification",
+          "placeholder": "Select data classification",
+          "help_text": "Classification of data handled by this software.",
+          "options": {
+            "public": "Public",
+            "internal": "Internal",
+            "confidential": "Confidential",
+            "restricted": "Restricted"
+          }
+        },
+        "end_of_life_date": {
+          "label": "End of Life Date",
+          "placeholder": "Select end of life date",
+          "help_text": "Date when the software reaches end of life."
+        },
+        "end_of_support_date": {
+          "label": "End of Support Date",
+          "placeholder": "Select end of support date",
+          "help_text": "Date when vendor support ends for this software."
+        },
+        "replacement_planned": {
+          "label": "Replacement Planned",
+          "help_text": "Whether replacement of this software is planned."
         }
       }
     }

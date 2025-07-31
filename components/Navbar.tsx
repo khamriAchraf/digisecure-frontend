@@ -25,7 +25,6 @@ export function Navbar() {
   const hasUserRead = useHasPermission(PERMISSIONS.USER_READ);
   const hasRoleRead = useHasPermission(PERMISSIONS.ROLE_READ);
   const hasGroupRead = useHasPermission(PERMISSIONS.GROUP_READ);
-  const hasConfigurationRead = useHasPermission(PERMISSIONS.CONFIGURATION_READ);
 
   // Build administration links based on permissions
   const adminLinks = [
@@ -35,8 +34,6 @@ export function Navbar() {
     ...(hasGroupRead ? [{ label: t('administration.groups'), link: '/admin/groups' }] : []),
     // Only show roles link if user has role read permission
     ...(hasRoleRead ? [{ label: t('administration.roles'), link: '/admin/roles' }] : []),
-    // Only show dictionaries link if user has configuration read permission
-    ...(hasConfigurationRead ? [{ label: t('administration.dictionaries'), link: '/admin/dictionaries' }] : []),
   ];
 
   // Build navigation data with permission filtering

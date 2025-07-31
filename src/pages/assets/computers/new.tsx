@@ -5,6 +5,8 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import DynamicForm from '../../../../components/DynamicForm';
 import { useCreateComputer } from '../../../../src/mutations';
+import React from 'react';
+import Head from 'next/head';
 
 export default function CreateComputerPage() {
   const router = useRouter();
@@ -61,6 +63,10 @@ export default function CreateComputerPage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('forms.computer.create.title')} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
@@ -84,5 +90,6 @@ export default function CreateComputerPage() {
         />
       </Stack>
     </Container>
+    </React.Fragment>
   );
 } 

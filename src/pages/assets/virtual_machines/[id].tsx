@@ -5,8 +5,9 @@ import DynamicEditForm from '../../../../components/DynamicEditForm';
 import { RelationshipItem } from '../../../../components/RelationshipWidget';
 import { useVirtualMachine, useGroups } from '../../../fetchers';
 import { useAddUserToGroup, useRemoveUserFromGroup, useUpdateVirtualMachine } from '../../../mutations';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from '../../../hooks/useTranslation';
+import Head from 'next/head';
 
 export default function EditVirtualMachinePage() {
   const router = useRouter();
@@ -90,6 +91,10 @@ export default function EditVirtualMachinePage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('forms.virtual_machine.edit.title', { name: vm?.name || '' })} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
         <Stack>
             {/* Header */}
@@ -120,5 +125,6 @@ export default function EditVirtualMachinePage() {
             )}
         </Stack>
         </Container>
+    </React.Fragment>
   );
 } 

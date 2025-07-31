@@ -9,7 +9,7 @@ import {
   Group,
   Loader,
   MultiSelect,
-  SimpleGrid,
+  Grid,
   Tabs,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
@@ -102,8 +102,14 @@ const getUpdatePermission = (ressourceType: string): string => {
     case 'assets':
       return PERMISSIONS.ASSET_UPDATE;
     case 'computer':
+    case 'network_device':
+    case 'network_devices':
+      return PERMISSIONS.NETWORK_DEVICE_UPDATE;
     case 'computers':
       return PERMISSIONS.COMPUTER_UPDATE;
+    case 'software':
+    case 'softwares':
+      return PERMISSIONS.SOFTWARE_UPDATE;
     case 'virtual_machine':
     case 'virtual_machines':
       return PERMISSIONS.VIRTUAL_MACHINE_UPDATE;
@@ -423,25 +429,37 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
 
       {tabs!.map((tab) => (
         <Tabs.Panel key={tab.id} value={tab.id} pt="xs">
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-            {(fieldsByTab[tab.id] || []).map(([k, f]) => renderField(k, f))}
-          </SimpleGrid>
+          <Grid align="center" gutter="md">
+            {(fieldsByTab[tab.id] || []).map(([k, f]) => (
+              <Grid.Col key={k} span={{ base: 12, md: 6 }}>
+                {renderField(k, f)}
+              </Grid.Col>
+            ))}
+          </Grid>
         </Tabs.Panel>
       ))}
 
       {/* Fields without tab_id */}
       {fieldsByTab['default'] && (
         <Tabs.Panel key="default" value="default" pt="xs">
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-            {fieldsByTab['default'].map(([k, f]) => renderField(k, f))}
-          </SimpleGrid>
+          <Grid align="center" gutter="md">
+            {fieldsByTab['default'].map(([k, f]) => (
+              <Grid.Col key={k} span={{ base: 12, md: 6 }}>
+                {renderField(k, f)}
+              </Grid.Col>
+            ))}
+          </Grid>
         </Tabs.Panel>
       )}
     </Tabs>
   ) : (
-    <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md">
-      {Object.entries(fields).map(([k, f]) => renderField(k, f))}
-    </SimpleGrid>
+    <Grid align="center" gutter="md">
+      {Object.entries(fields).map(([k, f]) => (
+        <Grid.Col key={k} span={{ base: 12, md: 6 }}>
+          {renderField(k, f)}
+        </Grid.Col>
+      ))}
+    </Grid>
   );
 
   const handleSubmit = (values: Record<string, any>) => {

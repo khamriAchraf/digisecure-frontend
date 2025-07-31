@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSession, getSession, signOut } from 'next-auth/react';
-import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine } from '../types/models';
+import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine } from '../types/models';
 import { PaginationParams, PersistedTableConfig } from '../types/utils';
 
 // Base URL for the backend API – change this to match your backend configuration
@@ -203,6 +203,41 @@ export const useComputer = (computerId?: number | string) => {
     isError: error,
     mutate,
   } as const;
+};
+
+// Assets fetcher
+export const useNetworkDevices = (params?: {
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
+  search?: string;
+  filters?: Record<string, any>;
+}) => {
+  return usePaginatedData<NetworkDevice>(`${API_BASE}/assets/network_devices`, params);
+};
+
+// Single NetworkDevice fetcher
+export const useNetworkDevice = (ndId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+  const key = ndId ? `${API_BASE}/assets/network_devices/${ndId}` : null;
+  const { data, error, isLoading, mutate } = useSWR<NetworkDevice>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
+  return { data, isLoading, isError: error, mutate } as const;
+};
+
+// Assets fetcher
+export const useSoftwares = (params?: { page?:number; per_page?:number; sort_by?:string; sort_order?:'asc'|'desc'; search?:string; filters?:Record<string,any>;})=>{
+  return usePaginatedData<Software>(`${API_BASE}/assets/software`,params);
+};
+
+// Single Software fetcher
+export const useSoftware = (sid?: number | string)=>{
+  const {data:session}=useSession();
+  const token=session?.accessToken;
+  const key=sid?`${API_BASE}/assets/software/${sid}`:null;
+  const {data,error,isLoading,mutate}=useSWR<Software>(key,(url)=>jsonFetcher(url,token),{shouldRetryOnError:false});
+  return {data,isLoading,isError:error,mutate} as const;
 };
 
 // Assets fetcher

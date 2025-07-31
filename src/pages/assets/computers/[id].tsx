@@ -5,8 +5,9 @@ import DynamicEditForm from '../../../../components/DynamicEditForm';
 import { RelationshipItem } from '../../../../components/RelationshipWidget';
 import { useComputer, useGroups } from '../../../fetchers';
 import { useAddUserToGroup, useRemoveUserFromGroup, useUpdateUser } from '../../../mutations';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from '../../../hooks/useTranslation';
+import Head from 'next/head';
 
 export default function EditComputerPage() {
   const router = useRouter();
@@ -92,6 +93,10 @@ export default function EditComputerPage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('forms.computer.edit.title', { name: computer?.name || '' })} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
@@ -122,5 +127,6 @@ export default function EditComputerPage() {
         )}
       </Stack>
     </Container>
+    </React.Fragment>
   );
 } 

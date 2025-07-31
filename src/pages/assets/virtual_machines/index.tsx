@@ -5,6 +5,7 @@ import { DataTable, useDataTable } from '../../../../components/DataTable';
 import { VirtualMachine } from '../../../../types/models';
 import { useLanguage } from '../../../../src/contexts/LanguageContext';
 import { Container } from '@mantine/core';
+import Head from 'next/head';
 
 const VirtualMachinesPage: NextPage = () => {
   const { t } = useLanguage();
@@ -43,6 +44,10 @@ const VirtualMachinesPage: NextPage = () => {
   const errorMessage = error ? (typeof error === 'string' ? error : 'An error occurred while loading data') : null;
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('datatable.virtual_machines')} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <DataTable<VirtualMachine>
         dataType="virtual_machines"
@@ -69,6 +74,7 @@ const VirtualMachinesPage: NextPage = () => {
         showCreateButton={true}
         showExportButton={true}
       /></Container>
+    </React.Fragment>
   );
 };
 

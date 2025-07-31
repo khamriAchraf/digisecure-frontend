@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { useUsers, useRoles, useGroups, useAssetTypes, useManufacturers, useLocations, useComputers, useVirtualMachines } from '../../src/fetchers';
+import { useUsers, useRoles, useGroups, useAssetTypes, useManufacturers, useLocations, useComputers, useVirtualMachines, useNetworkDevices, useSoftwares } from '../../src/fetchers';
 import { DataType, getDataTableConfig } from './config';
 import { PaginatedResponse } from '../../types/models';
 import { t } from '../../i18n';
@@ -117,12 +117,14 @@ export function useDataTable<T extends { id: number | string }>({
   }, [currentPage, pageSize, sortBy, sortOrder, searchQuery, filters]);
   
   // Use appropriate fetcher based on data type
-  const fetcherMap = {
+  const fetcherMap: Record<string, any> = {
     users: useUsers,
     roles: useRoles,
     groups: useGroups,
     computers: useComputers,
+    network_devices: useNetworkDevices,
     virtual_machines: useVirtualMachines,
+    software: useSoftwares,
     asset_types: useAssetTypes,
     manufacturers: useManufacturers,
     locations: useLocations,

@@ -5,8 +5,9 @@ import DynamicEditForm from '../../../../components/DynamicEditForm';
 import { RelationshipItem } from '../../../../components/RelationshipWidget';
 import { useUser, useGroups } from '../../../fetchers';
 import { useAddUserToGroup, useRemoveUserFromGroup, useUpdateUser } from '../../../mutations';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useTranslation } from '../../../hooks/useTranslation';
+import Head from 'next/head';
 
 export default function EditUserPage() {
   const router = useRouter();
@@ -97,6 +98,10 @@ export default function EditUserPage() {
   } : null;
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('forms.user.edit.title', { name: user?.username || '' })} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
@@ -127,5 +132,6 @@ export default function EditUserPage() {
         )}
       </Stack>
     </Container>
+    </React.Fragment>
   );
 } 

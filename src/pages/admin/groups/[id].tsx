@@ -11,9 +11,10 @@ import {
   useRemoveAssetFromGroup,
   useUpdateGroup,
 } from '../../../mutations';
-import { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { Asset, User } from '../../../../types';
+import Head from 'next/head';
 
 export default function EditGroupPage() {
   const router = useRouter();
@@ -162,6 +163,10 @@ export default function EditGroupPage() {
   };
 
   return (
+    <React.Fragment>
+      <Head>
+        <title>{t('forms.group.edit.title', { name: group?.name || '' })} - Digi Secure</title>
+      </Head>
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
@@ -211,5 +216,6 @@ export default function EditGroupPage() {
         )}
       </Stack>
     </Container>
+    </React.Fragment>
   );
 } 

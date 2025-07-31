@@ -160,10 +160,16 @@
     "os": "نظام التشغيل",
     "macAddress": "عنوان MAC",
     "ipAddress": "عنوان IP",
+    "deviceType": "نوع الجهاز",
     "model": "الطراز",
     "hostname": "اسم المضيف",
     "assignedTo": "مخصص إلى",
-    "group": "المجموعة"
+    "group": "المجموعة",
+    "virtual_machine": "الأجهزة الافتراضية",
+    "virtual_machines": "الأجهزة الافتراضية",
+    "network_device": "الأجهزة الشبكية",
+    "network_devices": "الأجهزة الشبكية",
+    "software": "البرمجيات"
   },
   "forms": {
     "errors": {
@@ -181,7 +187,14 @@
       "assets": "الأصول",
       "specifications": "المواصفات",
       "network": "الشبكة",
-      "security": "الأمان"
+      "security": "الأمان",
+      "virtualization": "الافتراضية",
+      "compliance": "الامتثال",
+      "pci_compliance": "امتثال PCI",
+      "backup": "النسخ الاحتياطي",
+      "authentication": "المصادقة",
+      "monitoring": "المراقبة",
+      "lifecycle": "دورة الحياة"
     },
     "group": {
       "create": {
@@ -561,6 +574,1024 @@
             "Medium": "متوسط",
             "Low": "منخفض"
           }
+        }
+      }
+    },
+    "virtual_machine": {
+      "create": {
+        "title": "إنشاء آلة افتراضية",
+        "description": "إنشاء آلة افتراضية جديدة في النظام"
+      },
+      "edit": {
+        "title": "تعديل الآلة الافتراضية: {name}",
+        "description": "تعديل معلومات الآلة الافتراضية وعلاقاتها"
+      },
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "أدخل اسم الآلة الافتراضية",
+          "help_text": "اسم الآلة الافتراضية.",
+          "errors": {
+            "required": "اسم الآلة الافتراضية مطلوب."
+          }
+        },
+        "serial_number": {
+          "label": "الرقم التسلسلي",
+          "placeholder": "أدخل الرقم التسلسلي",
+          "help_text": "الرقم التسلسلي لهذه الآلة الافتراضية."
+        },
+        "inventory_number": {
+          "label": "رقم المخزون",
+          "placeholder": "أدخل رقم المخزون",
+          "help_text": "رقم المخزون الداخلي لهذه الآلة الافتراضية."
+        },
+        "assigned_to": {
+          "label": "مخصص إلى",
+          "placeholder": "اختر المستخدم",
+          "help_text": "المستخدم الذي تم تخصيص هذه الآلة الافتراضية له.",
+          "options": {
+            "no_user": "لا يوجد مستخدم",
+            "user_name": "{name}"
+          }
+        },
+        "status": {
+          "label": "الحالة",
+          "placeholder": "اختر الحالة",
+          "help_text": "الحالة الحالية للآلة الافتراضية.",
+          "options": {
+            "active": "نشط",
+            "inactive": "غير نشط",
+            "maintenance": "صيانة",
+            "retired": "متقاعد"
+          }
+        },
+        "purchase_date": {
+          "label": "تاريخ الشراء",
+          "placeholder": "اختر تاريخ الشراء",
+          "help_text": "تاريخ شراء الآلة الافتراضية."
+        },
+        "warranty_expiry": {
+          "label": "انتهاء الضمان",
+          "placeholder": "اختر تاريخ انتهاء الضمان",
+          "help_text": "تاريخ انتهاء ضمان الآلة الافتراضية."
+        },
+        "manufacturer_id": {
+          "label": "الشركة المصنعة",
+          "placeholder": "اختر الشركة المصنعة",
+          "help_text": "الشركة المصنعة للآلة الافتراضية.",
+          "options": {
+            "no_manufacturer": "لا يوجد شركة مصنعة",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "الموقع",
+          "placeholder": "اختر الموقع",
+          "help_text": "موقع الآلة الافتراضية.",
+          "options": {
+            "no_location": "لا يوجد موقع",
+            "location_name": "{name} {description}"
+          }
+        },
+        "hypervisor_type": {
+          "label": "نوع المحاكي الافتراضي",
+          "placeholder": "اختر نوع المحاكي الافتراضي",
+          "help_text": "نوع المحاكي الافتراضي المستخدم لهذه الآلة الافتراضية.",
+          "options": {
+            "vmware": "VMware",
+            "hyperv": "Hyper-V",
+            "kvm": "KVM",
+            "xen": "Xen",
+            "virtualbox": "VirtualBox"
+          }
+        },
+        "hypervisor_version": {
+          "label": "إصدار المحاكي الافتراضي",
+          "placeholder": "أدخل إصدار المحاكي الافتراضي",
+          "help_text": "إصدار برنامج المحاكي الافتراضي."
+        },
+        "vm_platform": {
+          "label": "منصة الآلة الافتراضية",
+          "placeholder": "أدخل منصة الآلة الافتراضية",
+          "help_text": "المنصة أو البيئة التي تعمل فيها الآلة الافتراضية."
+        },
+        "power_state": {
+          "label": "حالة الطاقة",
+          "placeholder": "اختر حالة الطاقة",
+          "help_text": "حالة الطاقة الحالية للآلة الافتراضية.",
+          "options": {
+            "running": "قيد التشغيل",
+            "stopped": "متوقف",
+            "suspended": "معلق"
+          }
+        },
+        "creation_date": {
+          "label": "تاريخ الإنشاء",
+          "placeholder": "اختر تاريخ الإنشاء",
+          "help_text": "تاريخ إنشاء الآلة الافتراضية."
+        },
+        "scheduled_decommission_date": {
+          "label": "تاريخ الإلغاء المجدول",
+          "placeholder": "اختر تاريخ الإلغاء",
+          "help_text": "التاريخ المخطط لإلغاء الآلة الافتراضية."
+        },
+        "ha_enabled": {
+          "label": "التوفر العالي مفعل",
+          "placeholder": "اختر حالة التوفر العالي",
+          "help_text": "ما إذا كان التوفر العالي مفعل لهذه الآلة الافتراضية.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "redundancy_level": {
+          "label": "مستوى التكرار",
+          "placeholder": "اختر مستوى التكرار",
+          "help_text": "مستوى التكرار المُعد لهذه الآلة الافتراضية.",
+          "options": {
+            "none": "لا شيء",
+            "n_plus_1": "N+1",
+            "n_plus_2": "N+2"
+          }
+        },
+        "failover_capability": {
+          "label": "قدرة الانتقال",
+          "placeholder": "اختر قدرة الانتقال",
+          "help_text": "ما إذا كانت قدرة الانتقال مفعلة.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "confidentiality_level": {
+          "label": "مستوى السرية",
+          "placeholder": "اختر مستوى السرية",
+          "help_text": "مستوى السرية لهذه الآلة الافتراضية.",
+          "options": {
+            "Public": "عام",
+            "Internal": "داخلي",
+            "Confidential": "سري",
+            "Secret": "سري للغاية"
+          }
+        },
+        "integrity_level": {
+          "label": "مستوى النزاهة",
+          "placeholder": "اختر مستوى النزاهة",
+          "help_text": "مستوى النزاهة لهذه الآلة الافتراضية.",
+          "options": {
+            "High": "عالي",
+            "Medium": "متوسط",
+            "Low": "منخفض"
+          }
+        },
+        "availability_level": {
+          "label": "مستوى التوفر",
+          "placeholder": "اختر مستوى التوفر",
+          "help_text": "مستوى التوفر لهذه الآلة الافتراضية.",
+          "options": {
+            "High": "عالي",
+            "Medium": "متوسط",
+            "Low": "منخفض"
+          }
+        },
+        "encryption_status": {
+          "label": "حالة التشفير",
+          "placeholder": "اختر حالة التشفير",
+          "help_text": "حالة التشفير الحالية للآلة الافتراضية.",
+          "options": {
+            "encrypted": "مشفر",
+            "not_encrypted": "غير مشفر",
+            "partial": "جزئي"
+          }
+        },
+        "encryption_type": {
+          "label": "نوع التشفير",
+          "placeholder": "أدخل نوع التشفير",
+          "help_text": "نوع التشفير المستخدم لهذه الآلة الافتراضية."
+        },
+        "admin_access_restricted": {
+          "label": "الوصول الإداري مقيد",
+          "placeholder": "اختر حالة الوصول الإداري",
+          "help_text": "ما إذا كان الوصول الإداري مقيد.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "multi_factor_auth_enabled": {
+          "label": "المصادقة متعددة العوامل مفعلة",
+          "placeholder": "اختر حالة المصادقة متعددة العوامل",
+          "help_text": "ما إذا كانت المصادقة متعددة العوامل مفعلة.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "logging_enabled": {
+          "label": "التسجيل مفعل",
+          "placeholder": "اختر حالة التسجيل",
+          "help_text": "ما إذا كان التسجيل مفعل لهذه الآلة الافتراضية.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "monitoring_tool": {
+          "label": "أداة المراقبة",
+          "placeholder": "أدخل اسم أداة المراقبة",
+          "help_text": "اسم أداة المراقبة المستخدمة لهذه الآلة الافتراضية."
+        },
+        "isolation_level": {
+          "label": "مستوى العزل",
+          "placeholder": "اختر مستوى العزل",
+          "help_text": "مستوى العزل لهذه الآلة الافتراضية.",
+          "options": {
+            "high": "عالي",
+            "medium": "متوسط",
+            "low": "منخفض"
+          }
+        },
+        "resource_isolation": {
+          "label": "عزل الموارد",
+          "placeholder": "اختر حالة عزل الموارد",
+          "help_text": "ما إذا كان عزل الموارد مفعل.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "network_isolation": {
+          "label": "عزل الشبكة",
+          "placeholder": "اختر حالة عزل الشبكة",
+          "help_text": "ما إذا كان عزل الشبكة مفعل.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "storage_isolation": {
+          "label": "عزل التخزين",
+          "placeholder": "اختر حالة عزل التخزين",
+          "help_text": "ما إذا كان عزل التخزين مفعل.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "cpu_cores": {
+          "label": "أنوية المعالج",
+          "placeholder": "أدخل عدد أنوية المعالج",
+          "help_text": "عدد أنوية المعالج المخصصة لهذه الآلة الافتراضية."
+        },
+        "memory_mb": {
+          "label": "الذاكرة (ميجابايت)",
+          "placeholder": "أدخل الذاكرة بالميجابايت",
+          "help_text": "كمية الذاكرة المخصصة لهذه الآلة الافتراضية بالميجابايت."
+        },
+        "storage_gb": {
+          "label": "التخزين (جيجابايت)",
+          "placeholder": "أدخل التخزين بالجيجابايت",
+          "help_text": "كمية التخزين المخصصة لهذه الآلة الافتراضية بالجيجابايت."
+        },
+        "os_type": {
+          "label": "نوع نظام التشغيل",
+          "placeholder": "اختر نوع نظام التشغيل",
+          "help_text": "نوع نظام التشغيل المثبت على هذه الآلة الافتراضية.",
+          "options": {
+            "windows": "Windows",
+            "linux": "Linux",
+            "macos": "macOS"
+          }
+        },
+        "os_version": {
+          "label": "إصدار نظام التشغيل",
+          "placeholder": "أدخل إصدار نظام التشغيل",
+          "help_text": "إصدار نظام التشغيل المثبت."
+        },
+        "os_architecture": {
+          "label": "معمارية نظام التشغيل",
+          "placeholder": "اختر معمارية نظام التشغيل",
+          "help_text": "معمارية نظام التشغيل.",
+          "options": {
+            "x86_64": "x86_64",
+            "arm64": "ARM64",
+            "i386": "i386"
+          }
+        },
+        "model": {
+          "label": "الطراز",
+          "placeholder": "أدخل الطراز",
+          "help_text": "طراز الآلة الافتراضية."
+        },
+        "cpu": {
+          "label": "المعالج",
+          "placeholder": "أدخل مواصفات المعالج",
+          "help_text": "مواصفات المعالج لهذه الآلة الافتراضية."
+        },
+        "ram": {
+          "label": "الذاكرة",
+          "placeholder": "أدخل مواصفات الذاكرة",
+          "help_text": "مواصفات الذاكرة لهذه الآلة الافتراضية."
+        },
+        "storage": {
+          "label": "التخزين",
+          "placeholder": "أدخل مواصفات التخزين",
+          "help_text": "مواصفات التخزين لهذه الآلة الافتراضية."
+        },
+        "os": {
+          "label": "نظام التشغيل",
+          "placeholder": "أدخل نظام التشغيل",
+          "help_text": "نظام التشغيل المثبت على هذه الآلة الافتراضية."
+        },
+        "hostname": {
+          "label": "اسم المضيف",
+          "placeholder": "أدخل اسم المضيف",
+          "help_text": "اسم المضيف على الشبكة لهذه الآلة الافتراضية."
+        },
+        "cpu_allocation_percent": {
+          "label": "تخصيص المعالج (%)",
+          "placeholder": "أدخل نسبة تخصيص المعالج",
+          "help_text": "نسبة موارد المعالج المخصصة لهذه الآلة الافتراضية."
+        },
+        "memory_allocation_percent": {
+          "label": "تخصيص الذاكرة (%)",
+          "placeholder": "أدخل نسبة تخصيص الذاكرة",
+          "help_text": "نسبة موارد الذاكرة المخصصة لهذه الآلة الافتراضية."
+        },
+        "storage_allocation_percent": {
+          "label": "تخصيص التخزين (%)",
+          "placeholder": "أدخل نسبة تخصيص التخزين",
+          "help_text": "نسبة موارد التخزين المخصصة لهذه الآلة الافتراضية."
+        },
+        "network_segment": {
+          "label": "قطاع الشبكة",
+          "placeholder": "اختر قطاع الشبكة",
+          "help_text": "قطاع الشبكة الذي تم نشر هذه الآلة الافتراضية فيه.",
+          "options": {
+            "dmz": "DMZ",
+            "internal": "داخلي",
+            "pci": "PCI",
+            "management": "الإدارة"
+          }
+        },
+        "vlan_id": {
+          "label": "معرف VLAN",
+          "placeholder": "أدخل معرف VLAN",
+          "help_text": "معرف VLAN لهذه الآلة الافتراضية."
+        },
+        "ip_address": {
+          "label": "عنوان IP",
+          "placeholder": "أدخل عنوان IP",
+          "help_text": "عنوان IP المخصص لهذه الآلة الافتراضية."
+        },
+        "mac_address": {
+          "label": "عنوان MAC",
+          "placeholder": "أدخل عنوان MAC",
+          "help_text": "عنوان MAC لواجهة الشبكة للآلة الافتراضية."
+        },
+        "pci_scope": {
+          "label": "نطاق PCI",
+          "placeholder": "اختر نطاق PCI",
+          "help_text": "ما إذا كانت هذه الآلة الافتراضية في نطاق PCI.",
+          "options": {
+            "in_scope": "في النطاق",
+            "out_of_scope": "خارج النطاق"
+          }
+        },
+        "cardholder_data_environment": {
+          "label": "بيئة بيانات حاملي البطاقات",
+          "placeholder": "اختر حالة بيئة بيانات حاملي البطاقات",
+          "help_text": "تصنيف بيئة بيانات حاملي البطاقات.",
+          "options": {
+            "cde": "بيئة بيانات حاملي البطاقات",
+            "connected_to": "متصل بـ",
+            "out_of_scope": "خارج النطاق"
+          }
+        },
+        "pci_assessment_date": {
+          "label": "تاريخ تقييم PCI",
+          "placeholder": "اختر تاريخ تقييم PCI",
+          "help_text": "تاريخ آخر تقييم PCI."
+        },
+        "pci_compliance_status": {
+          "label": "حالة الامتثال لـ PCI",
+          "placeholder": "اختر حالة الامتثال لـ PCI",
+          "help_text": "حالة الامتثال لـ PCI الحالية.",
+          "options": {
+            "compliant": "متوافق",
+            "non_compliant": "غير متوافق",
+            "in_progress": "قيد التقدم"
+          }
+        },
+        "next_assessment_date": {
+          "label": "تاريخ التقييم التالي",
+          "placeholder": "اختر تاريخ التقييم التالي",
+          "help_text": "تاريخ التقييم التالي المجدول."
+        },
+        "compliance_notes": {
+          "label": "ملاحظات الامتثال",
+          "placeholder": "أدخل ملاحظات الامتثال",
+          "help_text": "ملاحظات إضافية متعلقة بالامتثال."
+        },
+        "last_patch_date": {
+          "label": "تاريخ آخر تصحيح",
+          "placeholder": "اختر تاريخ آخر تصحيح",
+          "help_text": "تاريخ تطبيق آخر تصحيح."
+        },
+        "patch_level": {
+          "label": "مستوى التصحيح",
+          "placeholder": "أدخل مستوى التصحيح",
+          "help_text": "مستوى التصحيح الحالي للآلة الافتراضية."
+        },
+        "vulnerability_scan_date": {
+          "label": "تاريخ فحص الثغرات",
+          "placeholder": "اختر تاريخ فحص الثغرات",
+          "help_text": "تاريخ آخر فحص للثغرات."
+        },
+        "vulnerability_status": {
+          "label": "حالة الثغرات",
+          "placeholder": "اختر حالة الثغرات",
+          "help_text": "حالة الثغرات الحالية.",
+          "options": {
+            "compliant": "متوافق",
+            "non_compliant": "غير متوافق",
+            "pending": "في الانتظار"
+          }
+        },
+        "backup_frequency": {
+          "label": "تكرار النسخ الاحتياطي",
+          "placeholder": "اختر تكرار النسخ الاحتياطي",
+          "help_text": "تكرار النسخ الاحتياطي لهذه الآلة الافتراضية.",
+          "options": {
+            "daily": "يومي",
+            "weekly": "أسبوعي",
+            "monthly": "شهري"
+          }
+        },
+        "last_backup_date": {
+          "label": "تاريخ آخر نسخ احتياطي",
+          "placeholder": "اختر تاريخ آخر نسخ احتياطي",
+          "help_text": "تاريخ آخر نسخ احتياطي."
+        },
+        "backup_retention_days": {
+          "label": "الاحتفاظ بالنسخ الاحتياطي (أيام)",
+          "placeholder": "أدخل أيام الاحتفاظ بالنسخ الاحتياطي",
+          "help_text": "عدد أيام الاحتفاظ بالنسخ الاحتياطي."
+        },
+        "backup_encryption": {
+          "label": "تشفير النسخ الاحتياطي",
+          "placeholder": "اختر حالة تشفير النسخ الاحتياطي",
+          "help_text": "ما إذا كانت النسخ الاحتياطية مشفرة.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا",
+            "na": "غير متوفر"
+          }
+        },
+        "disaster_recovery_plan": {
+          "label": "خطة التعافي من الكوارث",
+          "placeholder": "اختر حالة خطة التعافي من الكوارث",
+          "help_text": "ما إذا كانت خطة التعافي من الكوارث موجودة.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا",
+            "na": "غير متوفر"
+          }
+        },
+        "group_id": {
+          "label": "المجموعة",
+          "placeholder": "اختر المجموعة",
+          "help_text": "المجموعة التي تنتمي إليها هذه الآلة الافتراضية.",
+          "options": {
+            "no_group": "لا توجد مجموعة",
+            "group_name": "{name} ({type})"
+          }
+        }
+      }
+    },
+    "network_device": {
+      "create": {
+        "title": "إنشاء جهاز شبكة",
+        "description": "إنشاء جهاز شبكة جديد في النظام"
+      },
+      "edit": {
+        "title": "تعديل جهاز الشبكة: {name}",
+        "description": "تعديل معلومات جهاز الشبكة وعلاقاته"
+      },
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "أدخل اسم جهاز الشبكة",
+          "help_text": "اسم جهاز الشبكة.",
+          "errors": {
+            "required": "اسم جهاز الشبكة مطلوب."
+          }
+        },
+        "serial_number": {
+          "label": "الرقم التسلسلي",
+          "placeholder": "أدخل الرقم التسلسلي",
+          "help_text": "الرقم التسلسلي لهذا الجهاز الشبكي."
+        },
+        "inventory_number": {
+          "label": "رقم المخزون",
+          "placeholder": "أدخل رقم المخزون",
+          "help_text": "رقم المخزون الداخلي لهذا الجهاز الشبكي."
+        },
+        "assigned_to": {
+          "label": "مخصص إلى",
+          "placeholder": "اختر المستخدم",
+          "help_text": "المستخدم الذي تم تخصيص هذا الجهاز الشبكي له.",
+          "options": {
+            "no_user": "لا يوجد مستخدم",
+            "user_name": "{name}"
+          }
+        },
+        "status": {
+          "label": "الحالة",
+          "placeholder": "اختر الحالة",
+          "help_text": "الحالة الحالية لجهاز الشبكة.",
+          "options": {
+            "active": "نشط",
+            "inactive": "غير نشط",
+            "maintenance": "صيانة",
+            "retired": "متقاعد"
+          }
+        },
+        "purchase_date": {
+          "label": "تاريخ الشراء",
+          "placeholder": "اختر تاريخ الشراء",
+          "help_text": "تاريخ شراء جهاز الشبكة."
+        },
+        "warranty_expiry": {
+          "label": "انتهاء الضمان",
+          "placeholder": "اختر تاريخ انتهاء الضمان",
+          "help_text": "تاريخ انتهاء ضمان جهاز الشبكة."
+        },
+        "manufacturer_id": {
+          "label": "الشركة المصنعة",
+          "placeholder": "اختر الشركة المصنعة",
+          "help_text": "الشركة المصنعة لجهاز الشبكة.",
+          "options": {
+            "no_manufacturer": "لا يوجد شركة مصنعة",
+            "manufacturer_name": "{name} {description}"
+          }
+        },
+        "location_id": {
+          "label": "الموقع",
+          "placeholder": "اختر الموقع",
+          "help_text": "موقع جهاز الشبكة.",
+          "options": {
+            "no_location": "لا يوجد موقع",
+            "location_name": "{name} {description}"
+          }
+        },
+        "device_type": {
+          "label": "نوع الجهاز",
+          "placeholder": "اختر نوع الجهاز",
+          "help_text": "نوع جهاز الشبكة.",
+          "options": {
+            "switch": "مبدل",
+            "router": "موجه",
+            "access_point": "نقطة وصول",
+            "firewall": "جدار حماية"
+          }
+        },
+        "model": {
+          "label": "الطراز",
+          "placeholder": "أدخل الطراز",
+          "help_text": "طراز جهاز الشبكة."
+        },
+        "firmware_version": {
+          "label": "إصدار البرنامج الثابت",
+          "placeholder": "أدخل إصدار البرنامج الثابت",
+          "help_text": "الإصدار الحالي للبرنامج الثابت للجهاز."
+        },
+        "ip_address": {
+          "label": "عنوان IP",
+          "placeholder": "أدخل عنوان IP",
+          "help_text": "عنوان IP الأساسي لجهاز الشبكة."
+        },
+        "management_ip": {
+          "label": "IP الإدارة",
+          "placeholder": "أدخل عنوان IP الإدارة",
+          "help_text": "عنوان IP الإدارة لإدارة الجهاز."
+        },
+        "mac_address": {
+          "label": "عنوان MAC",
+          "placeholder": "أدخل عنوان MAC",
+          "help_text": "عنوان MAC لجهاز الشبكة."
+        },
+        "port_count": {
+          "label": "عدد المنافذ",
+          "placeholder": "أدخل عدد المنافذ",
+          "help_text": "عدد منافذ الشبكة على الجهاز."
+        },
+        "connection_type": {
+          "label": "نوع الاتصال",
+          "placeholder": "اختر نوع الاتصال",
+          "help_text": "نوع الاتصال الشبكي.",
+          "options": {
+            "ethernet": "إيثرنت",
+            "wifi": "واي فاي",
+            "fiber": "ألياف ضوئية"
+          }
+        },
+        "vlan": {
+          "label": "VLAN",
+          "placeholder": "أدخل معلومات VLAN",
+          "help_text": "تكوين VLAN لهذا الجهاز."
+        },
+        "segmentation": {
+          "label": "تقسيم الشبكة",
+          "placeholder": "اختر تقسيم الشبكة",
+          "help_text": "تصنيف تقسيم الشبكة.",
+          "options": {
+            "pci": "PCI",
+            "guest": "ضيف",
+            "internal": "داخلي",
+            "dmz": "DMZ"
+          }
+        },
+        "confidentiality_level": {
+          "label": "مستوى السرية",
+          "placeholder": "اختر مستوى السرية",
+          "help_text": "مستوى السرية لهذا الجهاز الشبكي.",
+          "options": {
+            "Public": "عام",
+            "Internal": "داخلي",
+            "Confidential": "سري",
+            "Secret": "سري للغاية"
+          }
+        },
+        "integrity_level": {
+          "label": "مستوى النزاهة",
+          "placeholder": "اختر مستوى النزاهة",
+          "help_text": "مستوى النزاهة لهذا الجهاز الشبكي.",
+          "options": {
+            "High": "عالي",
+            "Medium": "متوسط",
+            "Low": "منخفض"
+          }
+        },
+        "availability_level": {
+          "label": "مستوى التوفر",
+          "placeholder": "اختر مستوى التوفر",
+          "help_text": "مستوى التوفر لهذا الجهاز الشبكي.",
+          "options": {
+            "High": "عالي",
+            "Medium": "متوسط",
+            "Low": "منخفض"
+          }
+        },
+        "rack_location": {
+          "label": "موقع الرف",
+          "placeholder": "أدخل موقع الرف",
+          "help_text": "الموقع المادي للرف للجهاز."
+        },
+        "physical_lock": {
+          "label": "قفل فيزيائي",
+          "placeholder": "اختر حالة القفل الفيزيائي",
+          "help_text": "ما إذا كان الجهاز مؤمناً فيزيائياً.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "tamper_evident": {
+          "label": "مقاوم للعبث",
+          "placeholder": "اختر حالة مقاومة العبث",
+          "help_text": "ما إذا كانت الأختام المقاومة للعبث موجودة.",
+          "options": {
+            "yes": "نعم",
+            "no": "لا"
+          }
+        },
+        "firewall_enabled": {
+          "label": "جدار الحماية مفعل",
+          "help_text": "ما إذا كانت وظيفة جدار الحماية مفعلة."
+        },
+        "ids_ips_enabled": {
+          "label": "كشف/منع التسلل مفعل",
+          "help_text": "ما إذا كان كشف/منع التسلل مفعل."
+        },
+        "remote_access_enabled": {
+          "label": "الوصول عن بُعد مفعل",
+          "help_text": "ما إذا كان الوصول عن بُعد مفعل."
+        },
+        "remote_access_method": {
+          "label": "طريقة الوصول عن بُعد",
+          "placeholder": "اختر طريقة الوصول عن بُعد",
+          "help_text": "الطريقة المستخدمة للوصول عن بُعد.",
+          "options": {
+            "ssh": "SSH",
+            "telnet": "Telnet",
+            "https": "HTTPS",
+            "http": "HTTP"
+          }
+        },
+        "remote_access_restriction": {
+          "label": "تقييد الوصول عن بُعد",
+          "placeholder": "أدخل قيود الوصول",
+          "help_text": "قيود على الوصول عن بُعد."
+        },
+        "management_encryption": {
+          "label": "تشفير الإدارة",
+          "help_text": "ما إذا كان حركة الإدارة مشفرة."
+        },
+        "encryption_type": {
+          "label": "نوع التشفير",
+          "placeholder": "أدخل نوع التشفير",
+          "help_text": "نوع التشفير المستخدم."
+        },
+        "data_in_transit_encryption": {
+          "label": "تشفير البيانات في العبور",
+          "help_text": "ما إذا كانت البيانات في العبور مشفرة."
+        },
+        "admin_username": {
+          "label": "اسم المستخدم الإداري",
+          "placeholder": "أدخل اسم المستخدم الإداري",
+          "help_text": "اسم المستخدم الإداري للجهاز."
+        },
+        "admin_password_set": {
+          "label": "كلمة مرور الإدارة محددة",
+          "help_text": "ما إذا كانت كلمة مرور الإدارة مُعدة."
+        },
+        "password_last_changed": {
+          "label": "آخر تغيير لكلمة المرور",
+          "placeholder": "اختر تاريخ تغيير كلمة المرور",
+          "help_text": "تاريخ آخر تغيير لكلمة مرور الإدارة."
+        },
+        "multi_factor_auth_enabled": {
+          "label": "المصادقة متعددة العوامل مفعلة",
+          "help_text": "ما إذا كانت المصادقة متعددة العوامل مفعلة."
+        },
+        "default_accounts_disabled": {
+          "label": "الحسابات الافتراضية معطلة",
+          "help_text": "ما إذا كانت الحسابات الافتراضية معطلة."
+        },
+        "logging_enabled": {
+          "label": "التسجيل مفعل",
+          "help_text": "ما إذا كان التسجيل مفعل."
+        },
+        "log_retention_days": {
+          "label": "الاحتفاظ بالسجلات (أيام)",
+          "placeholder": "أدخل أيام الاحتفاظ بالسجلات",
+          "help_text": "عدد أيام الاحتفاظ بالسجلات."
+        },
+        "syslog_server": {
+          "label": "خادم Syslog",
+          "placeholder": "أدخل عنوان خادم syslog",
+          "help_text": "خادم syslog لإعادة توجيه السجلات."
+        },
+        "snmp_enabled": {
+          "label": "SNMP مفعل",
+          "help_text": "ما إذا كان SNMP مفعل."
+        },
+        "snmp_version": {
+          "label": "إصدار SNMP",
+          "placeholder": "اختر إصدار SNMP",
+          "help_text": "إصدار بروتوكول SNMP.",
+          "options": {
+            "v1": "v1",
+            "v2c": "v2c",
+            "v3": "v3"
+          }
+        },
+        "monitoring_tool": {
+          "label": "أداة المراقبة",
+          "placeholder": "أدخل اسم أداة المراقبة",
+          "help_text": "اسم أداة المراقبة المستخدمة."
+        },
+        "pci_assessment_date": {
+          "label": "تاريخ تقييم PCI",
+          "placeholder": "اختر تاريخ تقييم PCI",
+          "help_text": "تاريخ آخر تقييم PCI."
+        },
+        "pci_compliance_status": {
+          "label": "حالة الامتثال لـ PCI",
+          "placeholder": "اختر حالة الامتثال لـ PCI",
+          "help_text": "حالة الامتثال لـ PCI الحالية.",
+          "options": {
+            "compliant": "متوافق",
+            "non_compliant": "غير متوافق",
+            "in_progress": "قيد التقدم"
+          }
+        },
+        "next_assessment_date": {
+          "label": "تاريخ التقييم التالي",
+          "placeholder": "اختر تاريخ التقييم التالي",
+          "help_text": "تاريخ التقييم التالي المجدول."
+        },
+        "compliance_notes": {
+          "label": "ملاحظات الامتثال",
+          "placeholder": "أدخل ملاحظات الامتثال",
+          "help_text": "ملاحظات إضافية متعلقة بالامتثال."
+        },
+        "last_patch_date": {
+          "label": "تاريخ آخر تصحيح",
+          "placeholder": "اختر تاريخ آخر تصحيح",
+          "help_text": "تاريخ تطبيق آخر تصحيح."
+        },
+        "patch_level": {
+          "label": "مستوى التصحيح",
+          "placeholder": "أدخل مستوى التصحيح",
+          "help_text": "مستوى التصحيح الحالي للجهاز."
+        },
+        "vulnerability_scan_date": {
+          "label": "تاريخ فحص الثغرات",
+          "placeholder": "اختر تاريخ فحص الثغرات",
+          "help_text": "تاريخ آخر فحص للثغرات."
+        },
+        "vulnerability_status": {
+          "label": "حالة الثغرات",
+          "placeholder": "اختر حالة الثغرات",
+          "help_text": "حالة الثغرات الحالية.",
+          "options": {
+            "compliant": "متوافق",
+            "non_compliant": "غير متوافق",
+            "pending": "في الانتظار"
+          }
+        },
+        "power_state": {
+          "label": "حالة الطاقة",
+          "placeholder": "اختر حالة الطاقة",
+          "help_text": "حالة الطاقة الحالية للجهاز.",
+          "options": {
+            "on": "تشغيل",
+            "off": "إيقاف",
+            "standby": "استعداد"
+          }
+        },
+        "creation_date": {
+          "label": "تاريخ الإنشاء",
+          "placeholder": "اختر تاريخ الإنشاء",
+          "help_text": "تاريخ إنشاء الجهاز."
+        },
+        "scheduled_decommission_date": {
+          "label": "تاريخ الإلغاء المجدول",
+          "placeholder": "اختر تاريخ الإلغاء",
+          "help_text": "التاريخ المخطط لإلغاء الجهاز."
+        },
+        "ha_enabled": {
+          "label": "التوفر العالي مفعل",
+          "help_text": "ما إذا كان التوفر العالي مفعل."
+        },
+        "redundancy_level": {
+          "label": "مستوى التكرار",
+          "placeholder": "اختر مستوى التكرار",
+          "help_text": "مستوى التكرار المُعد.",
+          "options": {
+            "none": "لا شيء",
+            "n_plus_1": "N+1",
+            "n_plus_2": "N+2"
+          }
+        },
+        "failover_capability": {
+          "label": "قدرة الانتقال",
+          "help_text": "ما إذا كانت قدرة الانتقال مفعلة."
+        },
+        "group_id": {
+          "label": "المجموعة",
+          "placeholder": "اختر المجموعة",
+          "help_text": "المجموعة التي ينتمي إليها هذا الجهاز الشبكي.",
+          "options": {
+            "no_group": "لا توجد مجموعة",
+            "group_name": "{name} ({type})"
+          }
+        }
+      }
+    },
+    "software": {
+      "create": {
+        "title": "إنشاء برمجية",
+        "description": "إنشاء برمجية جديدة في النظام"
+      },
+      "edit": {
+        "title": "تعديل البرمجية: {name}",
+        "description": "تعديل معلومات البرمجية وعلاقاتها"
+      },
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "أدخل اسم البرمجية",
+          "help_text": "اسم البرمجية.",
+          "errors": {
+            "required": "اسم البرمجية مطلوب."
+          }
+        },
+        "vendor": {
+          "label": "المورد",
+          "placeholder": "أدخل اسم المورد",
+          "help_text": "المورد أو المطور للبرمجية."
+        },
+        "description": {
+          "label": "الوصف",
+          "placeholder": "أدخل وصف البرمجية",
+          "help_text": "وصف البرمجية والغرض منها."
+        },
+        "software_type": {
+          "label": "نوع البرمجية",
+          "placeholder": "اختر نوع البرمجية",
+          "help_text": "نوع البرمجية.",
+          "options": {
+            "application": "تطبيق",
+            "operating_system": "نظام تشغيل",
+            "utility": "أداة مساعدة",
+            "security_tool": "أداة أمان"
+          }
+        },
+        "handles_cardholder_data": {
+          "label": "يتعامل مع بيانات حاملي البطاقات",
+          "help_text": "ما إذا كانت هذه البرمجية تتعامل مع بيانات حاملي البطاقات."
+        },
+        "stores_cardholder_data": {
+          "label": "تخزن بيانات حاملي البطاقات",
+          "help_text": "ما إذا كانت هذه البرمجية تخزن بيانات حاملي البطاقات."
+        },
+        "transmits_cardholder_data": {
+          "label": "تنقل بيانات حاملي البطاقات",
+          "help_text": "ما إذا كانت هذه البرمجية تنقل بيانات حاملي البطاقات."
+        },
+        "processes_cardholder_data": {
+          "label": "تعالج بيانات حاملي البطاقات",
+          "help_text": "ما إذا كانت هذه البرمجية تعالج بيانات حاملي البطاقات."
+        },
+        "pci_compliance_status": {
+          "label": "حالة الامتثال لـ PCI",
+          "placeholder": "اختر حالة الامتثال لـ PCI",
+          "help_text": "حالة الامتثال لـ PCI الحالية.",
+          "options": {
+            "compliant": "متوافق",
+            "non_compliant": "غير متوافق",
+            "in_progress": "قيد التقدم"
+          }
+        },
+        "pci_assessment_date": {
+          "label": "تاريخ تقييم PCI",
+          "placeholder": "اختر تاريخ تقييم PCI",
+          "help_text": "تاريخ آخر تقييم PCI."
+        },
+        "next_assessment_date": {
+          "label": "تاريخ التقييم التالي",
+          "placeholder": "اختر تاريخ التقييم التالي",
+          "help_text": "تاريخ التقييم التالي المجدول."
+        },
+        "compliance_notes": {
+          "label": "ملاحظات الامتثال",
+          "placeholder": "أدخل ملاحظات الامتثال",
+          "help_text": "ملاحظات إضافية متعلقة بالامتثال."
+        },
+        "encryption_enabled": {
+          "label": "التشفير مفعل",
+          "help_text": "ما إذا كان التشفير مفعل لهذه البرمجية."
+        },
+        "encryption_type": {
+          "label": "نوع التشفير",
+          "placeholder": "أدخل نوع التشفير",
+          "help_text": "نوع التشفير المستخدم بواسطة البرمجية."
+        },
+        "authentication_required": {
+          "label": "المصادقة مطلوبة",
+          "help_text": "ما إذا كانت المصادقة مطلوبة لاستخدام هذه البرمجية."
+        },
+        "multi_factor_auth_supported": {
+          "label": "المصادقة متعددة العوامل مدعومة",
+          "help_text": "ما إذا كانت هذه البرمجية تدعم المصادقة متعددة العوامل."
+        },
+        "vulnerability_status": {
+          "label": "حالة الثغرات",
+          "placeholder": "اختر حالة الثغرات",
+          "help_text": "حالة الثغرات الحالية.",
+          "options": {
+            "compliant": "متوافق",
+            "non_compliant": "غير متوافق",
+            "pending": "في الانتظار"
+          }
+        },
+        "data_classification": {
+          "label": "تصنيف البيانات",
+          "placeholder": "اختر تصنيف البيانات",
+          "help_text": "تصنيف البيانات التي تتعامل معها هذه البرمجية.",
+          "options": {
+            "public": "عام",
+            "internal": "داخلي",
+            "confidential": "سري",
+            "restricted": "مقيد"
+          }
+        },
+        "end_of_life_date": {
+          "label": "تاريخ انتهاء الصلاحية",
+          "placeholder": "اختر تاريخ انتهاء الصلاحية",
+          "help_text": "التاريخ الذي تنتهي فيه صلاحية البرمجية."
+        },
+        "end_of_support_date": {
+          "label": "تاريخ انتهاء الدعم",
+          "placeholder": "اختر تاريخ انتهاء الدعم",
+          "help_text": "التاريخ الذي ينتهي فيه دعم المورد لهذه البرمجية."
+        },
+        "replacement_planned": {
+          "label": "الاستبدال مخطط",
+          "help_text": "ما إذا كان استبدال هذه البرمجية مخطط."
         }
       }
     }
