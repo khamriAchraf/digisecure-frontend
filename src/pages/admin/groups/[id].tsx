@@ -1,6 +1,6 @@
-import { Container, Title, Stack, Loader, Text, Group as MantineGroup, ActionIcon } from '@mantine/core';
+import { Container, Title, Stack, Loader, Text, Group as MantineGroup, ActionIcon, Popover } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { IconArrowLeft, IconTrash } from '@tabler/icons-react';
 import DynamicEditForm from '../../../../components/DynamicEditForm';
 import { RelationshipItem } from '../../../../components/RelationshipWidget';
 import { useGroup, useUsers, useAssets } from '../../../fetchers';
@@ -10,11 +10,15 @@ import {
   useAddAssetToGroup,
   useRemoveAssetFromGroup,
   useUpdateGroup,
+  useDeleteGroup,
 } from '../../../mutations';
 import React, { useCallback, useState, useEffect } from 'react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import { Asset, User } from '../../../../types';
 import Head from 'next/head';
+import ConfirmModal from '../../../../components/ConfirmModal/ConfirmModal';
+import { useConfirmMessages } from '../../../../components/DataTable/useConfirmMessages';
+import { useHasPermission, PERMISSIONS } from '../../../hooks/usePermissions';
 
 export default function EditGroupPage() {
   const router = useRouter();
@@ -38,6 +42,11 @@ export default function EditGroupPage() {
   const removeAssetMutation = useRemoveAssetFromGroup({ onSuccess: mutateGroup });
 
   const updateGroupMutation = useUpdateGroup({ onSuccess: mutateGroup });
+  const deleteGroupMutation = useDeleteGroup({});
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deletePopoverOpened, setDeletePopoverOpened] = useState(false);
+  const { deleteTitleKey, deleteMessageKey, confirmKey, cancelKey } = useConfirmMessages('groups');
+  const canDelete = useHasPermission(PERMISSIONS.GROUP_DELETE);
 
   // Search state for available users (debounced)
   const [userSearch, setUserSearch] = useState('');
@@ -90,6 +99,12 @@ export default function EditGroupPage() {
   }, [assetsData]);
 
   const handleBack = () => {
+    router.push('/admin/groups');
+  };
+
+  const handleDeleteGroup = async () => {
+    if (!groupId) return;
+    await deleteGroupMutation.mutate(groupId);
     router.push('/admin/groups');
   };
 
@@ -170,11 +185,33 @@ export default function EditGroupPage() {
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
-        <MantineGroup align="center">
-          <ActionIcon variant="light" onClick={handleBack} aria-label={t('common.back')} size="lg">
-            <IconArrowLeft size={20} />
-          </ActionIcon>
-          <Title order={2}>{t('forms.group.edit.title', { name: group?.name || '' })}</Title>
+        <MantineGroup align="center" justify="space-between">
+          <MantineGroup>
+            <ActionIcon variant="light" onClick={handleBack} aria-label={t('common.back')} size="lg">
+              <IconArrowLeft size={20} />
+            </ActionIcon>
+            <Title order={2}>{t('forms.group.edit.title', { name: group?.name || '' })}</Title>
+          </MantineGroup>
+          {canDelete && (
+            <Popover opened={deletePopoverOpened} withArrow>
+              <Popover.Target>
+                <ActionIcon
+                  variant="light"
+                  color="red"
+                  size="lg"
+                  onMouseEnter={() => setDeletePopoverOpened(true)}
+                  onMouseLeave={() => setDeletePopoverOpened(false)}
+                  onClick={() => setConfirmOpen(true)}
+                  aria-label={t('common.delete')}
+                >
+                  <IconTrash size={20} />
+                </ActionIcon>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Text size="sm">{t('common.delete')}</Text>
+              </Popover.Dropdown>
+            </Popover>
+          )}
         </MantineGroup>
 
         {/* Dynamic Edit Form */}
@@ -215,6 +252,17 @@ export default function EditGroupPage() {
           />
         )}
       </Stack>
+      <ConfirmModal
+        opened={confirmOpen}
+        title={t(deleteTitleKey)}
+        message={t(deleteMessageKey)}
+        confirmLabel={t(confirmKey)}
+        cancelLabel={t(cancelKey)}
+        confirmColor="red"
+        loading={deleteGroupMutation.isLoading}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleDeleteGroup}
+      />
     </Container>
     </React.Fragment>
   );

@@ -6,7 +6,8 @@
     "analytics": "التحليلات",
     "contracts": "العقود",
     "settings": "الإعدادات",
-    "security": "الأمان"
+    "security": "الأمان",
+    "compliance": "الامتثال"
   },
   "assets": {
     "computers": "الحواسيب",
@@ -22,6 +23,10 @@
     "roles": "الأدوار",
     "role": "الدور",
     "dictionaries": "القواميس"
+  },
+  "compliance": {
+    "scopes": "مجالات",
+    "scope": "مجال"
   },
   "security": {
     "enable2FA": "تفعيل المصادقة الثنائية",
@@ -1605,5 +1610,51 @@
   "relationshipWidget": {
     "selectPlaceholder": "اختر {item} للإضافة...",
     "emptyMessage": "لا يوجد {item} مُخصص"
+  },
+  "notifications": {
+    "group": {
+      "createSuccess": "تم إنشاء المجموعة بنجاح!",
+      "updateSuccess": "تم تحديث المجموعة بنجاح!",
+      "deleteSuccess": "تم حذف المجموعة بنجاح!",
+      "assetAddedSuccess": "تمت إضافة الأصل إلى المجموعة بنجاح!",
+      "assetRemovedSuccess": "تمت إزالة الأصل من المجموعة بنجاح!",
+      "userAddedSuccess": "تمت إضافة المستخدم إلى المجموعة بنجاح!",
+      "userRemovedSuccess": "تمت إزالة المستخدم من المجموعة بنجاح!"
+    },
+    "compliance": {
+      "assetAddedToScopeSuccess": "تمت إضافة الأصل إلى نطاق الامتثال بنجاح!",
+      "assetRemovedFromScopeSuccess": "تمت إزالة الأصل من نطاق الامتثال بنجاح!"
+    },
+    "role": {
+      "createSuccess": "تم إنشاء الدور بنجاح!"
+    },
+    "user": {
+      "createSuccess": "تم إنشاء المستخدم بنجاح!",
+      "updateSuccess": "تم تحديث المستخدم بنجاح!",
+      "deleteSuccess": "تم حذف المستخدم بنجاح!"
+    },
+    "asset": {
+      "createSuccess": "تم إنشاء الأصل بنجاح!",
+      "updateSuccess": "تم تحديث الأصل بنجاح!",
+      "deleteSuccess": "تم حذف الأصل بنجاح!"
+    },
+    "networkDevice": {
+      "createSuccess": "تم إنشاء جهاز الشبكة بنجاح!",
+      "updateSuccess": "تم تحديث جهاز الشبكة بنجاح!",
+      "deleteSuccess": "تم حذف جهاز الشبكة بنجاح!"
+    },
+    "computer": {
+      "createSuccess": "تم إنشاء الحاسوب بنجاح!",
+      "updateSuccess": "تم تحديث الحاسوب بنجاح!",
+      "deleteSuccess": "تم حذف الحاسوب بنجاح!"
+    },
+    "virtualMachine": {
+      "createSuccess": "تم إنشاء الآلة الافتراضية بنجاح!",
+      "updateSuccess": "تم تحديث الآلة الافتراضية بنجاح!",
+      "deleteSuccess": "تم حذف الآلة الافتراضية بنجاح!"
+    },
+    "quickCreate": {
+      "success": "تم إنشاء {resource} بنجاح!"
+    }
   }
 } 

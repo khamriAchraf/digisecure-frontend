@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 import { useSession, getSession, signOut } from 'next-auth/react';
-import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine } from '../types/models';
+import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine, ComplianceScope } from '../types/models';
 import { PaginationParams, PersistedTableConfig } from '../types/utils';
 
 // Base URL for the backend API – change this to match your backend configuration
@@ -287,6 +287,37 @@ export const useAssets = (params?: {
   return usePaginatedData<Asset>(`${API_BASE}/assets`, params);
 };
 
+// Single Asset fetcher
+export const useAsset = (assetId?: number | string, assetType?: string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const formattedAssetType = (assetType?: string) => {
+    if (assetType === 'computer') return 'computers';
+    if (assetType === 'network_device') return 'network_devices';
+    if (assetType === 'virtual_machine') return 'virtual_machines';
+    if (assetType === 'software') return 'software';
+    return assetType;
+  };
+
+  const key = assetId ? `${API_BASE}/assets/${formattedAssetType(assetType ?? '')}/${assetId}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<Asset>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      shouldRetryOnError: false,
+    },
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+};
+
 // Asset Types fetcher
 export const useAssetTypes = (params?: {
   page?: number;
@@ -516,3 +547,26 @@ export const useResourceEditSchema = (resourceType?: string) => {
     mutate,
   } as const;
 };
+
+// ------------------------------------------------------------
+// Compliance scopes fetcher
+export const useComplianceScopes = () => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const { data, error, isLoading, mutate } = useSWR<ComplianceScope[]>(
+    `${API_BASE}/compliance/scopes`,
+    (url: string) => jsonFetcher(url, token)
+  );
+
+  return {
+    data,
+    totalItems: data?.length,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+};
+
+// Fetch all compliance scopes with optional query (alias for consistency)
+export const useAllComplianceScopes = () => useComplianceScopes();

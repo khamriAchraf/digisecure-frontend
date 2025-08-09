@@ -1,13 +1,16 @@
-import { Container, Title, Stack, Loader, Text, Group, ActionIcon } from '@mantine/core';
+import { Container, Title, Stack, Loader, Text, Group, ActionIcon, Popover } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { IconArrowLeft, IconTrash } from '@tabler/icons-react';
 import DynamicEditForm from '../../../../components/DynamicEditForm';
 import { RelationshipItem } from '../../../../components/RelationshipWidget';
 import { useComputer, useGroups } from '../../../fetchers';
-import { useAddUserToGroup, useRemoveUserFromGroup, useUpdateUser } from '../../../mutations';
-import React, { useCallback, useEffect } from 'react';
+import { useAddAssetToGroup, useRemoveAssetFromGroup, useUpdateComputer, useDeleteComputer } from '../../../mutations';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import Head from 'next/head';
+import ConfirmModal from '../../../../components/ConfirmModal/ConfirmModal';
+import { useConfirmMessages } from '../../../../components/DataTable/useConfirmMessages';
+import { useHasPermission, PERMISSIONS } from '../../../hooks/usePermissions';
 
 export default function EditComputerPage() {
   const router = useRouter();
@@ -26,12 +29,23 @@ export default function EditComputerPage() {
   // Fetch all groups (large page size to avoid pagination)
   const { data: groupsData, isLoading: groupsLoading } = useGroups({ page: 1, per_page: 1000 });
 
-  const addUserToGroupMutation = useAddUserToGroup({ onSuccess: mutateComputer });
-  const removeUserFromGroupMutation = useRemoveUserFromGroup({ onSuccess: mutateComputer });
+  const addAssetToGroupMutation = useAddAssetToGroup({ onSuccess: mutateComputer });
+  const removeAssetFromGroupMutation = useRemoveAssetFromGroup({ onSuccess: mutateComputer });
 
-  const updateUserMutation = useUpdateUser({ onSuccess: mutateComputer });
+  const updateComputerMutation = useUpdateComputer({ onSuccess: mutateComputer });
+  const deleteComputerMutation = useDeleteComputer({});
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deletePopoverOpened, setDeletePopoverOpened] = useState(false);
+  const { deleteTitleKey, deleteMessageKey, confirmKey, cancelKey } = useConfirmMessages('computers');
+  const canDelete = useHasPermission(PERMISSIONS.COMPUTER_DELETE);
 
   const handleBack = () => {
+    router.push('/assets/computers');
+  };
+
+  const handleDelete = async () => {
+    if (!computerId) return;
+    await deleteComputerMutation.mutate(computerId);
     router.push('/assets/computers');
   };
 
@@ -51,24 +65,24 @@ export default function EditComputerPage() {
       
       // Add user to each group individually
       const promises = groupIds.map((groupId) =>
-        addUserToGroupMutation.mutate({ groupId: Number(groupId), computerId })
+        addAssetToGroupMutation.mutate({ groupId: Number(groupId), assetId: computerId })
       );
       
       await Promise.all(promises);
     },
-    [computerId, addUserToGroupMutation],
+    [computerId, addAssetToGroupMutation],
   );
 
   const removeGroup = useCallback(
     async (groupId: string | number) => {
       if (!computerId) return;
       
-      await removeUserFromGroupMutation.mutate({ 
+      await removeAssetFromGroupMutation.mutate({ 
         groupId: Number(groupId), 
-        computerId 
+        assetId: computerId 
       });
     },
-    [computerId, removeUserFromGroupMutation],
+    [computerId, removeAssetFromGroupMutation],
   );
 
   if (computerLoading || groupsLoading) {
@@ -89,7 +103,7 @@ export default function EditComputerPage() {
 
   const handleFormSubmit = async (values: Record<string, any>) => {
     if (!computerId) return;
-    await updateUserMutation.mutate({ id: computerId, ...values });
+    await updateComputerMutation.mutate({ id: computerId, ...values });
   };
 
   return (
@@ -100,11 +114,33 @@ export default function EditComputerPage() {
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
-        <Group align="center">
-          <ActionIcon variant="light" onClick={handleBack} aria-label={t('common.back')} size="lg">
-            <IconArrowLeft size={20} />
-          </ActionIcon>
-          <Title order={2}>{t('forms.computer.edit.title', { name: computer?.name || '' })}</Title>
+        <Group align="center" justify="space-between">
+          <Group>
+            <ActionIcon variant="light" onClick={handleBack} aria-label={t('common.back')} size="lg">
+              <IconArrowLeft size={20} />
+            </ActionIcon>
+            <Title order={2}>{t('forms.computer.edit.title', { name: computer?.name || '' })}</Title>
+          </Group>
+          {canDelete && (
+            <Popover opened={deletePopoverOpened} withArrow>
+              <Popover.Target>
+                <ActionIcon
+                  variant="light"
+                  color="red"
+                  size="lg"
+                  onMouseEnter={() => setDeletePopoverOpened(true)}
+                  onMouseLeave={() => setDeletePopoverOpened(false)}
+                  onClick={() => setConfirmOpen(true)}
+                  aria-label={t('common.delete')}
+                >
+                  <IconTrash size={20} />
+                </ActionIcon>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Text size="sm">{t('common.delete')}</Text>
+              </Popover.Dropdown>
+            </Popover>
+          )}
         </Group>
 
         {/* Dynamic Edit Form */}
@@ -113,19 +149,30 @@ export default function EditComputerPage() {
             resourceType="computer"
             initialValues={computer}
             onSubmit={handleFormSubmit}
-            isSubmitting={updateUserMutation.isLoading}
+            isSubmitting={updateComputerMutation.isLoading}
             relationshipOverrides={{
               groups: {
                 currentItems: currentGroupItems,
                 availableItems: availableGroupItems,
                 onAdd: addGroups,
                 onRemove: removeGroup,
-                loading: addUserToGroupMutation.isLoading || removeUserFromGroupMutation.isLoading,
+                loading: addAssetToGroupMutation.isLoading || removeAssetFromGroupMutation.isLoading,
               },
             }}
           />
         )}
       </Stack>
+      <ConfirmModal
+        opened={confirmOpen}
+        title={t(deleteTitleKey)}
+        message={t(deleteMessageKey)}
+        confirmLabel={t(confirmKey)}
+        cancelLabel={t(cancelKey)}
+        confirmColor="red"
+        loading={deleteComputerMutation.isLoading}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+      />
     </Container>
     </React.Fragment>
   );

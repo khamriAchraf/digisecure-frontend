@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useSession, getSession, signOut } from 'next-auth/react';
+import { notifications } from '@mantine/notifications';
 import { API_BASE } from './fetchers';
 import { Group, CreateGroupRequest, Role, CreateRoleRequest } from '../types/models';
+import { useTranslation } from './hooks/useTranslation';
 
 // Generic mutation client that handles JSON requests, transparently refreshes the
 // access token on 401 and signs the user out if refresh also fails.
@@ -64,11 +66,18 @@ function useMutation<TData = any, TError = any>(
   options?: {
     onSuccess?: (data: TData) => void;
     onError?: (error: TError) => void;
+    successNotification?: {
+      title?: string;
+      message: string; // translation key
+      color?: string;
+      messageValues?: Record<string, any>;
+    };
   }
 ) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<TError | null>(null);
   const [data, setData] = useState<TData | null>(null);
+  const { t } = useTranslation();
 
   const mutate = async (mutationData: any) => {
     setIsLoading(true);
@@ -78,6 +87,14 @@ function useMutation<TData = any, TError = any>(
       const result = await mutationFn(mutationData);
       setData(result);
       options?.onSuccess?.(result);
+      // Show success notification if configured
+      if (options?.successNotification) {
+        notifications.show({
+          title: options.successNotification.title ?? t('common.success'),
+          message: t(options.successNotification.message, options.successNotification.messageValues),
+          color: options.successNotification.color ?? 'teal',
+        });
+      }
       return result;
     } catch (err) {
       const errorObj = err as TError;
@@ -109,7 +126,13 @@ export const useCreateGroup = (options?: {
     async (groupData: CreateGroupRequest) => {
       return mutationClient(`${API_BASE}/groups/`, 'POST', groupData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.createSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -123,7 +146,13 @@ export const useUpdateGroup = (options?: {
     async ({ id, ...groupData }: { id: number } & Partial<CreateGroupRequest>) => {
       return mutationClient(`${API_BASE}/groups/${id}`, 'PUT', groupData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.updateSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -137,7 +166,13 @@ export const useDeleteGroup = (options?: {
     async (id: number) => {
       return mutationClient(`${API_BASE}/groups/${id}`, 'DELETE', undefined, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.deleteSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -157,7 +192,13 @@ export const useAddAssetToGroup = (options?: {
         session?.accessToken
       );
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.assetAddedSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -176,7 +217,13 @@ export const useRemoveAssetFromGroup = (options?: {
         session?.accessToken
       );
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.assetRemovedSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -197,7 +244,13 @@ export const useAddUserToGroup = (options?: {
         session?.accessToken
       );
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.userAddedSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -216,7 +269,64 @@ export const useRemoveUserFromGroup = (options?: {
         session?.accessToken
       );
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.userRemovedSuccess',
+        color: 'red',
+      },
+    }
+  );
+};
+
+// Compliance scope - asset relationship mutations
+export const useAddAssetToComplianceScope = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ scopeId, assetId }: { scopeId: number; assetId: number }) => {
+      return mutationClient(
+        `${API_BASE}/compliance/assets/${assetId}/scopes/${scopeId}`,
+        'POST',
+        undefined,
+        session?.accessToken
+      );
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.compliance.assetAddedToScopeSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useRemoveAssetFromComplianceScope = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ scopeId, assetId }: { scopeId: number; assetId: number }) => {
+      return mutationClient(
+        `${API_BASE}/compliance/assets/${assetId}/scopes/${scopeId}`,
+        'DELETE',
+        undefined,
+        session?.accessToken
+      );
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.compliance.assetRemovedFromScopeSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -231,7 +341,13 @@ export const useCreateRole = (options?: {
     async (roleData: CreateRoleRequest) => {
       return mutationClient(`${API_BASE}/roles/`, 'POST', roleData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.role.createSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -246,7 +362,13 @@ export const useCreateUser = (options?: {
     async (userData: any) => {
       return mutationClient(`${API_BASE}/users/`, 'POST', userData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.user.createSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -260,7 +382,13 @@ export const useUpdateUser = (options?: {
     async ({ id, ...userData }: { id: number } & any) => {
       return mutationClient(`${API_BASE}/users/${id}`, 'PUT', userData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.user.updateSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -274,7 +402,13 @@ export const useDeleteUser = (options?: {
     async (id: number) => {
       return mutationClient(`${API_BASE}/users/${id}`, 'DELETE', undefined, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.user.deleteSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -289,7 +423,13 @@ export const useCreateAsset = (options?: {
     async (assetData: any) => {
       return mutationClient(`${API_BASE}/assets/`, 'POST', assetData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.asset.createSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -303,7 +443,13 @@ export const useUpdateAsset = (options?: {
     async ({ id, ...assetData }: { id: number } & any) => {
       return mutationClient(`${API_BASE}/assets/${id}`, 'PUT', assetData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.asset.updateSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -317,7 +463,13 @@ export const useDeleteAsset = (options?: {
     async (id: number) => {
       return mutationClient(`${API_BASE}/assets/${id}`, 'DELETE', undefined, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.asset.deleteSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -340,21 +492,39 @@ export const useCreateNetworkDevice = (options?: { onSuccess?: (nd:any)=>void; o
   const { data: session } = useSession();
   return useMutation(
     async (data:any)=> mutationClient(`${API_BASE}/assets/network_devices/`,'POST',data,session?.accessToken),
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.networkDevice.createSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 export const useUpdateNetworkDevice = (options?: { onSuccess?: (nd:any)=>void; onError?: (e:any)=>void;})=>{
   const { data: session } = useSession();
   return useMutation(
     async ({id,...data}:{id:number}&any)=>mutationClient(`${API_BASE}/assets/network_devices/${id}`,'PUT',data,session?.accessToken),
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.networkDevice.updateSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 export const useDeleteNetworkDevice = (options?: { onSuccess?: () => void; onError?: (e:any)=>void;})=>{
   const { data: session } = useSession();
   return useMutation<void>(
     async (id:number)=>mutationClient(`${API_BASE}/assets/network_devices/${id}`,'DELETE',undefined,session?.accessToken),
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.networkDevice.deleteSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -369,7 +539,13 @@ export const useCreateComputer = (options?: {
     async (computerData: any) => {
       return mutationClient(`${API_BASE}/assets/computers/`, 'POST', computerData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.computer.createSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -383,7 +559,13 @@ export const useUpdateComputer = (options?: {
     async ({ id, ...computerData }: { id: number } & any) => {
       return mutationClient(`${API_BASE}/assets/computers/${id}`, 'PUT', computerData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.computer.updateSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -397,7 +579,13 @@ export const useDeleteComputer = (options?: {
     async (id: number) => {
       return mutationClient(`${API_BASE}/assets/computers/${id}`, 'DELETE', undefined, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.computer.deleteSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -412,7 +600,13 @@ export const useCreateVirtualMachine = (options?: {
     async (virtualMachineData: any) => {
       return mutationClient(`${API_BASE}/assets/virtual_machines/`, 'POST', virtualMachineData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.virtualMachine.createSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -426,7 +620,13 @@ export const useUpdateVirtualMachine = (options?: {
     async ({ id, ...virtualMachineData }: { id: number } & any) => {
       return mutationClient(`${API_BASE}/assets/virtual_machines/${id}`, 'PUT', virtualMachineData, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.virtualMachine.updateSuccess',
+        color: 'teal',
+      },
+    }
   );
 };
 
@@ -440,7 +640,13 @@ export const useDeleteVirtualMachine = (options?: {
     async (id: number) => {
       return mutationClient(`${API_BASE}/assets/virtual_machines/${id}`, 'DELETE', undefined, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.virtualMachine.deleteSuccess',
+        color: 'red',
+      },
+    }
   );
 };
 
@@ -449,6 +655,11 @@ export const useDeleteVirtualMachine = (options?: {
 export const useQuickCreate = (resourceType: string, options?: {
   onSuccess?: (data: any) => void;
   onError?: (error: any) => void;
+  successNotification?: {
+    title?: string;
+    message: string;
+    color?: string;
+  };
 }) => {
   const { data: session } = useSession();
 
@@ -456,7 +667,14 @@ export const useQuickCreate = (resourceType: string, options?: {
     async (data: any) => {
       return mutationClient(`${API_BASE}/${resourceType}s/`, 'POST', data, session?.accessToken);
     },
-    options
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.quickCreate.success',
+        messageValues: { resource: resourceType },
+        color: 'teal',
+      },
+    }
   );
 };
 

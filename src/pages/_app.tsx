@@ -1,10 +1,12 @@
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { SessionProvider } from 'next-auth/react';
 
 import type { AppProps } from 'next/app';
 import { createTheme, MantineProvider, AppShell } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -12,6 +14,7 @@ import { useEffect } from 'react';
 import { Navbar } from '../../components/Navbar';
 import { Header } from '../../components/Header';
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
+import { SidebarProvider, useSidebar } from '../contexts/SidebarContext';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
 
 const theme = createTheme({
@@ -34,6 +37,7 @@ function AppContent({ Component, pageProps }: AppProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { locale } = useLanguage();
+  const { width } = useSidebar();
 
   // Handle authentication redirects
   useEffect(() => {
@@ -64,7 +68,7 @@ function AppContent({ Component, pageProps }: AppProps) {
         header={{ height: 60 }}
         layout="alt"
         navbar={{
-          width: 300,
+          width,
           breakpoint: 'sm',
           collapsed: { mobile: !opened },
         }}
@@ -90,6 +94,7 @@ function AppWithDirection(props: AppProps) {
   
   return (
     <MantineProvider theme={theme}>
+      <Notifications position="bottom-right" zIndex={2077} />
       <ThemeProvider>
         <div dir={locale === 'ar' ? 'rtl' : 'ltr'}>
           <AppContent {...props} />
@@ -103,7 +108,9 @@ export default function App(props: AppProps) {
   return (
     <LanguageProvider>
       <SessionProvider session={props.pageProps.session}>
-        <AppWithDirection {...props} />
+        <SidebarProvider>
+          <AppWithDirection {...props} />
+        </SidebarProvider>
       </SessionProvider>
     </LanguageProvider>
   );

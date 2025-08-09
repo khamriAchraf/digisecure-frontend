@@ -1,13 +1,17 @@
-import { Container, Title, Stack, Loader, Text, Group, ActionIcon } from '@mantine/core';
+import { Container, Title, Stack, Loader, Text, Group, ActionIcon, Popover } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { IconArrowLeft, IconTrash } from '@tabler/icons-react';
 import DynamicEditForm from '../../../../components/DynamicEditForm';
 import { RelationshipItem } from '../../../../components/RelationshipWidget';
 import { useUser, useGroups } from '../../../fetchers';
-import { useAddUserToGroup, useRemoveUserFromGroup, useUpdateUser } from '../../../mutations';
+import { useAddUserToGroup, useRemoveUserFromGroup, useUpdateUser, useDeleteUser } from '../../../mutations';
 import React, { useCallback } from 'react';
 import { useTranslation } from '../../../hooks/useTranslation';
 import Head from 'next/head';
+import { useState } from 'react';
+import ConfirmModal from '../../../../components/ConfirmModal/ConfirmModal';
+import { useConfirmMessages } from '../../../../components/DataTable/useConfirmMessages';
+import { useHasPermission, PERMISSIONS } from '../../../hooks/usePermissions';
 
 export default function EditUserPage() {
   const router = useRouter();
@@ -29,8 +33,19 @@ export default function EditUserPage() {
   const removeUserFromGroupMutation = useRemoveUserFromGroup({ onSuccess: mutateUser });
 
   const updateUserMutation = useUpdateUser({ onSuccess: mutateUser });
+  const deleteUserMutation = useDeleteUser({});
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deletePopoverOpened, setDeletePopoverOpened] = useState(false);
+  const { deleteTitleKey, deleteMessageKey, confirmKey, cancelKey } = useConfirmMessages('users');
+  const canDelete = useHasPermission(PERMISSIONS.USER_DELETE);
 
   const handleBack = () => {
+    router.push('/admin/users');
+  };
+
+  const handleDeleteUser = async () => {
+    if (!userId) return;
+    await deleteUserMutation.mutate(userId);
     router.push('/admin/users');
   };
 
@@ -105,11 +120,33 @@ export default function EditUserPage() {
     <Container size="xl" py="md">
       <Stack>
         {/* Header */}
-        <Group align="center">
-          <ActionIcon variant="light" onClick={handleBack} aria-label={t('common.back')} size="lg">
-            <IconArrowLeft size={20} />
-          </ActionIcon>
-          <Title order={2}>{t('forms.user.edit.title', { name: user?.username || '' })}</Title>
+        <Group align="center" justify="space-between">
+          <Group>
+            <ActionIcon variant="light" onClick={handleBack} aria-label={t('common.back')} size="lg">
+              <IconArrowLeft size={20} />
+            </ActionIcon>
+            <Title order={2}>{t('forms.user.edit.title', { name: user?.username || '' })}</Title>
+          </Group>
+          {canDelete && (
+            <Popover opened={deletePopoverOpened} withArrow>
+              <Popover.Target>
+                <ActionIcon
+                  variant="light"
+                  color="red"
+                  size="lg"
+                  onMouseEnter={() => setDeletePopoverOpened(true)}
+                  onMouseLeave={() => setDeletePopoverOpened(false)}
+                  onClick={() => setConfirmOpen(true)}
+                  aria-label={t('common.delete')}
+                >
+                  <IconTrash size={20} />
+                </ActionIcon>
+              </Popover.Target>
+              <Popover.Dropdown>
+                <Text size="sm">{t('common.delete')}</Text>
+              </Popover.Dropdown>
+            </Popover>
+          )}
         </Group>
 
         {/* Dynamic Edit Form */}
@@ -131,6 +168,17 @@ export default function EditUserPage() {
           />
         )}
       </Stack>
+      <ConfirmModal
+        opened={confirmOpen}
+        title={t(deleteTitleKey)}
+        message={t(deleteMessageKey)}
+        confirmLabel={t(confirmKey)}
+        cancelLabel={t(cancelKey)}
+        confirmColor="red"
+        loading={deleteUserMutation.isLoading}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleDeleteUser}
+      />
     </Container>
     </React.Fragment>
   );

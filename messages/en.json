@@ -6,7 +6,8 @@
     "analytics": "Analytics",
     "contracts": "Contracts",
     "settings": "Settings",
-    "security": "Security"
+    "security": "Security",
+    "compliance": "Compliance"
   },
   "assets": {
     "computers": "Computers",
@@ -22,6 +23,10 @@
     "roles": "Roles",
     "role": "Role",
     "dictionaries": "Dictionaries"
+  },
+  "compliance": {
+    "scopes": "Scopes",
+    "scope": "Scope"
   },
   "security": {
     "enable2FA": "Enable 2FA",
@@ -169,8 +174,9 @@
     "virtual_machines": "Virtual Machines",
     "network_device": "Network Device",
     "network_devices": "Network Devices",
-    "software": "Software"
-    
+    "software": "Software",
+    "computer": "Computer",
+    "computers": "Computers"
   },
   "forms": {
     "errors": {
@@ -1606,5 +1612,51 @@
   "relationshipWidget": {
     "selectPlaceholder": "Select {item} to add...",
     "emptyMessage": "No {item} assigned"
+  },
+  "notifications": {
+    "group": {
+      "createSuccess": "Group created successfully!",
+      "updateSuccess": "Group updated successfully!",
+      "deleteSuccess": "Group deleted successfully!",
+      "assetAddedSuccess": "Asset added to group successfully!",
+      "assetRemovedSuccess": "Asset removed from group successfully!",
+      "userAddedSuccess": "User added to group successfully!",
+      "userRemovedSuccess": "User removed from group successfully!"
+    },
+    "compliance": {
+      "assetAddedToScopeSuccess": "Asset added to compliance scope successfully!",
+      "assetRemovedFromScopeSuccess": "Asset removed from compliance scope successfully!"
+    },
+    "role": {
+      "createSuccess": "Role created successfully!"
+    },
+    "user": {
+      "createSuccess": "User created successfully!",
+      "updateSuccess": "User updated successfully!",
+      "deleteSuccess": "User deleted successfully!"
+    },
+    "asset": {
+      "createSuccess": "Asset created successfully!",
+      "updateSuccess": "Asset updated successfully!",
+      "deleteSuccess": "Asset deleted successfully!"
+    },
+    "networkDevice": {
+      "createSuccess": "Network device created successfully!",
+      "updateSuccess": "Network device updated successfully!",
+      "deleteSuccess": "Network device deleted successfully!"
+    },
+    "computer": {
+      "createSuccess": "Computer created successfully!",
+      "updateSuccess": "Computer updated successfully!",
+      "deleteSuccess": "Computer deleted successfully!"
+    },
+    "virtualMachine": {
+      "createSuccess": "Virtual machine created successfully!",
+      "updateSuccess": "Virtual machine updated successfully!",
+      "deleteSuccess": "Virtual machine deleted successfully!"
+    },
+    "quickCreate": {
+      "success": "{resource} created successfully!"
+    }
   }
 } 

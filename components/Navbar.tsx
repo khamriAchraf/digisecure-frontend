@@ -1,21 +1,26 @@
 import {
   IconAdjustments,
   IconCalendarStats,
+  IconChecklist,
   IconFileAnalytics,
   IconGauge,
   IconLock,
   IconNotes,
   IconPresentationAnalytics,
 } from '@tabler/icons-react';
-import { Code, Group, ScrollArea } from '@mantine/core';
+import { ActionIcon, Code, Group, ScrollArea } from '@mantine/core';
 import classes from '@/styles/Navbar.module.css';
 import { LinksGroup } from './NavbarLinksGroup';
 import Image from 'next/image';
 import { useLanguage } from '../src/contexts/LanguageContext';
 import { useHasPermission, PERMISSIONS } from '../src/hooks/usePermissions';
+import { useState } from 'react';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { useSidebar } from '../src/contexts/SidebarContext';
 
 export function Navbar() {
   const { t } = useLanguage();
+  const { collapsed: isCollapsed, toggleCollapsed } = useSidebar();
   
   // Permission checks
   const hasComputersRead = useHasPermission(PERMISSIONS.COMPUTER_READ);
@@ -25,6 +30,7 @@ export function Navbar() {
   const hasUserRead = useHasPermission(PERMISSIONS.USER_READ);
   const hasRoleRead = useHasPermission(PERMISSIONS.ROLE_READ);
   const hasGroupRead = useHasPermission(PERMISSIONS.GROUP_READ);
+  const hasComplianceScopeRead = useHasPermission(PERMISSIONS.COMPLIANCE_SCOPE_READ);
 
   // Build administration links based on permissions
   const adminLinks = [
@@ -38,7 +44,7 @@ export function Navbar() {
 
   // Build navigation data with permission filtering
   const mockdata = [
-    { label: t('navigation.dashboard'), icon: IconGauge },
+    { label: t('navigation.dashboard'), icon: IconGauge, link: '/' },
     // Assets section - only show if user has asset read permission
     ...(hasComputersRead || hasNetworkDevicesRead || hasVirtualMachinesRead || hasSoftwareRead ? [{
       label: t('navigation.assets'),
@@ -58,9 +64,10 @@ export function Navbar() {
     }] : []),
     // TODO: Add permissions for these sections when backend supports them
     // For now, these are visible to all authenticated users
-    { label: t('navigation.analytics'), icon: IconPresentationAnalytics },
-    { label: t('navigation.contracts'), icon: IconFileAnalytics },
-    { label: t('navigation.settings'), icon: IconAdjustments },
+    ...(hasComplianceScopeRead ? [{ label: t('navigation.compliance'), icon: IconChecklist, link: '/compliance' }] : []),
+    { label: t('navigation.analytics'), icon: IconPresentationAnalytics, link: '/analytics' },
+    { label: t('navigation.contracts'), icon: IconFileAnalytics, link: '/contracts' },
+    { label: t('navigation.settings'), icon: IconAdjustments, link: '/settings' },
     {
       label: t('navigation.security'),
       icon: IconLock,
@@ -68,18 +75,29 @@ export function Navbar() {
         { label: t('security.enable2FA'), link: '/' },
         { label: t('security.changePassword'), link: '/' },
         { label: t('security.recoveryCodes'), link: '/' },
-      ],
+      ],  
     },
   ];
 
-  const links = mockdata.map((item) => <LinksGroup {...item} key={item.label} />);
+  const links = mockdata.map((item) => (
+    <LinksGroup {...item} key={item.label} collapsed={isCollapsed} />
+  ));
 
   return (
-    <nav className={classes.navbar}>
+    <nav className={`${classes.navbar} ${isCollapsed ? classes.collapsed : ''}`}>
       <div className={classes.header}>
         <Group justify="space-between">
-          <Image src="/logo.png" alt="logo" width={120} height={120} />
-          <Code fw={700}>v0.1.0</Code>
+          <Image src="/logo.png" alt="logo" width={isCollapsed ? 36 : 120} height={isCollapsed ? 36 : 120} />
+          <Group gap="xs">
+            {!isCollapsed && <Code fw={700}>v0.1.0</Code>}
+            <ActionIcon
+              variant="light"
+              aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              onClick={toggleCollapsed}
+            >
+              {isCollapsed ? <IconChevronRight size={18} /> : <IconChevronLeft size={18} />}
+            </ActionIcon>
+          </Group>
         </Group>
       </div>
 

@@ -197,18 +197,14 @@ export const PERMISSIONS = {
   REFERENCE_DATA_PURGE: "reference_data:purge",
   
   // Asset permissions
-  ASSET_READ: "asset:read",
-  ASSET_CREATE: "asset:create",
-  ASSET_UPDATE: "asset:update",
-  ASSET_DELETE: "asset:delete",
-  ASSET_PURGE: "asset:purge",
+  ASSET_COMPLIANCE_MANAGE: "asset:compliance_manage",
   
   // Analytics permissions (for future use)
-  ANALYTICS_READ: "analytics:read",
-  ANALYTICS_CREATE: "analytics:create",
-  ANALYTICS_UPDATE: "analytics:update",
-  ANALYTICS_DELETE: "analytics:delete",
-  ANALYTICS_PURGE: "analytics:purge",
+  COMPLIANCE_SCOPE_READ: "compliance_scope:read",
+  COMPLIANCE_SCOPE_CREATE: "compliance_scope:create",
+  COMPLIANCE_SCOPE_UPDATE: "compliance_scope:update",
+  COMPLIANCE_SCOPE_DELETE: "compliance_scope:delete",
+  COMPLIANCE_SCOPE_PURGE: "compliance_scope:purge",
   
   // Contract permissions (for future use)
   CONTRACT_READ: "contract:read",

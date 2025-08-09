@@ -15,6 +15,7 @@ import {
 import { useForm } from '@mantine/form';
 import QuickCreateSelect from './QuickCreateSelect';
 import RelationshipWidget, { RelationshipWidgetProps } from './RelationshipWidget';
+import AssetComplianceManager from './AssetComplianceManager';
 import { useResourceEditSchema } from '@/fetchers';
 import { useTranslation } from '@/hooks/useTranslation';
 import { PERMISSIONS, useHasPermission } from '@/hooks/usePermissions';
@@ -98,9 +99,6 @@ const getUpdatePermission = (ressourceType: string): string => {
     case 'group':
     case 'groups':
       return PERMISSIONS.GROUP_UPDATE;
-    case 'asset':
-    case 'assets':
-      return PERMISSIONS.ASSET_UPDATE;
     case 'computer':
     case 'network_device':
     case 'network_devices':
@@ -192,6 +190,19 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
 
   const form = useForm({ initialValues: baseInitialValues, validate });
 
+  // Compute tabs early for consistent hook order
+  const tabs: UITab[] | undefined = schemaResp?.ui?.tabs;
+
+  // Track active tab to control submit button visibility
+  const [activeTab, setActiveTab] = useState<string | null>("general");
+  useEffect(() => {
+    if (tabs && tabs.length > 0) {
+      setActiveTab((prev) => prev ?? tabs[0].id);
+    } else {
+      setActiveTab('default');
+    }
+  }, [tabs]);
+
   // Function to refresh options for a specific field (legacy support)
   const refreshFieldOptions = useCallback(async (fieldName: string) => {
     if (!onRefreshOptions) return;
@@ -260,7 +271,7 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
   // After we have the schema
   const ui: UI = schemaResp.ui;
   const fields = ui.fields || {};
-  const tabs = ui.tabs;
+  // tabs computed earlier for hook order
 
   // Field renderer
   const renderField = (key: string, field: UIField) => {
@@ -354,7 +365,7 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
       description: t(field.help_text_key ?? ''),
       ...form.getInputProps(key as any),
     } as const;
-
+    
     switch (field.widget) {
       case 'text':
         return <TextInput {...commonProps} disabled={!hasUpdatePermission} />;
@@ -418,7 +429,7 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
   const hasTabs = tabs && tabs.length > 0;
 
   const formContent = hasTabs ? (
-    <Tabs defaultValue={tabs![0].id} keepMounted={false}>
+    <Tabs value={activeTab ?? (tabs && tabs[0] ? tabs[0].id : 'default')} onChange={setActiveTab} keepMounted={false}>
       <Tabs.List>
         {tabs!.map((tab) => (
           <Tabs.Tab key={tab.id} value={tab.id}>
@@ -429,6 +440,11 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
 
       {tabs!.map((tab) => (
         <Tabs.Panel key={tab.id} value={tab.id} pt="xs">
+          {tab.id === 'compliance' && (
+            <Stack mb="md">
+              <AssetComplianceManager assetId={externalInitialValues?.id} assetType={resourceType} />
+            </Stack>
+          )}
           <Grid align="center" gutter="md">
             {(fieldsByTab[tab.id] || []).map(([k, f]) => (
               <Grid.Col key={k} span={{ base: 12, md: 6 }}>
@@ -482,9 +498,12 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
       <Stack>
         {formContent}
         <Group justify="flex-end" mt="md">
-          <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
-            {isSubmitting ? t('common.submitting') : t('common.submit')}
-          </Button>
+          {/* Hide the submit button if the current tab is "groups" or "compliance" */}
+          {!(activeTab === "groups" || activeTab === "compliance") && (
+            <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
+              {isSubmitting ? t('common.submitting') : t('common.submit')}
+            </Button>
+          )}
         </Group>
       </Stack>
     </form>

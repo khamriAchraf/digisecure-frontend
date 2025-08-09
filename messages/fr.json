@@ -1,12 +1,13 @@
 {
   "navigation": {
     "dashboard": "Tableau de bord",
-    "assets": "Actifs",
+    "assets": "Parc",
     "administration": "Administration",
     "analytics": "Analyses",
     "contracts": "Contrats",
     "settings": "Paramètres",
-    "security": "Sécurité"
+    "security": "Sécurité",
+    "compliance": "Conformité"
   },
   "assets": {
     "computers": "Ordinateurs",
@@ -22,6 +23,10 @@
     "roles": "Rôles",
     "role": "Rôle",
     "dictionaries": "Dictionnaires"
+  },
+  "compliance": {
+    "scopes": "Périmètres",
+    "scope": "Périmètre"
   },
   "security": {
     "enable2FA": "Activer 2FA",
@@ -86,7 +91,7 @@
   },
   "breadcrumbs": {
     "home": "Accueil",
-    "assets": "Actifs",
+    "assets": "Parc",
     "admin": "Administration",
     "users": "Utilisateurs",
     "groups": "Groupes",
@@ -1606,5 +1611,51 @@
   "relationshipWidget": {
     "selectPlaceholder": "Sélectionner {item} à ajouter...",
     "emptyMessage": "Aucun {item} assigné"
+  },
+  "notifications": {
+    "group": {
+      "createSuccess": "Groupe créé avec succès !",
+      "updateSuccess": "Groupe mis à jour avec succès !",
+      "deleteSuccess": "Groupe supprimé avec succès !",
+      "assetAddedSuccess": "Actif ajouté au groupe avec succès !",
+      "assetRemovedSuccess": "Actif retiré du groupe avec succès !",
+      "userAddedSuccess": "Utilisateur ajouté au groupe avec succès !",
+      "userRemovedSuccess": "Utilisateur retiré du groupe avec succès !"
+    },
+    "compliance": {
+      "assetAddedToScopeSuccess": "Actif ajouté au périmètre de conformité avec succès !",
+      "assetRemovedFromScopeSuccess": "Actif retiré du périmètre de conformité avec succès !"
+    },
+    "role": {
+      "createSuccess": "Rôle créé avec succès !"
+    },
+    "user": {
+      "createSuccess": "Utilisateur créé avec succès !",
+      "updateSuccess": "Utilisateur mis à jour avec succès !",
+      "deleteSuccess": "Utilisateur supprimé avec succès !"
+    },
+    "asset": {
+      "createSuccess": "Actif créé avec succès !",
+      "updateSuccess": "Actif mis à jour avec succès !",
+      "deleteSuccess": "Actif supprimé avec succès !"
+    },
+    "networkDevice": {
+      "createSuccess": "Périphérique réseau créé avec succès !",
+      "updateSuccess": "Périphérique réseau mis à jour avec succès !",
+      "deleteSuccess": "Périphérique réseau supprimé avec succès !"
+    },
+    "computer": {
+      "createSuccess": "Ordinateur créé avec succès !",
+      "updateSuccess": "Ordinateur mis à jour avec succès !",
+      "deleteSuccess": "Ordinateur supprimé avec succès !"
+    },
+    "virtualMachine": {
+      "createSuccess": "Machine virtuelle créée avec succès !",
+      "updateSuccess": "Machine virtuelle mise à jour avec succès !",
+      "deleteSuccess": "Machine virtuelle supprimée avec succès !"
+    },
+    "quickCreate": {
+      "success": "{resource} créé avec succès !"
+    }
   }
 } 

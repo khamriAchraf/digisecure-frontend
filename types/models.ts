@@ -134,12 +134,6 @@ export interface NetworkDevice extends Asset {
     encryption_type?: string;
     data_in_transit_encryption?: boolean;
 
-    // Compliance tracking
-    pci_assessment_date?: string;
-    pci_compliance_status?: string;
-    next_assessment_date?: string;
-    compliance_notes?: string;
-
     // Device lifecycle
     power_state?: string;
     creation_date?: string;
@@ -158,11 +152,6 @@ export interface Software extends BaseModel {
     vendor?: string;
     description?: string;
     software_type?: string;
-
-    handles_cardholder_data?: boolean;
-    stores_cardholder_data?: boolean;
-    transmits_cardholder_data?: boolean;
-    processes_cardholder_data?: boolean;
 
     encryption_enabled?: boolean;
     encryption_type?: string;
@@ -212,6 +201,7 @@ export interface Software extends BaseModel {
     minimum_requirements?: string;
     recommended_requirements?: string;
     resource_usage_monitoring?: boolean;
+    groups?: Group[];
 }
 
 export interface VirtualMachine extends Asset {
@@ -311,6 +301,8 @@ export interface Asset extends BaseModel {
   location?: Location;
   group?: Group;
   assigned_user?: User;
+  // Compliance scopes attached to this asset
+  compliance_scopes?: ComplianceScope[];
 }
 
 export interface AssetType extends BaseModel {
@@ -367,6 +359,18 @@ export interface PaginatedResponse<T> {
   page: number;
   per_page: number;
   total_pages: number;
+}
+
+// Compliance types
+export interface ComplianceScope extends BaseModel {
+  name: string;
+  description?: string;
+  reference_url?: string;
+  last_audit_date?: string | null;
+  last_audit_result?: string | null;
+  next_audit_due?: string | null;
+  auditor?: string | null;
+  notes?: string | null;
 }
 
 // Request types for API calls

@@ -35,19 +35,19 @@ const QuickCreateSelect: React.FC<QuickCreateSelectProps> = ({
 
   const quickCreateMutation = useQuickCreate(resourceType, {
     onSuccess: (createdResource) => {
-      console.log(`${resourceType} created successfully:`, createdResource);
-      
       // Auto-select the newly created item
       if (createdResource && createdResource.id) {
         onChange(String(createdResource.id));
       }
-      
       onCreated();
       close();
     },
     onError: (error) => {
       console.error(`Error creating ${resourceType}:`, error);
       alert(`Failed to create ${resourceType}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    },
+    successNotification: {
+        message: `${resourceType} created successfully!`,
     }
   });
 

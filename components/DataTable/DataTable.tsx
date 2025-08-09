@@ -20,6 +20,7 @@ import {
   Modal,
   Textarea,
   Divider,
+  Title,
 } from '@mantine/core';
 import {
   IconSearch,
@@ -43,6 +44,8 @@ import { TableColumn } from '../../types/utils';
 import { t } from '../../i18n';
 import { useVisibleColumns } from './useVisibleColumns';
 import { useHasPermission, PERMISSIONS } from '../../src/hooks/usePermissions';
+import { useConfirmMessages } from './useConfirmMessages';
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
 
 // Helper function to get create permission for a data type
 const getCreatePermission = (dataType: DataType): string => {
@@ -202,6 +205,8 @@ export function DataTable<T extends { id: number | string }>({
 
   const [filterModalOpened, { open: openFilterModal, close: closeFilterModal }] = useDisclosure(false);
   const [settingsModalOpened, { open: openSettingsModal, close: closeSettingsModal }] = useDisclosure(false);
+  const [confirmModalOpened, { open: openConfirmModal, close: closeConfirmModal }] = useDisclosure(false);
+  const [confirmDeleteItem, setConfirmDeleteItem] = useState<T | null>(null);
   
   // Clear error when settings modal is closed
   const handleCloseSettingsModal = useCallback(() => {
@@ -395,10 +400,10 @@ export function DataTable<T extends { id: number | string }>({
   const tableHeader = (
     <Group justify="space-between" mb="md">
       <Group>
-        {config.icon && <config.icon size={24} />}
-        <Text fw={600} size="lg">
+        {config.icon && <config.icon size={28} />}
+        <Title order={2}>
           {title || `${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`}
-        </Text>
+        </Title>
                   {totalItems > 0 && (
             <Badge variant="light" color="blue">
               {totalItems} {totalItems === 1 ? t('datatable.item') : t('datatable.items')}
@@ -575,19 +580,26 @@ export function DataTable<T extends { id: number | string }>({
                     </Menu.Target>
                     <Menu.Dropdown>
                       {onView && (
-                                                  <Menu.Item onClick={() => onView(item)}>
+                        <Menu.Item onClick={(e) => { e.stopPropagation(); onView(item); }}>
                             <IconEye size={16} />
                             {t('datatable.view')}
                           </Menu.Item>
                       )}
                       {onEdit && (
-                                                  <Menu.Item onClick={() => onEdit(item)}>
+                        <Menu.Item onClick={(e) => { e.stopPropagation(); onEdit(item); }}>
                             <IconEdit size={16} />
                             {t('common.edit')}
                           </Menu.Item>
                       )}
                       {onDelete && (
-                                                  <Menu.Item onClick={() => onDelete(item)} color="red">
+                        <Menu.Item
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setConfirmDeleteItem(item);
+                            openConfirmModal();
+                          }}
+                          color="red"
+                        >
                             <IconTrash size={16} />
                             {t('common.delete')}
                           </Menu.Item>
@@ -720,6 +732,27 @@ export function DataTable<T extends { id: number | string }>({
     </Modal>
   );
 
+  // Delete confirmation modal
+  const { deleteTitleKey, deleteMessageKey, confirmKey, cancelKey } = useConfirmMessages(dataType);
+  const confirmModal = (
+    <ConfirmModal
+      opened={confirmModalOpened}
+      title={t(deleteTitleKey)}
+      message={t(deleteMessageKey)}
+      confirmLabel={t(confirmKey)}
+      cancelLabel={t(cancelKey)}
+      confirmColor="red"
+      onCancel={() => { setConfirmDeleteItem(null); closeConfirmModal(); }}
+      onConfirm={() => {
+        if (confirmDeleteItem && onDelete) {
+          onDelete(confirmDeleteItem);
+        }
+        setConfirmDeleteItem(null);
+        closeConfirmModal();
+      }}
+    />
+  );
+
   return (
     <Paper p="0" className={className} style={{ height, minHeight, maxHeight }}>
       <LoadingOverlay visible={isLoading} />
@@ -742,6 +775,7 @@ export function DataTable<T extends { id: number | string }>({
       {pagination}
       {filterModal}
       {settingsModal}
+      {confirmModal}
     </Paper>
   );
 } 
