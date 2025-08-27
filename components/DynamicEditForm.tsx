@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   TextInput,
   Textarea,
@@ -11,6 +11,7 @@ import {
   MultiSelect,
   Grid,
   Tabs,
+  Card,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import QuickCreateSelect from './QuickCreateSelect';
@@ -20,6 +21,9 @@ import { useResourceEditSchema } from '@/fetchers';
 import { useTranslation } from '@/hooks/useTranslation';
 import { PERMISSIONS, useHasPermission } from '@/hooks/usePermissions';
 import { useDynamicOptions } from '@/hooks/useDynamicOptions';
+import SoftwareDocsManager from './SoftwareDocsManager';
+import { DatePickerInput } from '@mantine/dates';
+import SoftwareVersionsManager from './SoftwareVersionsManager/SoftwareVersionsManager';
 
 // Helper types mirroring the backend UI schema
 interface UIFieldOption {
@@ -118,6 +122,9 @@ const getUpdatePermission = (ressourceType: string): string => {
     case 'location':
     case 'locations':
       return PERMISSIONS.REFERENCE_DATA_UPDATE;
+    case 'certificate_key':
+    case 'certificate_keys':
+      return PERMISSIONS.CERTIFICATE_KEY_UPDATE;
     default:
       return '';
   }
@@ -138,13 +145,13 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
   const [legacyOptions, setLegacyOptions] = useState<Record<string, UIFieldOption[]>>({});
   const [legacyRefreshing, setLegacyRefreshing] = useState<Record<string, boolean>>({});
 
-  const createPermission = getUpdatePermission(resourceType);
+  const updatePermission = getUpdatePermission(resourceType);
   
   // Debug logging
   console.log('DynamicEditForm - resourceType:', resourceType);
-  console.log('DynamicEditForm - createPermission:', createPermission);
+  console.log('DynamicEditForm - createPermission:', updatePermission);
 
-  const hasUpdatePermission = useHasPermission(createPermission);
+  const hasUpdatePermission = useHasPermission(updatePermission);
 
 
   // ----- Build initial values & validation rules -----
@@ -161,7 +168,13 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
       const defaultValue = externalInitialValues[key] ??
         validation.default ??
         schemaResp.schema?.properties?.[key]?.default ??
-        (field.widget === 'checkbox' ? false : field.widget === 'multi-select' ? [] : '');
+        (field.widget === 'checkbox'
+          ? false
+          : field.widget === 'multi-select'
+          ? []
+          : field.widget === 'select' || field.widget === 'date'
+          ? null
+          : '');
 
       baseInitialValues[key] = defaultValue;
 
@@ -199,7 +212,7 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
     if (tabs && tabs.length > 0) {
       setActiveTab((prev) => prev ?? tabs[0].id);
     } else {
-      setActiveTab('default');
+      setActiveTab('general');
     }
   }, [tabs]);
 
@@ -218,8 +231,11 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
     }
   }, [onRefreshOptions]);
 
-  // Update initial values when schema changes
-  useEffect(() => {
+  // Keep a baseline of initial values to only submit edited fields
+  const baselineRef = useRef<Record<string, any>>({ ...baseInitialValues });
+
+  // Update initial values when schema changes (sync before paint to avoid first-click popover closing)
+  useLayoutEffect(() => {
     if (schemaResp) {
       const ui: UI = schemaResp.ui;
       const fields = ui.fields || {};
@@ -229,10 +245,17 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
         newVals[key] = externalInitialValues[key] ??
           validation.default ??
           schemaResp.schema?.properties?.[key]?.default ??
-          (field.widget === 'checkbox' ? false : field.widget === 'multi-select' ? [] : '');
+          (field.widget === 'checkbox'
+            ? false
+            : field.widget === 'multi-select'
+            ? []
+            : field.widget === 'select' || field.widget === 'date'
+            ? null
+            : '');
       });
+      form.setValues(newVals);
       form.setInitialValues(newVals);
-      form.reset();
+      baselineRef.current = newVals;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schemaResp, externalInitialValues]);
@@ -321,12 +344,12 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
           label={t(field.label_key ?? key)}
           placeholder={t(field.placeholder_key ?? '')}
           description={t(field.help_text_key ?? '')}
-          {...form.getInputProps(key as any)}
-          value={currentValue != null ? String(currentValue) : null}
           data={options.map((o) => ({
             value: String(o.value),
             label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
           }))}
+          value={currentValue == null || currentValue === '' ? null : String(currentValue)}
+          onChange={(val) => form.setFieldValue(key, val)}
           allowDeselect
           rightSection={(isRefreshing || shouldWaitForOptions) ? <Loader size="xs" /> : undefined}
           disabled={!hasUpdatePermission}
@@ -381,8 +404,8 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
         return <SelectField />;
       case 'multi-select':
         return <MultiSelectField />;
-      case 'datetime-local':
-        return <TextInput {...commonProps} type="datetime-local" disabled={!hasUpdatePermission} />;
+      case 'date':
+        return <DatePickerInput {...commonProps} disabled={!hasUpdatePermission} />;
       case 'checkbox':
         return (
           <Checkbox
@@ -429,20 +452,33 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
   const hasTabs = tabs && tabs.length > 0;
 
   const formContent = hasTabs ? (
-    <Tabs value={activeTab ?? (tabs && tabs[0] ? tabs[0].id : 'default')} onChange={setActiveTab} keepMounted={false}>
-      <Tabs.List>
+    <Tabs orientation="vertical" variant="pills" value={activeTab ?? (tabs && tabs[0] ? tabs[0].id : 'default')} onChange={setActiveTab} keepMounted={false}>
+      <Tabs.List style={{ marginRight: '20px' }}>
+      <Card withBorder>  
         {tabs!.map((tab) => (
           <Tabs.Tab key={tab.id} value={tab.id}>
             {t(tab.label_key)}
           </Tabs.Tab>
         ))}
+        </Card>
       </Tabs.List>
 
       {tabs!.map((tab) => (
-        <Tabs.Panel key={tab.id} value={tab.id} pt="xs">
+        <Tabs.Panel key={tab.id} value={tab.id}>
+          
           {tab.id === 'compliance' && (
             <Stack mb="md">
               <AssetComplianceManager assetId={externalInitialValues?.id} assetType={resourceType} />
+            </Stack>
+          )}
+          {tab.id === 'documents' && (
+            <Stack mb="md">
+              <SoftwareDocsManager assetId={externalInitialValues?.id} assetType={resourceType} />
+            </Stack>
+          )}
+          {tab.id === 'software_versions' && (
+            <Stack mb="md">
+              <SoftwareVersionsManager softwareId={externalInitialValues?.id} />
             </Stack>
           )}
           <Grid align="center" gutter="md">
@@ -479,12 +515,39 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
   );
 
   const handleSubmit = (values: Record<string, any>) => {
-    // remove relationship fields
-    const cleanValues = { ...values };
-    relationshipFieldNames.forEach((name) => {
-      delete cleanValues[name];
+    // remove relationship fields and only keep changed keys vs baseline
+    const isEqual = (a: any, b: any) => {
+      // Treat dates/strings equivalently when stringified
+      const norm = (v: any) => {
+        if (v instanceof Date) return v.toISOString();
+        return v;
+      };
+      const va = norm(a);
+      const vb = norm(b);
+      if (Array.isArray(va) && Array.isArray(vb)) {
+        if (va.length !== vb.length) return false;
+        for (let i = 0; i < va.length; i++) {
+          if (!isEqual(va[i], vb[i])) return false;
+        }
+        return true;
+      }
+      if (typeof va === 'object' && va !== null && typeof vb === 'object' && vb !== null) {
+        try { return JSON.stringify(va) === JSON.stringify(vb); } catch { return false; }
+      }
+      return va === vb;
+    };
+
+    const baseline = baselineRef.current || {};
+    const changed: Record<string, any> = {};
+    Object.keys(values).forEach((key) => {
+      if (relationshipFieldNames.includes(key)) return; // skip relationship fields
+      const current = values[key];
+      const initial = baseline[key];
+      if (!isEqual(current, initial)) {
+        changed[key] = current;
+      }
     });
-    onSubmit(cleanValues);
+    onSubmit(changed);
   };
 
   return (
@@ -498,8 +561,7 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
       <Stack>
         {formContent}
         <Group justify="flex-end" mt="md">
-          {/* Hide the submit button if the current tab is "groups" or "compliance" */}
-          {!(activeTab === "groups" || activeTab === "compliance") && (
+          {!(activeTab === "groups" || activeTab === "compliance" || activeTab === "documents" || activeTab === "software_versions") && (
             <Button type="submit" loading={isSubmitting} disabled={isSubmitting}>
               {isSubmitting ? t('common.submitting') : t('common.submit')}
             </Button>

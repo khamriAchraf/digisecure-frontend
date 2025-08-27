@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { IconCalendarStats, IconChevronRight } from '@tabler/icons-react';
-import { Box, Collapse, Group, Popover, Text, ThemeIcon, Tooltip, UnstyledButton } from '@mantine/core';
+import { Box, Collapse, Group, Popover, Text, ThemeIcon, Tooltip, UnstyledButton, useMantineTheme, useMantineColorScheme } from '@mantine/core';
 import classes from '@/styles/NavbarLinksGroup.module.css';
 import { useSidebar } from '../src/contexts/SidebarContext';
 import { useRouter } from 'next/router';
@@ -15,6 +15,7 @@ interface LinksGroupProps {
 }
 
 export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, collapsed = false }: LinksGroupProps) {
+  const theme = useMantineTheme();
   const hasLinks = Array.isArray(links);
   const router = useRouter();
   // If parent didn't pass collapsed, read from global sidebar state for robustness
@@ -74,10 +75,24 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, co
     };
   }, []);
 
+  const { colorScheme } = useMantineColorScheme();
+  const primaryShade = 6;
+  const primary = theme.colors[theme.primaryColor][primaryShade];
+  const primaryBgLight = colorScheme === 'dark'
+    ? theme.colors[theme.primaryColor][9]
+    : theme.colors[theme.primaryColor][0];
+
   const items = (hasLinks ? links : []).map((child) => (
     <Text<'a'>
       component="a"
-      className={`${classes.link} ${isLinkActive(child.link) ? classes.linkActive : ''}`}
+      className={`${classes.link}`}
+      style={isLinkActive(child.link)
+        ? {
+            backgroundColor: primaryBgLight,
+            borderLeft: `3px solid ${primary}`,
+            fontWeight: 600,
+          }
+        : undefined}
       href={child.link}
       key={child.label}
       onClick={(event) => {
@@ -114,11 +129,17 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, co
             scheduleCloseIfNotHovered();
           }
         }}
-        className={`${classes.control} ${(isCurrentSection || isDirectLinkActive) ? classes.controlActive : ''}`}
+        className={`${classes.control}`}
+        style={(isCurrentSection || isDirectLinkActive)
+          ? {
+              backgroundColor: primaryBgLight,
+              borderLeft: `3px solid ${primary}`,
+            }
+          : undefined}
         aria-label={label}
       >
         <Group justify="center">
-          <ThemeIcon variant="light" size={30}>
+          <ThemeIcon variant="light" size={30} color="primary">
             <Icon size={18} />
           </ThemeIcon>
         </Group>
@@ -177,11 +198,18 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, co
             router.push(link);
           }
         }}
-        className={`${classes.control} ${(isCurrentSection || isDirectLinkActive) ? classes.controlActive : ''}`}
+        className={`${classes.control}`}
+        style={(isCurrentSection || isDirectLinkActive)
+          ? {
+              backgroundColor: primaryBgLight,
+              fontWeight: 600,
+              borderLeft: `3px solid ${primary}`,
+            }
+          : undefined}
       >
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
-            <ThemeIcon variant="light" size={30}>
+            <ThemeIcon variant="light" size={30} color="primary">
               <Icon size={18} />
             </ThemeIcon>
             <Box ml="md">{label}</Box>

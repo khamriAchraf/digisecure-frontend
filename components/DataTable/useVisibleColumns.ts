@@ -2,10 +2,8 @@ import { useMemo } from 'react';
 import { useTableConfig, upsertTableConfig, deleteTableConfig } from '../../src/fetchers';
 import { DataType } from './config';
 import { TableColumn } from '../../types/utils';
-import { useSession } from 'next-auth/react';
 
 export function useVisibleColumns<T>(dataType: DataType, allColumns: TableColumn<T>[]) {
-  const { data: session } = useSession();
   const { data: persisted, mutate } = useTableConfig(dataType);
   
   // Memoize the default column keys to prevent recreation on every render
@@ -29,11 +27,7 @@ export function useVisibleColumns<T>(dataType: DataType, allColumns: TableColumn
   // Save visibility configuration
   const saveVisibility = async (keys: string[]) => {
     try {
-      if (!session?.accessToken) {
-        throw new Error('No authentication token available');
-      }
-      
-      await upsertTableConfig(dataType, keys, session.accessToken);
+      await upsertTableConfig(dataType, keys);
       await mutate();
     } catch (error) {
       console.error('Failed to save table configuration:', error);
@@ -44,26 +38,15 @@ export function useVisibleColumns<T>(dataType: DataType, allColumns: TableColumn
   // Reset to default visibility
   const resetVisibility = async () => {
     try {
-      if (!session?.accessToken) {
-        throw new Error('No authentication token available');
-      }
-      
       // If no custom config exists, just set cache to null (no need to delete)
       if (persisted === null) {
         await mutate(null, { revalidate: false });
         return;
       }
-      
-      await deleteTableConfig(dataType, session.accessToken);
+      await deleteTableConfig(dataType);
       // Set cache to null to indicate no persisted config exists
       await mutate(null, { revalidate: false });
     } catch (error: any) {
-      // If it's a 404 error, it means the config doesn't exist, which is fine
-      if (error.status === 404) {
-        await mutate(null, { revalidate: false });
-        return;
-      }
-      
       console.error('Failed to reset table configuration:', error);
       throw error;
     }

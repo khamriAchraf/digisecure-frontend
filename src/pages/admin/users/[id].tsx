@@ -26,6 +26,8 @@ export default function EditUserPage() {
     mutate: mutateUser,
   } = useUser(userId);
 
+  
+
   // Fetch all groups (large page size to avoid pagination)
   const { data: groupsData, isLoading: groupsLoading } = useGroups({ page: 1, per_page: 1000 });
 
@@ -42,6 +44,10 @@ export default function EditUserPage() {
   const handleBack = () => {
     router.push('/admin/users');
   };
+
+  if (userError) {
+    handleBack();
+  }
 
   const handleDeleteUser = async () => {
     if (!userId) return;

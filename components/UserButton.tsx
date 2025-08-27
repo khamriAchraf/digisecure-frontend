@@ -23,7 +23,7 @@ export function UserButton({ user, onSignOut }: UserButtonProps) {
             <Avatar
               src={null}
               radius="xl"
-              color="blue"
+              color="primary"
             >
               {initials}
             </Avatar>

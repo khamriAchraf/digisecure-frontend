@@ -13,9 +13,9 @@
   }
 
   .controlActive {
-    background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-blue-9));
-    color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-1));
-    border-left: 3px solid var(--mantine-color-blue-6);
+    background-color: light-dark(var(--mantine-primary-color-0, var(--mantine-color-blue-0)), var(--mantine-primary-color-9, var(--mantine-color-blue-9)));
+    color: light-dark(var(--mantine-primary-color-7, var(--mantine-color-blue-7)), var(--mantine-primary-color-1, var(--mantine-color-blue-1)));
+    border-left: 3px solid var(--mantine-primary-color-6, var(--mantine-color-blue-6));
   }
   
   .link {
@@ -36,9 +36,9 @@
   }
 
   .linkActive {
-    background-color: light-dark(var(--mantine-color-blue-0), var(--mantine-color-blue-9));
-    color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-blue-1));
-    border-left: 3px solid var(--mantine-color-blue-6);
+    background-color: light-dark(var(--mantine-primary-color-0, var(--mantine-color-blue-0)), var(--mantine-primary-color-9, var(--mantine-color-blue-9)));
+    color: light-dark(var(--mantine-primary-color-7, var(--mantine-color-blue-7)), var(--mantine-primary-color-1, var(--mantine-color-blue-1)));
+    border-left: 3px solid var(--mantine-primary-color-6, var(--mantine-color-blue-6));
     font-weight: 600;
   }
   

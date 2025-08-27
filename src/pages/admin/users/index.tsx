@@ -5,9 +5,25 @@ import React, { useEffect } from 'react';
 import { t } from '../../../../i18n';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { useDeleteUser, usePurgeUser, useRestoreUser } from '../../../mutations';
 
 export default function AdminUsersPage() {
   const router = useRouter();
+  const { mutate: deleteUser } = useDeleteUser({
+    onSuccess: () => {
+      refresh();
+    },
+  });
+  const { mutate: purgeUser } = usePurgeUser({
+    onSuccess: () => {
+      refresh();
+    },
+  });
+  const { mutate: restoreUser } = useRestoreUser({
+    onSuccess: () => {
+      refresh();
+    },
+  });
   const {
     data,
     paginatedData,
@@ -19,6 +35,8 @@ export default function AdminUsersPage() {
     setSearch,
     setFilters,
     refresh,
+    isRecycleBin,
+    setRecycleBin,
   } = useDataTable<User>({
     dataType: 'users',
   });
@@ -38,12 +56,31 @@ export default function AdminUsersPage() {
   };
 
   const handleDelete = (user: User) => {
-    console.log('Delete user:', user);
-    // Implement delete functionality
+    deleteUser(user.id);
+  };
+
+  const handleBulkDelete = (users: User[]) => {
+    users.forEach((u) => deleteUser(u.id));
   };
 
   const handleCreate = () => {
     router.push('/admin/users/new');
+  };
+
+  const handlePurge = (user: User) => {
+    purgeUser(user.id);
+  };
+
+  const handleRestore = (user: User) => {
+    restoreUser(user.id);
+  };
+
+  const handleBulkRestore = (users: User[]) => {
+    users.forEach((u) => restoreUser(u.id));
+  };
+
+  const handleBulkPurge = (users: User[]) => {
+    users.forEach((u) => purgeUser(u.id));
   };
 
   const handleExport = () => {
@@ -72,10 +109,11 @@ export default function AdminUsersPage() {
           onEdit={handleEdit}
           onRowClick={handleRowClick}
           onDelete={handleDelete}
+          onBulkDelete={handleBulkDelete}
           onCreate={handleCreate}
           onExport={handleExport}
           selectable={true}
-          title={t('datatable.users')}
+          title={isRecycleBin ? t('datatable.recycleBinUsers') : t('datatable.users')}
           showSearch={true}
           showFilters={true}
           showActions={true}
@@ -84,6 +122,12 @@ export default function AdminUsersPage() {
           showRefreshButton={true}
           showCreateButton={true}
           showExportButton={true}
+          recycleBin={isRecycleBin}
+          onRecycleBinChange={setRecycleBin}
+          onPurge={handlePurge}
+          onRestore={handleRestore}
+          onBulkRestore={handleBulkRestore}
+          onBulkPurge={handleBulkPurge}
         />
       </Container>
     </React.Fragment>

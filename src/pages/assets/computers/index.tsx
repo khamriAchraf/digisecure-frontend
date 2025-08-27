@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { t } from '../../../../i18n';
 import { Computer } from '../../../../types/models';
 import Head from 'next/head';
+import { useDeleteComputer, usePurgeAsset, useRestoreAsset } from '@/mutations';
 
 export default function ComputersPage() {
   const router = useRouter();
@@ -20,8 +21,28 @@ export default function ComputersPage() {
     setSearch,
     setFilters,
     refresh,
+    isRecycleBin,
+    setRecycleBin,
   } = useDataTable<Computer>({
     dataType: 'computers',
+  });
+
+  const { mutate: deleteComputer } = useDeleteComputer({
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: purgeComputer } = usePurgeAsset('computers', {
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: restoreComputer } = useRestoreAsset('computers', {
+    onSuccess: () => {
+      refresh();
+    },
   });
 
   useEffect(() => {
@@ -38,8 +59,15 @@ export default function ComputersPage() {
   };
 
   const handleDelete = (computer: Computer) => {
-    console.log('Delete computer:', computer);
-    // Implement delete functionality
+    deleteComputer(computer.id);
+  };
+
+  const handlePurge = (computer: Computer) => {
+    purgeComputer(computer.id);
+  };
+
+  const handleRestore = (computer: Computer) => {
+    restoreComputer(computer.id);
   };
 
   const handleCreate = () => {
@@ -74,8 +102,10 @@ export default function ComputersPage() {
         onDelete={handleDelete}
         onCreate={handleCreate}
         onExport={handleExport}
+        onPurge={handlePurge}
+        onRestore={handleRestore}
         selectable={true}
-        title={t('datatable.computers')}
+        title={isRecycleBin ? t('datatable.recycleBinComputers') : t('datatable.computers')}
         showSearch={true}
         showFilters={true}
         showActions={true}
@@ -84,6 +114,8 @@ export default function ComputersPage() {
         showRefreshButton={true}
         showCreateButton={true}
         showExportButton={true}
+        recycleBin={isRecycleBin}
+        onRecycleBinChange={setRecycleBin}
       />
     </Container>
     </React.Fragment>

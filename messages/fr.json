@@ -7,7 +7,8 @@
     "contracts": "Contrats",
     "settings": "Paramètres",
     "security": "Sécurité",
-    "compliance": "Conformité"
+    "compliance": "Conformité",
+    "documents": "Documents"
   },
   "assets": {
     "computers": "Ordinateurs",
@@ -22,11 +23,21 @@
     "group": "Groupe",
     "roles": "Rôles",
     "role": "Rôle",
-    "dictionaries": "Dictionnaires"
+    "dictionaries": "Dictionnaires",
+    "recycle_bin": "Corbeille"
   },
   "compliance": {
     "scopes": "Périmètres",
-    "scope": "Périmètre"
+    "scope": "Périmètre",
+    "attachDocument": "Attacher un document",
+    "manageNotifications": "Gérer les notifications",
+    "changeStatus": "Changer le statut",
+    "attachedDocuments": "Documents attachés",
+    "noDocumentsAttached": "Aucun document attaché",
+    "pickDocumentToAttach": "Sélectionnez un document à attacher",
+    "attachSelected": "Attacher",
+    "documentsCoverage": "Couverture des documents",
+    "progress": "Progression"
   },
   "security": {
     "enable2FA": "Activer 2FA",
@@ -34,6 +45,7 @@
     "recoveryCodes": "Codes de récupération"
   },
   "common": {
+    "all": "Tous",
     "loading": "Chargement...",
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -66,7 +78,10 @@
     "redirecting": "Redirection...",
     "add": "Ajouter",
     "remove": "Supprimer",
-    "noOptions": "Aucune option disponible"
+    "noOptions": "Aucune option disponible",
+    "assets": "Actifs",
+    "documents": "Documents",
+    "assetsWithinScope": "Actifs relevant du périmètre {scope}"
   },
   "auth": {
     "login": "Connexion",
@@ -103,9 +118,18 @@
     "settings": "Paramètres",
     "login": "Connexion",
     "register": "Inscription",
-    "new": "Nouveau"
+    "new": "Nouveau",
+    "recycle_bin": "Corbeille"
   },
   "datatable": {
+    "recycleBin": "Corbeille",
+    "recycleBinGroups": "Groupes supprimés",
+    "recycleBinUsers": "Utilisateurs supprimés",
+    "recycleBinComputers": "Ordinateurs supprimés",
+    "recycleBinNetworkDevices": "Périphériques réseau supprimés",
+    "recycleBinVirtualMachines": "Machines virtuelles supprimées",
+    "recycleBinSoftware": "Logiciels supprimés",
+    "recycleBinCertificateKeys": "Certificats/Clés supprimés",
     "searchPlaceholder": "Rechercher...",
     "filters": "Filtres",
     "clearFilters": "Effacer les filtres",
@@ -147,8 +171,8 @@
     "postalCode": "Code postal",
     "comment": "Commentaire",
     "na": "N/A",
-    "users": "Gestion des utilisateurs",
-    "groups": "Gestion des groupes",
+    "users": "Utilisateurs",
+    "groups": "Groupes",
     "roles": "Gestion des rôles",
     "columnVisibility": "Visibilité des colonnes",
     "selectColumns": "Sélectionnez les colonnes à afficher",
@@ -175,7 +199,22 @@
     "virtual_machines": "Machines virtuelles",
     "network_device": "Périphérique réseau",
     "network_devices": "Périphériques réseau",
-    "software": "Logiciels"
+    "software": "Logiciels",
+    "compliant": "Conforme",
+    "not_compliant": "Non conforme",
+    "last_review": "Dernière vérification",
+    "next_review": "Prochaine vérification",
+    "name": "Nom",
+    "bulkActions": "Actions",
+    "deleteAll": "Supprimer tout",
+    "import": "Importer",
+    "refresh": "Actualiser",
+    "updatedAt": "Date de mise à jour",
+    "createdAt": "Date de création",
+    "certificate_keys": "Certificats/Clés",
+    "serial_number": "Numéro de série",
+    "usersCount": "Nombre d'utilisateurs",
+    "assetsCount": "Nombre d'éléments"
   },
   "forms": {
     "errors": {
@@ -200,7 +239,9 @@
       "backup": "Sauvegarde",
       "authentication": "Authentification",
       "monitoring": "Surveillance",
-      "lifecycle": "Cycle de vie"
+      "lifecycle": "Cycle de vie",
+      "software_versions": "Versions",
+      "documents": "Documents"
     },
     "group": {
       "create": {
@@ -1599,7 +1640,86 @@
           "label": "Remplacement prévu",
           "help_text": "Si le remplacement de ce logiciel est prévu."
         }
+      },
+      "add_version": "Ajouter une version"
+    },
+    "certificate_key": {
+      "create": {
+        "title": "Créer un certificat/clé",
+        "description": "Créer un nouveau certificat/clé dans le système"
+      },
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom du certificat/clé",
+          "help_text": "Le nom du certificat/clé."
+        },
+        "cert_type": {
+          "label": "Type de certificat",
+          "placeholder": "Sélectionnez le type de certificat",
+          "help_text": "Type de certificat.",
+          "options": {
+            "certificate": "Certificat",
+            "private_key": "Clé privée",
+            "public_key": "Clé publique",
+            "ssh_key": "Clé SSH",
+            "api": "API",
+            "other": "Autre"
+          }
+        },
+        "algorithm": {
+          "label": "Algorithme",
+          "placeholder": "Sélectionnez l'algorithme",
+          "help_text": "Algorithme utilisé pour le certificat.",
+          "options": {
+            "rsa": "RSA",
+            "ecdsa": "ECDSA",
+            "ecc": "ECC",
+            "dsa": "DSA",
+            "ed25519": "Ed25519",
+            "other": "Autre"
+          }
+        },
+        "storage_location": {
+          "label": "Emplacement de stockage",
+          "placeholder": "Sélectionnez l'emplacement de stockage",
+          "help_text": "Emplacement de stockage du certificat."
+        },
+        "issuer": {
+          "label": "Émetteur",
+          "placeholder": "Entrez l'émetteur du certificat",
+          "help_text": "Émetteur du certificat."
+        },
+        "subject": {
+          "label": "Sujet",
+          "placeholder": "Entrez le sujet du certificat",
+          "help_text": "Sujet du certificat."
+        },
+        "expiration_date": {
+          "label": "Date d'expiration",
+          "placeholder": "Sélectionnez la date d'expiration",
+          "help_text": "Date d'expiration du certificat."
+        },
+        "cert_status": {
+          "label": "Statut du certificat",
+          "placeholder": "Sélectionnez le statut du certificat",
+          "help_text": "Statut du certificat.",
+          "options": {
+            "valid": "Valide",
+            "invalid": "Invalide",
+            "expired": "Expiré",
+            "revoked": "Révoqué",
+            "pending": "En attente"
+          }
+        }
       }
+    },
+    "documents": {
+      "create": {
+        "title": "Créer un document",
+        "description": "Créer un nouveau document dans le système"
+      },
+      "attach": "Attacher un document"
     }
   },
   "relationships": {
@@ -1657,5 +1777,10 @@
     "quickCreate": {
       "success": "{resource} créé avec succès !"
     }
+  },
+  "modals": {
+    "add_version": "Ajouter une version logicielle",
+    "version_details": "Détails de la version",
+    "pick_document": "Sélectionner un document"
   }
 } 

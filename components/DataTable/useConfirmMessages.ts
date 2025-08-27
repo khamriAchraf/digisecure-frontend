@@ -5,6 +5,8 @@ interface DeleteConfirmKeys {
   deleteMessageKey: string;
   confirmKey: string;
   cancelKey: string;
+  purgeTitleKey?: string;
+  purgeMessageKey?: string;
 }
 
 /**
@@ -43,6 +45,8 @@ export function useConfirmMessages(dataType: DataType): DeleteConfirmKeys {
     // Use common keys for actions to preserve consistency
     confirmKey: 'common.delete',
     cancelKey: 'common.cancel',
+    purgeTitleKey: 'confirm.purge.default.title',
+    purgeMessageKey: 'confirm.purge.default.message',
   };
 }
 

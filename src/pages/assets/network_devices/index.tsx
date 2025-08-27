@@ -6,6 +6,7 @@ import { NetworkDevice } from '../../../../types/models';
 import { useLanguage } from '../../../../src/contexts/LanguageContext';
 import { Container } from '@mantine/core';
 import Head from 'next/head';
+import { useDeleteNetworkDevice, usePurgeAsset, useRestoreAsset } from '@/mutations';
 
 const NetworkDevicesPage: NextPage = () => {
   const { t } = useLanguage();
@@ -21,8 +22,28 @@ const NetworkDevicesPage: NextPage = () => {
     setSort,
     setSearch,
     refresh,
+    isRecycleBin,
+    setRecycleBin,
   } = useDataTable<NetworkDevice>({
     dataType: 'network_devices',
+  });
+
+  const { mutate: deleteNetworkDevice } = useDeleteNetworkDevice({
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: purgeNetworkDevice } = usePurgeAsset('network_devices', {
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: restoreNetworkDevice } = useRestoreAsset('network_devices', {
+    onSuccess: () => {
+      refresh();
+    },
   });
 
   const handleEdit = (nd: NetworkDevice) => {
@@ -31,6 +52,18 @@ const NetworkDevicesPage: NextPage = () => {
 
   const handleCreate = () => {
     router.push('/assets/network_devices/new');
+  };
+
+  const handleDelete = (nd: NetworkDevice) => {
+    deleteNetworkDevice(nd.id);
+  };
+
+  const handlePurge = (nd: NetworkDevice) => {
+    purgeNetworkDevice(nd.id);
+  };
+
+  const handleRestore = (nd: NetworkDevice) => {
+    restoreNetworkDevice(nd.id);
   };
 
   const errorMessage = error ? (typeof error === 'string' ? error : 'Error loading data') : null;
@@ -51,12 +84,17 @@ const NetworkDevicesPage: NextPage = () => {
         onPageSizeChange={setPageSize}
         onSortChange={(field, order) => setSort(field as keyof NetworkDevice, order)}
         onSearchChange={setSearch}
+        onDelete={handleDelete}
         onRefresh={refresh}
         onEdit={handleEdit}
         onCreate={handleCreate}
         onRowClick={handleEdit}
-        title={t('datatable.network_devices')}
+        onPurge={handlePurge}
+        onRestore={handleRestore}
+        title={isRecycleBin ? t('datatable.recycleBinNetworkDevices') : t('datatable.network_devices')}
         showFilters={false}
+        recycleBin={isRecycleBin}
+        onRecycleBinChange={setRecycleBin}
       />
     </Container>
     </React.Fragment>

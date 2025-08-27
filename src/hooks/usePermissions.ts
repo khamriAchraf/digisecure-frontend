@@ -142,6 +142,7 @@ export const permissionUtils = {
 export const PERMISSIONS = {
   // Network device permissions
   NETWORK_DEVICE_READ: "network_device:read",
+  NETWORK_DEVICE_LIST: "network_device:list",
   NETWORK_DEVICE_CREATE: "network_device:create",
   NETWORK_DEVICE_UPDATE: "network_device:update",
   NETWORK_DEVICE_DELETE: "network_device:delete",
@@ -149,6 +150,7 @@ export const PERMISSIONS = {
   
   // Virtual machine permissions
   VIRTUAL_MACHINE_READ: "virtual_machine:read",
+  VIRTUAL_MACHINE_LIST: "virtual_machine:list",
   VIRTUAL_MACHINE_CREATE: "virtual_machine:create",
   VIRTUAL_MACHINE_UPDATE: "virtual_machine:update",
   VIRTUAL_MACHINE_DELETE: "virtual_machine:delete",
@@ -156,6 +158,7 @@ export const PERMISSIONS = {
   
   // Software permissions
   SOFTWARE_READ: "software:read",
+  SOFTWARE_LIST: "software:list",
   SOFTWARE_CREATE: "software:create",
   SOFTWARE_UPDATE: "software:update",
   SOFTWARE_DELETE: "software:delete",
@@ -163,13 +166,23 @@ export const PERMISSIONS = {
   
   // Computer permissions
   COMPUTER_READ: "computer:read",
+  COMPUTER_LIST: "computer:list",
   COMPUTER_CREATE: "computer:create",
   COMPUTER_UPDATE: "computer:update",
   COMPUTER_DELETE: "computer:delete",
   COMPUTER_PURGE: "computer:purge",
+
+  // Certificate key permissions
+  CERTIFICATE_KEY_READ: "certificate_key:read",
+  CERTIFICATE_KEY_LIST: "certificate_key:list",
+  CERTIFICATE_KEY_CREATE: "certificate_key:create",
+  CERTIFICATE_KEY_UPDATE: "certificate_key:update",
+  CERTIFICATE_KEY_DELETE: "certificate_key:delete",
+  CERTIFICATE_KEY_PURGE: "certificate_key:purge",
   
   // User permissions
   USER_READ: "user:read",
+  USER_LIST: "user:list",
   USER_CREATE: "user:create",
   USER_UPDATE: "user:update",
   USER_DELETE: "user:delete",
@@ -177,6 +190,7 @@ export const PERMISSIONS = {
   
   // Role permissions
   ROLE_READ: "role:read",
+  ROLE_LIST: "role:list",
   ROLE_CREATE: "role:create",
   ROLE_UPDATE: "role:update",
   ROLE_DELETE: "role:delete",
@@ -184,6 +198,7 @@ export const PERMISSIONS = {
   
   // Group permissions
   GROUP_READ: "group:read",
+  GROUP_LIST: "group:list",
   GROUP_CREATE: "group:create",
   GROUP_UPDATE: "group:update",
   GROUP_DELETE: "group:delete",
@@ -191,36 +206,43 @@ export const PERMISSIONS = {
   
   // Reference data permissions
   REFERENCE_DATA_READ: "reference_data:read",
+  REFERENCE_DATA_LIST: "reference_data:list",
   REFERENCE_DATA_CREATE: "reference_data:create",
   REFERENCE_DATA_UPDATE: "reference_data:update",
   REFERENCE_DATA_DELETE: "reference_data:delete",
   REFERENCE_DATA_PURGE: "reference_data:purge",
   
   // Asset permissions
+  // compliance manage is the ability to tag/untag assets with compliance scopes
   ASSET_COMPLIANCE_MANAGE: "asset:compliance_manage",
+  // compliance check is the ability to check if an asset is compliant
+  ASSET_COMPLIANCE_CHECK: "asset:compliance_check",
   
-  // Analytics permissions (for future use)
+  // Compliance permissions
   COMPLIANCE_SCOPE_READ: "compliance_scope:read",
+  COMPLIANCE_SCOPE_LIST: "compliance_scope:list",
   COMPLIANCE_SCOPE_CREATE: "compliance_scope:create",
   COMPLIANCE_SCOPE_UPDATE: "compliance_scope:update",
   COMPLIANCE_SCOPE_DELETE: "compliance_scope:delete",
   COMPLIANCE_SCOPE_PURGE: "compliance_scope:purge",
+
+  // Documents permissions
+  DOCUMENTS_READ: "document:read",
+  DOCUMENTS_LIST: "document:list",
+  DOCUMENTS_CREATE: "document:create",
+  DOCUMENTS_UPDATE: "document:update",
+  DOCUMENTS_DELETE: "document:delete",
+  DOCUMENTS_PURGE: "document:purge",
+
+  // Recycle bin (user) permissions
+  RECYCLE_BIN_USER_READ: "recycle_bin_user:read",
+  RECYCLE_BIN_USER_LIST: "recycle_bin_user:list",
+  RECYCLE_BIN_USER_PURGE: "recycle_bin_user:purge",
+  RECYCLE_BIN_USER_RESTORE: "recycle_bin_user:restore",
+
+
   
-  // Contract permissions (for future use)
-  CONTRACT_READ: "contract:read",
-  CONTRACT_CREATE: "contract:create",
-  CONTRACT_UPDATE: "contract:update",
-  CONTRACT_DELETE: "contract:delete",
-  CONTRACT_PURGE: "contract:purge",
   
-  // Settings permissions (for future use)
-  SETTINGS_READ: "settings:read",
-  SETTINGS_UPDATE: "settings:update",
-  
-  // Security permissions (for future use)
-  SECURITY_READ: "security:read",
-  SECURITY_UPDATE: "security:update",
-  SECURITY_2FA_MANAGE: "security:2fa:manage",
 } as const;
 
 // Role constants

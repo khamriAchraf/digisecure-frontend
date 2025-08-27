@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { useUsers, useRoles, useGroups, useAssetTypes, useManufacturers, useLocations, useComputers, useVirtualMachines, useNetworkDevices, useSoftwares } from '../../src/fetchers';
+import { usePaginatedData, API_BASE } from '../../src/fetchers';
 import { DataType, getDataTableConfig } from './config';
 import { PaginatedResponse } from '../../types/models';
 import { t } from '../../i18n';
@@ -45,6 +45,9 @@ export interface UseDataTableReturn<T> {
   setFilters: (filters: Record<string, any>) => void;
   clearFilters: () => void;
   refresh: () => void;
+  // Recycle bin
+  isRecycleBin: boolean;
+  setRecycleBin: (enabled: boolean) => void;
   
   // Selection
   selectedItems: T[];
@@ -76,6 +79,7 @@ export function useDataTable<T extends { id: number | string }>({
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [filters, setFiltersState] = useState(initialFilters);
   const [selectedItems, setSelectedItems] = useState<T[]>([]);
+  const [isRecycleBin, setRecycleBin] = useState(false);
   const [, forceUpdate] = useState({});
 
   // Listen for language changes and force re-render
@@ -98,7 +102,9 @@ export function useDataTable<T extends { id: number | string }>({
     };
     
     if (sortBy) {
-      params.sort_by = sortBy;
+      // When recycle bin is enabled, map updated_at to deleted_at for server-side sorting
+      const serverSortBy = (isRecycleBin && String(sortBy) === 'updated_at') ? 'deleted_at' : sortBy;
+      params.sort_by = serverSortBy;
       params.sort_order = sortOrder;
     }
     
@@ -116,22 +122,38 @@ export function useDataTable<T extends { id: number | string }>({
     return params;
   }, [currentPage, pageSize, sortBy, sortOrder, searchQuery, filters]);
   
-  // Use appropriate fetcher based on data type
-  const fetcherMap: Record<string, any> = {
-    users: useUsers,
-    roles: useRoles,
-    groups: useGroups,
-    computers: useComputers,
-    network_devices: useNetworkDevices,
-    virtual_machines: useVirtualMachines,
-    software: useSoftwares,
-    asset_types: useAssetTypes,
-    manufacturers: useManufacturers,
-    locations: useLocations,
+  // Compute endpoint from data type and recycle bin mode
+  const basePathMap: Record<DataType, string> = {
+    users: '/users',
+    roles: '/roles',
+    groups: '/groups',
+    computers: '/assets/computers',
+    network_devices: '/assets/network_devices',
+    virtual_machines: '/assets/virtual_machines',
+    software: '/assets/software',
+    certificate_keys: '/assets/certificate_keys',
+    asset_types: '/asset-types',
+    manufacturers: '/reference_data/manufacturers',
+    locations: '/reference_data/locations',
   };
-  
-  const fetcher = fetcherMap[dataType];
-  const { data: paginatedData, isLoading, isError, mutate } = fetcher(queryParams);
+
+  const recyclePathMap: Partial<Record<DataType, string>> = {
+    users: '/recycle_bin/users',
+    groups: '/recycle_bin/groups',
+    computers: '/recycle_bin/assets/computers',
+    network_devices: '/recycle_bin/assets/network_devices',
+    virtual_machines: '/recycle_bin/assets/virtual_machines',
+    software: '/recycle_bin/assets/software',
+    certificate_keys: '/recycle_bin/assets/certificate_keys',
+  };
+
+  const endpointPath = isRecycleBin
+    ? (recyclePathMap[dataType] ?? basePathMap[dataType])
+    : basePathMap[dataType];
+
+  const endpoint = `${API_BASE}${endpointPath}`;
+
+  const { data: paginatedData, isLoading, isError, mutate } = usePaginatedData<T>(endpoint, queryParams);
   
   // Extract data and metadata
   const data = paginatedData?.data || [];
@@ -207,6 +229,9 @@ export function useDataTable<T extends { id: number | string }>({
     setFilters,
     clearFilters,
     refresh,
+    // Recycle bin
+    isRecycleBin,
+    setRecycleBin,
     
     // Selection
     selectedItems,

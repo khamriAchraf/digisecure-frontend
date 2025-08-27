@@ -1,4 +1,4 @@
-import { Container, Title, Stack, Loader, Text, Group, ActionIcon, Popover } from '@mantine/core';
+import { Container, Title, Stack, Loader, Text, Group, ActionIcon, Popover, Divider } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { IconArrowLeft, IconTrash } from '@tabler/icons-react';
 import DynamicEditForm from '../../../../components/DynamicEditForm';
@@ -131,7 +131,7 @@ export default function EditSoftwarePage() {
               </Popover>
             )}
           </Group>
-
+          <Divider my="xs" />
           {software && (
             <DynamicEditForm
               resourceType="software"

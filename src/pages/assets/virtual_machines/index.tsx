@@ -6,6 +6,7 @@ import { VirtualMachine } from '../../../../types/models';
 import { useLanguage } from '../../../../src/contexts/LanguageContext';
 import { Container } from '@mantine/core';
 import Head from 'next/head';
+import { useDeleteVirtualMachine, usePurgeAsset, useRestoreAsset } from '@/mutations';
 
 const VirtualMachinesPage: NextPage = () => {
   const { t } = useLanguage();
@@ -23,8 +24,28 @@ const VirtualMachinesPage: NextPage = () => {
     setSort,
     setSearch,
     refresh,
+    isRecycleBin,
+    setRecycleBin,
   } = useDataTable<VirtualMachine>({
     dataType: 'virtual_machines',
+  });
+
+  const { mutate: deleteVirtualMachine } = useDeleteVirtualMachine({
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: purgeVirtualMachine } = usePurgeAsset('virtual_machines', {
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: restoreVirtualMachine } = useRestoreAsset('virtual_machines', {
+    onSuccess: () => {
+      refresh();
+    },
   });
 
   const handleEdit = (vm: VirtualMachine) => {
@@ -32,8 +53,15 @@ const VirtualMachinesPage: NextPage = () => {
   };
 
   const handleDelete = (vm: VirtualMachine) => {
-    console.log('Delete:', vm);
-    // Implement delete logic here
+    deleteVirtualMachine(vm.id);
+  };
+
+  const handlePurge = (vm: VirtualMachine) => {
+    purgeVirtualMachine(vm.id);
+  };
+
+  const handleRestore = (vm: VirtualMachine) => {
+    restoreVirtualMachine(vm.id);
   };
 
   const handleCreate = () => {
@@ -64,7 +92,9 @@ const VirtualMachinesPage: NextPage = () => {
         onDelete={handleDelete}
         onCreate={handleCreate}
         onRowClick={handleEdit}
-        title={t('datatable.virtual_machines')}
+        onPurge={handlePurge}
+        onRestore={handleRestore}
+        title={isRecycleBin ? t('datatable.recycleBinVirtualMachines') : t('datatable.virtual_machines')}
         showSearch={true}
         showFilters={false}
         showActions={true}
@@ -73,6 +103,8 @@ const VirtualMachinesPage: NextPage = () => {
         showRefreshButton={true}
         showCreateButton={true}
         showExportButton={true}
+        recycleBin={isRecycleBin}
+        onRecycleBinChange={setRecycleBin}
       /></Container>
     </React.Fragment>
   );

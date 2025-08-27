@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Alert } from '@mantine/core';
+import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Alert, LoadingOverlay } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useTranslation } from '../hooks/useTranslation';
 
@@ -42,12 +42,11 @@ export default function Login() {
 
   // Show loading while checking authentication
   if (status === 'loading') {
-    return <div>{t('common.loading')}</div>;
+    return <LoadingOverlay visible={true} />;
   }
 
-  // Don't show login form if already authenticated
   if (session) {
-    return <div>{t('common.redirecting')}</div>;
+    return <LoadingOverlay visible={true} />;
   }
 
   return (
@@ -86,13 +85,6 @@ export default function Login() {
             {t('auth.signIn')}
           </Button>
         </form>
-        
-        <Text ta="center" mt="md">
-          {t('auth.dontHaveAccount')}{' '}
-          <Link href="/register" style={{ color: 'var(--mantine-color-blue-6)' }}>
-            {t('auth.signUp')}
-          </Link>
-        </Text>
       </Paper>
     </Container>
   );

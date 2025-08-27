@@ -7,7 +7,8 @@
     "contracts": "Contracts",
     "settings": "Settings",
     "security": "Security",
-    "compliance": "Compliance"
+    "compliance": "Compliance",
+    "documents": "Documents"
   },
   "assets": {
     "computers": "Computers",
@@ -22,11 +23,21 @@
     "group": "Group",
     "roles": "Roles",
     "role": "Role",
-    "dictionaries": "Dictionaries"
+    "dictionaries": "Dictionaries",
+    "recycle_bin": "Recycle Bin"
   },
   "compliance": {
     "scopes": "Scopes",
-    "scope": "Scope"
+    "scope": "Scope",
+    "attachDocument": "Attach a document",
+    "manageNotifications": "Manage notifications",
+    "changeStatus": "Change status",
+    "attachedDocuments": "Attached documents",
+    "noDocumentsAttached": "No documents attached",
+    "pickDocumentToAttach": "Select a document to attach",
+    "attachSelected": "Attach",
+    "documentsCoverage": "Documents coverage",
+    "progress": "Progress"
   },
   "security": {
     "enable2FA": "Enable 2FA",
@@ -34,6 +45,7 @@
     "recoveryCodes": "Recovery codes"
   },
   "common": {
+    "all": "All",
     "loading": "Loading...",
     "save": "Save",
     "cancel": "Cancel",
@@ -103,7 +115,8 @@
     "settings": "Settings",
     "login": "Login",
     "register": "Register",
-    "new": "New"
+    "new": "New",
+    "recycle_bin": "Recycle Bin"
   },
   "datatable": {
     "searchPlaceholder": "Search...",
@@ -176,7 +189,29 @@
     "network_devices": "Network Devices",
     "software": "Software",
     "computer": "Computer",
-    "computers": "Computers"
+    "computers": "Computers",
+    "compliant": "Compliant",
+    "not_compliant": "Not Compliant",
+    "last_review": "Last Review",
+    "next_review": "Next Review",
+    "name": "Name",
+    "recycleBin": "Recycle Bin",
+    "recycleBinGroups": "Deleted Groups",
+    "recycleBinUsers": "Deleted Users",
+    "recycleBinComputers": "Deleted Computers",
+    "recycleBinNetworkDevices": "Deleted Network Devices",
+    "recycleBinVirtualMachines": "Deleted Virtual Machines",
+    "recycleBinSoftware": "Deleted Software",
+    "recycleBinCertificateKeys": "Deleted Certificates/Keys",
+    "bulkActions": "Bulk Actions",
+    "deleteAll": "Delete all",
+    "import": "Import",
+    "updatedAt": "Updated At",
+    "createdAt": "Created At",
+    "certificate_keys": "Certificates/Keys",
+    "serial_number": "Serial Number",
+    "usersCount": "Users Count",
+    "assetsCount": "Assets Count"
   },
   "forms": {
     "errors": {
@@ -201,7 +236,9 @@
       "backup": "Backup",
       "authentication": "Authentication",
       "monitoring": "Monitoring",
-      "lifecycle": "Lifecycle"
+      "lifecycle": "Lifecycle",
+      "software_versions": "Versions",
+      "documents": "Documents"
     },
     "group": {  
       "create": {
@@ -1601,6 +1638,85 @@
           "help_text": "Whether replacement of this software is planned."
         }
       }
+    },
+    "add_version": "Add Version",
+    "certificate_key": {
+      "create": {
+        "title": "Create Certificate/Key",
+        "description": "Create a new certificate/key in the system"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter certificate/key name",
+          "help_text": "The name of the certificate/key."
+        },
+        "cert_type": {
+          "label": "Certificate Type",
+          "placeholder": "Select certificate type",
+          "help_text": "Type of certificate.",
+          "options": {
+            "certificate": "Certificate",
+            "private_key": "Private Key",
+            "public_key": "Public Key",
+            "ssh_key": "SSH Key",
+            "api": "API",
+            "other": "Other"
+          }
+        },
+        "algorithm": {
+          "label": "Algorithm",
+          "placeholder": "Select algorithm",
+          "help_text": "Algorithm used for the certificate.",
+          "options": {
+            "rsa": "RSA",
+            "ecdsa": "ECDSA",
+            "ecc": "ECC",
+            "dsa": "DSA",
+            "ed25519": "Ed25519",
+            "other": "Other"
+          }
+        },
+        "storage_location": {
+          "label": "Storage Location",
+          "placeholder": "Select storage location",
+          "help_text": "Where the certificate is stored."
+        },
+        "issuer": {
+          "label": "Issuer",
+          "placeholder": "Enter certificate issuer",
+          "help_text": "Issuer of the certificate."
+        },
+        "subject": {
+          "label": "Subject",
+          "placeholder": "Enter certificate subject",
+          "help_text": "Subject of the certificate."
+        },
+        "expiration_date": {
+          "label": "Expiration Date",
+          "placeholder": "Select expiration date",
+          "help_text": "Certificate expiration date."
+        },
+        "cert_status": {
+          "label": "Certificate Status",
+          "placeholder": "Select certificate status",
+          "help_text": "Status of the certificate.",
+          "options": {
+            "valid": "Valid",
+            "invalid": "Invalid",
+            "expired": "Expired",
+            "revoked": "Revoked",
+            "pending": "Pending"
+          }
+        }
+      }
+    },
+    "documents": {
+      "create": {
+        "title": "Create Document",
+        "description": "Create a new document in the system"
+      },
+      "attach": "Attach a document"
     }
   },
   "relationships": {
@@ -1658,5 +1774,10 @@
     "quickCreate": {
       "success": "{resource} created successfully!"
     }
+  },
+  "modals": {
+    "add_version": "Add software version",
+    "version_details": "Version details",
+    "pick_document": "Select a document"
   }
-} 
+}

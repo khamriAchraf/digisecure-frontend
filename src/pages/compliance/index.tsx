@@ -78,7 +78,7 @@ export default function CompliancePage() {
               onMouseLeave={() => setHoveredCardId((current) => (current === scope.id ? null : current))}
               style={{
                 cursor: 'pointer',
-                borderColor: hoveredCardId === scope.id ? theme.colors.blue[colorScheme === 'dark' ? 5 : 6] : undefined,
+                borderColor: hoveredCardId === scope.id ? theme.colors[theme.primaryColor][colorScheme === 'dark' ? 5 : 6] : undefined,
                 transition: 'border-color 150ms ease',
               }}
             >

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useCallback } from 'react';
 import {
   TextInput,
   Textarea,
@@ -17,6 +17,9 @@ import { useForm } from '@mantine/form';
 import { useResourceSchema } from '@/fetchers';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useDynamicOptions } from '@/hooks/useDynamicOptions';
+import { useRoles } from '@/fetchers';
+import { useSession } from 'next-auth/react';
+import { DatePickerInput } from '@mantine/dates';
 
 // Helper types mirroring the backend UI schema
 interface UIFieldOption {
@@ -108,8 +111,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
       const defaultValue =
         validation.default ?? // explicit default in UI validation
         schemaResp.schema?.properties?.[key]?.default ?? // default from JSON schema
-        (field.widget === 'checkbox' ? false : 
-         field.widget === 'multi-select' ? [] : ''); // sensible defaults
+        (field.widget === 'checkbox'
+          ? false
+          : field.widget === 'multi-select'
+          ? []
+          : field.widget === 'select' || field.widget === 'date'
+          ? null
+          : ''); // sensible defaults
 
       initialValues[key] = defaultValue;
 
@@ -160,8 +168,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
     }
   }, [onRefreshOptions]);
 
-  // Effect to update form when schema data changes
-  useEffect(() => {
+  // Synchronous update before paint to avoid first-click popover closing on fixed-option selects
+  useLayoutEffect(() => {
     if (schemaResp) {
       const ui: UI = schemaResp.ui;
       const fields: Record<string, UIField> = ui.fields || {};
@@ -171,16 +179,16 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
       Object.entries(fields).forEach(([key, field]) => {
         const validation = field.validation || {};
         const defaultValue =
-          validation.default ?? // explicit default in UI validation
-          schemaResp.schema?.properties?.[key]?.default ?? // default from JSON schema
-          (field.widget === 'checkbox' ? false : 
-           field.widget === 'multi-select' ? [] : ''); // sensible defaults
+          validation.default ??
+          schemaResp.schema?.properties?.[key]?.default ??
+          (field.widget === 'checkbox' ? false : field.widget === 'multi-select' ? [] : '');
 
         newInitialValues[key] = defaultValue;
       });
 
+      // Set both values and initial values without calling reset (which can close newly opened popovers)
+      form.setValues(newInitialValues);
       form.setInitialValues(newInitialValues);
-      form.reset();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schemaResp]);
@@ -223,9 +231,30 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 
     const SelectField: React.FC = () => {
       const { options: srcOptions, isLoading: srcLoading, refresh: srcRefresh } = useDynamicOptions(key);
+      const { data: session } = useSession();
+      const { data: rolesResp, isLoading: rolesLoading } = useRoles({ per_page: 9999 } as any);
 
-      const options = srcOptions ?? legacyOptions[key] ?? field.options ?? [];
-      const isRefreshing = srcLoading || legacyRefreshing[key];
+      const isRoleField = key === 'role_id';
+      const roles: any[] = rolesResp?.data ?? [];
+      const currentUserRoleId: number | null = session?.user?.role_id ?? null;
+
+      let options = srcOptions ?? legacyOptions[key] ?? field.options ?? [];
+
+      if (isRoleField && roles.length > 0 && currentUserRoleId !== null) {
+        const currentUserRole = roles.find((r) => r.id === currentUserRoleId);
+        const currentRank: number | undefined = currentUserRole?.rank;
+        if (typeof currentRank === 'number') {
+          const allowedRoleIds = new Set(
+            roles
+              .filter((r) => typeof r.rank === 'number' && r.rank > currentRank)
+              .map((r) => Number(r.id))
+          );
+          options = options.filter((o) => o.value === '' || allowedRoleIds.has(Number(o.value)));
+        }
+      }
+
+      const isRefreshing = srcLoading || legacyRefreshing[key] || (isRoleField && rolesLoading);
+      const currentValue = form.values[key];
 
       // Decide which refresh function to use when QuickCreate modal closes
       const refreshFn = srcOptions ? srcRefresh : () => refreshFieldOptions(key);
@@ -249,17 +278,20 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
         );
       }
 
+      const inputProps = form.getInputProps(key as any);
+
       return (
         <Select
           key={key}
           label={t(field.label_key ?? key)}
           placeholder={t(field.placeholder_key ?? '')}
           description={t(field.help_text_key ?? '')}
-          {...form.getInputProps(key as any)}
           data={options.map((o) => ({
             value: String(o.value),
             label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
           }))}
+          value={currentValue == null || currentValue === '' ? null : String(currentValue)}
+          onChange={(val) => form.setFieldValue(key, val)}
           allowDeselect
           rightSection={isRefreshing ? <Loader size="xs" /> : undefined}
         />
@@ -312,8 +344,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
         return <SelectField />;
       case 'multi-select':
         return <MultiSelectField />;
-      case 'datetime-local':
-        return <TextInput {...commonProps} type="datetime-local" />;
+      case 'date':
+        return <DatePickerInput {...commonProps} />;
       case 'checkbox':
         return (
           <Checkbox
@@ -358,4 +390,4 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   );
 };
 
-export default DynamicForm; 
+export default DynamicForm;   

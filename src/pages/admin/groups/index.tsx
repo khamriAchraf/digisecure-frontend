@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { t } from '../../../../i18n';
 import Head from 'next/head';
+import { useDeleteGroup, usePurgeGroup, useRestoreGroup } from '@/mutations';
 
 export default function AdminGroupsPage() {
   const router = useRouter();
@@ -19,8 +20,28 @@ export default function AdminGroupsPage() {
     setSearch,
     setFilters,
     refresh,
+    isRecycleBin,
+    setRecycleBin,
   } = useDataTable<Group>({
     dataType: 'groups',
+  });
+
+  const { mutate: deleteGroup } = useDeleteGroup({
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: purgeGroup } = usePurgeGroup({
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+  const { mutate: restoreGroup } = useRestoreGroup({
+    onSuccess: () => {
+      refresh();
+    },
   });
 
   useEffect(() => {
@@ -37,12 +58,19 @@ export default function AdminGroupsPage() {
   };
 
   const handleDelete = (group: Group) => {
-    console.log('Delete group:', group);
-    // Implement delete functionality
+    deleteGroup(group.id);
   };
 
   const handleCreate = () => {
     router.push('/admin/groups/new');
+  };
+
+  const handlePurge = (group: Group) => {
+    purgeGroup(group.id);
+  };
+
+  const handleRestore = (group: Group) => {
+    restoreGroup(group.id);
   };
 
   const handleExport = () => {
@@ -73,8 +101,10 @@ export default function AdminGroupsPage() {
         onDelete={handleDelete}
         onCreate={handleCreate}
         onExport={handleExport}
+        onPurge={handlePurge}
+        onRestore={handleRestore}
         selectable={true}
-        title={t('datatable.groups')}
+        title={isRecycleBin ? t('datatable.recycleBinGroups') : t('datatable.groups')}
         showSearch={true}
         showFilters={true}
         showActions={true}
@@ -83,6 +113,8 @@ export default function AdminGroupsPage() {
         showRefreshButton={true}
         showCreateButton={true}
         showExportButton={true}
+        recycleBin={isRecycleBin}
+        onRecycleBinChange={setRecycleBin}
       />
     </Container>
     </React.Fragment>

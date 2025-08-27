@@ -2,11 +2,14 @@ import {
   IconAdjustments,
   IconCalendarStats,
   IconChecklist,
+  IconComponents,
+  IconFile,
   IconFileAnalytics,
   IconGauge,
   IconLock,
   IconNotes,
   IconPresentationAnalytics,
+  IconShieldCheck,
 } from '@tabler/icons-react';
 import { ActionIcon, Code, Group, ScrollArea } from '@mantine/core';
 import classes from '@/styles/Navbar.module.css';
@@ -23,60 +26,49 @@ export function Navbar() {
   const { collapsed: isCollapsed, toggleCollapsed } = useSidebar();
   
   // Permission checks
-  const hasComputersRead = useHasPermission(PERMISSIONS.COMPUTER_READ);
-  const hasNetworkDevicesRead = useHasPermission(PERMISSIONS.NETWORK_DEVICE_READ);
-  const hasVirtualMachinesRead = useHasPermission(PERMISSIONS.VIRTUAL_MACHINE_READ);
-  const hasSoftwareRead = useHasPermission(PERMISSIONS.SOFTWARE_READ);
-  const hasUserRead = useHasPermission(PERMISSIONS.USER_READ);
-  const hasRoleRead = useHasPermission(PERMISSIONS.ROLE_READ);
-  const hasGroupRead = useHasPermission(PERMISSIONS.GROUP_READ);
-  const hasComplianceScopeRead = useHasPermission(PERMISSIONS.COMPLIANCE_SCOPE_READ);
+  const hasComputersList = useHasPermission(PERMISSIONS.COMPUTER_LIST);
+  const hasNetworkDevicesList = useHasPermission(PERMISSIONS.NETWORK_DEVICE_LIST);
+  const hasVirtualMachinesList = useHasPermission(PERMISSIONS.VIRTUAL_MACHINE_LIST);
+  const hasSoftwareList = useHasPermission(PERMISSIONS.SOFTWARE_LIST);
+  const hasCertificateKeysList = useHasPermission(PERMISSIONS.CERTIFICATE_KEY_LIST);
+  const hasUserList = useHasPermission(PERMISSIONS.USER_LIST);
+  const hasRoleList = useHasPermission(PERMISSIONS.ROLE_LIST);
+  const hasGroupList = useHasPermission(PERMISSIONS.GROUP_LIST);
+  const hasComplianceScopeList = useHasPermission(PERMISSIONS.COMPLIANCE_SCOPE_LIST);
+  const hasRecycleBinUserList = useHasPermission(PERMISSIONS.RECYCLE_BIN_USER_LIST);
+  const hasDocumentsList = useHasPermission(PERMISSIONS.DOCUMENTS_LIST);
 
-  // Build administration links based on permissions
   const adminLinks = [
     // Only show users link if user has user read permission
-    ...(hasUserRead ? [{ label: t('administration.users'), link: '/admin/users' }] : []),
-    // Only show groups link if user has group read permission
-    ...(hasGroupRead ? [{ label: t('administration.groups'), link: '/admin/groups' }] : []),
-    // Only show roles link if user has role read permission
-    ...(hasRoleRead ? [{ label: t('administration.roles'), link: '/admin/roles' }] : []),
+    ...(hasUserList ? [{ label: t('administration.users'), link: '/admin/users' }] : []),
+    ...(hasGroupList ? [{ label: t('administration.groups'), link: '/admin/groups' }] : []),
   ];
 
-  // Build navigation data with permission filtering
   const mockdata = [
     { label: t('navigation.dashboard'), icon: IconGauge, link: '/' },
     // Assets section - only show if user has asset read permission
-    ...(hasComputersRead || hasNetworkDevicesRead || hasVirtualMachinesRead || hasSoftwareRead ? [{
+    ...(hasComputersList || hasNetworkDevicesList || hasVirtualMachinesList || hasSoftwareList ? [{
       label: t('navigation.assets'),
-      icon: IconNotes,
+      icon: IconComponents,
       links: [
-        ...(hasComputersRead ? [{ label: t('assets.computers'), link: '/assets/computers' }] : []),
-        ...(hasNetworkDevicesRead ? [{ label: t('assets.network_devices'), link: '/assets/network_devices' }] : []),
-        ...(hasVirtualMachinesRead ? [{ label: t('assets.virtual_machines'), link: '/assets/virtual_machines' }] : []),
-        ...(hasSoftwareRead ? [{ label: t('assets.software'), link: '/assets/software' }] : []),
+        ...(hasComputersList ? [{ label: t('assets.computers'), link: '/assets/computers' }] : []),
+        ...(hasNetworkDevicesList ? [{ label: t('assets.network_devices'), link: '/assets/network_devices' }] : []),
+        ...(hasVirtualMachinesList ? [{ label: t('assets.virtual_machines'), link: '/assets/virtual_machines' }] : []),
+        ...(hasSoftwareList ? [{ label: t('assets.software'), link: '/assets/software' }] : []),
+        ...(hasCertificateKeysList ? [{ label: t('datatable.certificate_keys'), link: '/assets/certificates_keys' }] : []),
       ],
     }] : []),
-    // Administration section - only show if user has any admin read permissions AND there are visible links
     ...(adminLinks.length > 0 ? [{
       label: t('navigation.administration'),
-      icon: IconCalendarStats,
+      icon: IconShieldCheck,
       links: adminLinks,
     }] : []),
-    // TODO: Add permissions for these sections when backend supports them
-    // For now, these are visible to all authenticated users
-    ...(hasComplianceScopeRead ? [{ label: t('navigation.compliance'), icon: IconChecklist, link: '/compliance' }] : []),
+    ...(hasComplianceScopeList ? [{ label: t('navigation.compliance'), icon: IconChecklist, link: '/compliance' }] : []),
+    ...(hasDocumentsList ? [{ label: t('navigation.documents'), icon: IconFile, link: '/documents' }] : []),
     { label: t('navigation.analytics'), icon: IconPresentationAnalytics, link: '/analytics' },
     { label: t('navigation.contracts'), icon: IconFileAnalytics, link: '/contracts' },
     { label: t('navigation.settings'), icon: IconAdjustments, link: '/settings' },
-    {
-      label: t('navigation.security'),
-      icon: IconLock,
-      links: [
-        { label: t('security.enable2FA'), link: '/' },
-        { label: t('security.changePassword'), link: '/' },
-        { label: t('security.recoveryCodes'), link: '/' },
-      ],  
-    },
+
   ];
 
   const links = mockdata.map((item) => (
@@ -92,6 +84,7 @@ export function Navbar() {
             {!isCollapsed && <Code fw={700}>v0.1.0</Code>}
             <ActionIcon
               variant="light"
+              color="primary"
               aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               onClick={toggleCollapsed}
             >

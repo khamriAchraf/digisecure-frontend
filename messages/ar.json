@@ -7,7 +7,8 @@
     "contracts": "العقود",
     "settings": "الإعدادات",
     "security": "الأمان",
-    "compliance": "الامتثال"
+    "compliance": "الامتثال",
+    "documents": "الوثائق"
   },
   "assets": {
     "computers": "الحواسيب",
@@ -22,11 +23,21 @@
     "group": "المجموعة",
     "roles": "الأدوار",
     "role": "الدور",
-    "dictionaries": "القواميس"
+    "dictionaries": "القواميس",
+    "recycle_bin": "المهملات"
   },
   "compliance": {
     "scopes": "مجالات",
-    "scope": "مجال"
+    "scope": "مجال",
+    "attachDocument": "إرفاق مستند",
+    "manageNotifications": "إدارة الإشعارات",
+    "changeStatus": "تغيير الحالة",
+    "attachedDocuments": "المستندات المرفقة",
+    "noDocumentsAttached": "لا توجد مستندات مرفقة",
+    "pickDocumentToAttach": "اختر مستندًا لإرفاقه",
+    "attachSelected": "إرفاق",
+    "documentsCoverage": "تغطية المستندات",
+    "progress": "التقدم"
   },
   "security": {
     "enable2FA": "تفعيل المصادقة الثنائية",
@@ -34,6 +45,7 @@
     "recoveryCodes": "رموز الاسترداد"
   },
   "common": {
+    "all": "الكل",
     "loading": "جاري التحميل...",
     "save": "حفظ",
     "cancel": "إلغاء",
@@ -103,7 +115,8 @@
     "settings": "الإعدادات",
     "login": "تسجيل الدخول",
     "register": "التسجيل",
-    "new": "جديد"
+    "new": "جديد",
+    "recycle_bin": "المهملات"
   },
   "datatable": {
     "searchPlaceholder": "بحث...",
@@ -174,7 +187,29 @@
     "virtual_machines": "الأجهزة الافتراضية",
     "network_device": "الأجهزة الشبكية",
     "network_devices": "الأجهزة الشبكية",
-    "software": "البرمجيات"
+    "software": "البرمجيات",
+    "compliant": "متوافق",
+    "not_compliant": "غير متوافق",
+    "last_review": "آخر مراجعة",
+    "next_review": "المراجعة التالية",
+    "name": "الاسم",
+    "recycleBin": "المهملات",
+    "recycleBinGroups": "المجموعات المحذوفة",
+    "recycleBinUsers": "المستخدمون المحذوفون",
+    "recycleBinComputers": "الحواسيب المحذوفة",
+    "recycleBinNetworkDevices": "الأجهزة الشبكية المحذوفة",
+    "recycleBinVirtualMachines": "الأجهزة الافتراضية المحذوفة",
+    "recycleBinSoftware": "البرمجيات المحذوفة",
+    "recycleBinCertificateKeys": "الشهادات/المفاتيح المحذوفة",
+    "bulkActions": "إجراءات مجمعة",
+    "deleteAll": "حذف الكل",
+    "import": "استيراد",
+    "updatedAt": "تاريخ التحديث",
+    "createdAt": "تاريخ الإنشاء",
+    "certificate_keys": "الشهادات/المفاتيح",
+    "serial_number": "الرقم التسلسلي",
+    "usersCount": "عدد المستخدمين",
+    "assetsCount": "عدد الأصول"
   },
   "forms": {
     "errors": {
@@ -199,7 +234,9 @@
       "backup": "النسخ الاحتياطي",
       "authentication": "المصادقة",
       "monitoring": "المراقبة",
-      "lifecycle": "دورة الحياة"
+      "lifecycle": "دورة الحياة",
+      "software_versions": "الإصدارات",
+      "documents": "المستندات"
     },
     "group": {
       "create": {
@@ -1599,7 +1636,90 @@
           "help_text": "ما إذا كان استبدال هذه البرمجية مخطط."
         }
       }
+    },
+    "certificate_key": {
+      "create": {
+        "title": "إنشاء شهادة/مفتاح",
+        "description": "إنشاء شهادة/مفتاح جديد في النظام"
+      },
+      "fields": {
+        "name": {
+          "label": "الاسم",
+          "placeholder": "أدخل اسم الشهادة/المفتاح",
+          "help_text": "اسم الشهادة/المفتاح."
+        },
+        "cert_type": {
+          "label": "نوع الشهادة",
+          "placeholder": "اختر نوع الشهادة",
+          "help_text": "نوع الشهادة.",
+          "options": {
+            "certificate": "شهادة",
+            "private_key": "مفتاح خاص",
+            "public_key": "مفتاح عام",
+            "ssh_key": "مفتاح SSH",
+            "api": "واجهة برمجة تطبيقات",
+            "other": "أخرى"
+          }
+        },
+        "algorithm": {
+          "label": "الخوارزمية",
+          "placeholder": "اختر الخوارزمية",
+          "help_text": "الخوارزمية المستخدمة للشهادة.",
+          "options": {
+            "rsa": "RSA",
+            "ecdsa": "ECDSA",
+            "ecc": "ECC",
+            "dsa": "DSA",
+            "ed25519": "Ed25519",
+            "other": "أخرى"
+          }
+        },
+        "storage_location": {
+          "label": "موقع التخزين",
+          "placeholder": "اختر موقع التخزين",
+          "help_text": "مكان تخزين الشهادة."
+        },
+        "issuer": {
+          "label": "الجهة المصدرة",
+          "placeholder": "أدخل الجهة المصدرة للشهادة",
+          "help_text": "الجهة المصدرة للشهادة."
+        },
+        "subject": {
+          "label": "الموضوع",
+          "placeholder": "أدخل موضوع الشهادة",
+          "help_text": "موضوع الشهادة."
+        },
+        "expiration_date": {
+          "label": "تاريخ الانتهاء",
+          "placeholder": "اختر تاريخ الانتهاء",
+          "help_text": "تاريخ انتهاء الشهادة."
+        },
+        "cert_status": {
+          "label": "حالة الشهادة",
+          "placeholder": "اختر حالة الشهادة",
+          "help_text": "حالة الشهادة.",
+          "options": {
+            "valid": "سارية",
+            "invalid": "غير صالحة",
+            "expired": "منتهية",
+            "revoked": "ملغاة",
+            "pending": "قيد الانتظار"
+          }
+        }
+      }
+    },
+    "documents": {
+      "create": {
+        "title": "إنشاء مستند",
+        "description": "إنشاء مستند جديد في النظام"
+      },
+      "attach": "إرفاق مستند"
     }
+  },
+  "modals": {
+    "add_version": "إضافة إصدار برمجي",
+    "version_details": "تفاصيل الإصدار",
+    "pick_document": "اختر مستندًا"
   },
   "relationships": {
     "groups": "المجموعات",
@@ -1657,4 +1777,4 @@
       "success": "تم إنشاء {resource} بنجاح!"
     }
   }
-} 
+}

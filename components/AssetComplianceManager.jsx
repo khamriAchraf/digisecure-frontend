@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useCallback } from 'react';
-import { Card, Group, Stack, Text, ThemeIcon, Button, SimpleGrid, Collapse, Tooltip, Anchor, Modal, MultiSelect, Loader, Badge, ActionIcon } from '@mantine/core';
+import { Card, Group, Stack, Text, ThemeIcon, Button, SimpleGrid, Collapse, Tooltip, Anchor, Modal, MultiSelect, Loader, Badge, ActionIcon, Switch } from '@mantine/core';
 import { useMantineTheme, useComputedColorScheme } from '@mantine/core';
 import Link from 'next/link';
 import { IconChevronDown, IconExternalLink, IconPlus, IconShieldCheck, IconCreditCard, IconScale, IconTrash } from '@tabler/icons-react';
 import { useAllComplianceScopes, useAsset } from '@/fetchers';
-import { useAddAssetToComplianceScope, useRemoveAssetFromComplianceScope } from '@/mutations';
+import { useAddAssetToComplianceScope, useRemoveAssetFromComplianceScope, useUpdateAssetScopeCompliance } from '@/mutations';
 import { PERMISSIONS, useHasPermission, useUserPermissions } from '@/hooks/usePermissions';
 
 // Expects an assetId and fetches asset details internally
@@ -36,6 +36,7 @@ const AssetComplianceManager = ({ assetId, assetType }) => {
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [selectedScopeIds, setSelectedScopeIds] = useState([]);
     const canManageCompliance = useHasPermission(PERMISSIONS.ASSET_COMPLIANCE_MANAGE);
+    const canCheckCompliance = useHasPermission(PERMISSIONS.ASSET_COMPLIANCE_CHECK);
 
     const addMutation = useAddAssetToComplianceScope({
         successNotification: {
@@ -46,6 +47,11 @@ const AssetComplianceManager = ({ assetId, assetType }) => {
         successNotification: {
             message: 'Scope removed from asset successfully.',
             color: 'red',
+        },
+    });
+    const updateComplianceMutation = useUpdateAssetScopeCompliance({
+        successNotification: {
+            message: 'Compliance status updated.',
         },
     });
 
@@ -83,6 +89,20 @@ const AssetComplianceManager = ({ assetId, assetType }) => {
         [assetId, removeMutation, assetMutate]
     );
 
+    const handleToggleCompliance = useCallback(
+        async (scopeId, nextValue) => {
+            if (!assetId) return;
+            await updateComplianceMutation.mutate({
+                assetId: Number(assetId),
+                scopeId: Number(scopeId),
+                compliant: !!nextValue,
+                assetType,
+            });
+            await assetMutate();
+        },
+        [assetId, assetType, updateComplianceMutation, assetMutate]
+    );
+
     const grid = useMemo(() => (
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="lg">
             {(assetLoading ? [] : activeScopes).map((scope) => {
@@ -96,19 +116,33 @@ const AssetComplianceManager = ({ assetId, assetType }) => {
                         padding="lg"
                         onMouseEnter={() => setHoveredCardId(scope.id)}
                         onMouseLeave={() => setHoveredCardId((current) => (current === scope.id ? null : current))}
-                        style={{
+                            style={{
                             borderColor:
                                 hoveredCardId === scope.id
-                                    ? theme.colors.blue[colorScheme === 'dark' ? 5 : 6]
+                                    ? theme.colors[theme.primaryColor][colorScheme === 'dark' ? 5 : 6]
                                     : undefined,
                             transition: 'border-color 150ms ease',
                         }}
                     >
                         <Group justify="space-between" align="flex-start">
                             <Group gap="sm">
-                                <ThemeIcon radius="md" size="lg" variant="light" color={isOpen ? 'blue' : 'gray'}>
-                                    <Icon size={18} />
-                                </ThemeIcon>
+                                <Group gap="sm" justify="space-between" style={{ width: '100%' }}>
+                                    <ThemeIcon radius="md" size="lg" variant="light" color={isOpen ? 'primary' : 'gray'}>
+                                        <Icon size={18} />
+                                    </ThemeIcon>
+                                    
+                                {canManageCompliance && (
+                                    <ActionIcon
+                                        variant="subtle"
+                                        color="red"
+                                        aria-label="Remove scope"
+                                        onClick={() => handleRemoveScope(scope.id)}
+                                        loading={removeMutation.isLoading}
+                                    >
+                                        <IconTrash size={16} />
+                                    </ActionIcon>
+                                )}
+                                </Group>
                                 <Stack gap={2}>
                                     <Text fw={600}>{scope.name}</Text>
                                     {scope.description && (
@@ -118,6 +152,8 @@ const AssetComplianceManager = ({ assetId, assetType }) => {
                                     )}
                                 </Stack>
                             </Group>
+                            <Badge key={scope.id} variant="light" color={scope.compliant ? 'green' : 'red'} size="sm">{scope.compliant ? 'Compliant' : 'Non-compliant'}</Badge>
+
                             <Group gap={6} wrap="nowrap" justify="space-between" style={{ width: '100%' }}>
                                 {scope.reference_url && (
                                     <Tooltip label="Reference">
@@ -135,20 +171,19 @@ const AssetComplianceManager = ({ assetId, assetType }) => {
                                 >
                                     {isOpen ? 'Hide details' : 'Show more'}
                                 </Button>
-                                {canManageCompliance && (
-                                    <ActionIcon
-                                        variant="subtle"
-                                        color="red"
-                                        aria-label="Remove scope"
-                                        onClick={() => handleRemoveScope(scope.id)}
-                                        loading={removeMutation.isLoading}
-                                    >
-                                        <IconTrash size={16} />
-                                    </ActionIcon>
+                                {canCheckCompliance && (
+                                    <Tooltip label="Mark compliant">
+                                        <Switch
+                                            size="xs"
+                                            checked={!!scope.compliant}
+                                            onClick={(e) => e.stopPropagation?.()}
+                                            onChange={(e) => handleToggleCompliance(scope.id, e.currentTarget.checked)}
+                                        />
+                                    </Tooltip>
                                 )}
                             </Group>
                         </Group>
-
+                                
                         <Collapse in={isOpen} transitionDuration={150}>
                             <Stack gap="sm" mt="md">
                                 <Group gap="xs">
@@ -196,7 +231,7 @@ const AssetComplianceManager = ({ assetId, assetType }) => {
 
                 <Card onClick={() => setAddModalOpen(true)} withBorder radius="md" padding="lg" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 140, cursor: 'pointer', backgroundColor: 'transparent' }}>
                     <Stack align="center" gap="xs">
-                        <ThemeIcon size="xl" radius="xl" variant="light" color="blue">
+                        <ThemeIcon size="xl" radius="xl" variant="light" color="primary">
                             <IconPlus size={20} />
                         </ThemeIcon>
                         {scopesLoading && <Loader size="sm" />}

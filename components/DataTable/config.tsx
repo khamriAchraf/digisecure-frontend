@@ -1,7 +1,8 @@
 import React from 'react';
 import { TableColumn } from '../../types/utils';
-import { User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine, NetworkDevice, Software } from '../../types/models';
-import { IconUser, IconShield, IconUsers, IconDeviceDesktop, IconCategory, IconBuilding, IconMapPin, IconDeviceLaptop, IconApps } from '@tabler/icons-react';
+import { User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine, NetworkDevice, Software, CertificateKey } from '../../types/models';
+import { IconUser, IconShield, IconUsers, IconDeviceDesktop, IconRouter, IconCategory, IconBuilding, IconMapPin, IconDeviceLaptop, IconApps, IconNetwork, IconKey } from '@tabler/icons-react';
+import { Text } from '@mantine/core';
 
 // Base configuration interface
 export interface DataTableConfig<T> {
@@ -40,31 +41,18 @@ export const createUserConfig = (t: (key: string) => string): DataTableConfig<Us
       width: 80,
     },
     {
-      key: 'full_name',
-      label: t('datatable.fullName'),
-      sortable: true,
-      filterable: true,
-      render: (value: any, row: User) => value || row.username || t('datatable.na'),
-    },
-    {
-      key: 'email',
-      label: t('common.email'),
-      sortable: true,
-      filterable: true,
-    },
-    {
-      key: 'phone',
-      label: t('datatable.phone'),
+      key: 'username',
+      label: t('common.username'),
       sortable: false,
       filterable: true,
       render: (value: any) => value || t('datatable.na'),
     },
     {
-      key: 'location',
-      label: t('datatable.location'),
+      key: 'role',
+      label: t('datatable.role.name'),
       sortable: true,
       filterable: true,
-      render: (value: any) => value || t('datatable.na'),
+      render: (value: any) => value?.name || t('datatable.na'),
     },
     {
       key: 'status',
@@ -85,7 +73,7 @@ export const createUserConfig = (t: (key: string) => string): DataTableConfig<Us
   sortableFields: ['id', 'full_name', 'email', 'phone', 'location', 'status'],
   defaultSort: { field: 'id', order: 'asc' },
   defaultPageSize: 20,
-  pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000, 99999],
+  pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
 });
 
 // Role configuration factory
@@ -158,36 +146,20 @@ export const createGroupConfig = (t: (key: string) => string): DataTableConfig<G
       filterable: true,
     },
     {
-      key: 'contain_users',
-      label: t('datatable.containsUsers'),
+      key: 'user_count',
+      label: t('datatable.usersCount'),
       sortable: true,
       filterable: true,
-      render: (value: any) => (
-        <span style={{ 
-          color: value ? 'green' : 'gray',
-          fontWeight: 'bold'
-        }}>
-          {value ? t('common.yes') : t('common.no')}
-        </span>
-      ),
     },
     {
-      key: 'contain_items',
-      label: t('datatable.containsItems'),
+      key: 'asset_count',
+      label: t('datatable.assetsCount'),
       sortable: true,
       filterable: true,
-      render: (value: any) => (
-        <span style={{ 
-          color: value ? 'green' : 'gray',
-          fontWeight: 'bold'
-        }}>
-          {value ? t('common.yes') : t('common.no')}
-        </span>
-      ),
     },
   ],
   searchableFields: ['name', 'description', 'type'],
-  sortableFields: ['id', 'name', 'type', 'contain_users', 'contain_items'],
+  sortableFields: ['id', 'name', 'type', 'user_count', 'asset_count'],
   defaultSort: { field: 'name', order: 'asc' },
   defaultPageSize: 20,
   pageSizeOptions: [5, 10, 20, 50, 100],
@@ -398,62 +370,52 @@ export const createComputerConfig = (t: (key: string) => string): DataTableConfi
   columns: [
     { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
     { key: 'name', label: t('common.name'), sortable: true, filterable: true },
-    { key: 'serial_number', label: t('datatable.serialNumber'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'inventory_number', label: t('datatable.inventoryNumber'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'status', label: t('common.status'), sortable: true, filterable: true, render: (value: any) => (<span style={{ color: value === 'active' ? 'green' : value === 'maintenance' ? 'orange' : 'red', fontWeight: 'bold' }}>{value?.charAt(0).toUpperCase() + value?.slice(1) || t('datatable.na')}</span>) },
-    { key: 'cpu', label: t('datatable.cpu'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'ram', label: t('datatable.ram'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'storage', label: t('datatable.storage'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'os', label: t('datatable.os'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'mac_address', label: t('datatable.macAddress'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'ip_address', label: t('datatable.ipAddress'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'model', label: t('datatable.model'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'hostname', label: t('datatable.hostname'), sortable: true, filterable: true, render: (value: any) => value || t('datatable.na') },
-    { key: 'manufacturer', label: t('datatable.manufacturer'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
-    { key: 'location', label: t('datatable.location'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
-    { key: 'group', label: t('datatable.group'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
-    { key: 'assigned_user', label: t('datatable.assignedTo'), sortable: false, filterable: true, render: (value: any) => value?.full_name || value?.username || t('datatable.na') },
+    { key: 'serial_number', label: t('datatable.serial_number'), sortable: true, filterable: true },
+    { key: 'updated_at', label: t('datatable.updatedAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+    { key: 'created_at', label: t('datatable.createdAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+    
   ],
-  searchableFields: ['name', 'serial_number', 'inventory_number', 'status', 'cpu', 'ram', 'storage', 'os', 'mac_address', 'ip_address', 'model', 'hostname'],
-  sortableFields: ['id', 'name', 'serial_number', 'inventory_number', 'status', 'cpu', 'ram', 'storage', 'os', 'mac_address', 'ip_address', 'model', 'hostname'],
-  defaultSort: { field: 'name', order: 'asc' },
+  searchableFields: ['name', 'serial_number'],
+  sortableFields: ['id', 'name', 'serial_number', 'updated_at', 'created_at'],
+  defaultSort: { field: 'updated_at', order: 'desc' },
   defaultPageSize: 20,
-  pageSizeOptions: [5, 10, 20, 50, 100],
+  pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
 });
 
 // Software configuration factory
 export const createSoftwareConfig = (t:(k:string)=>string): DataTableConfig<Software>=>({
   type:'software',
   icon: IconApps,
-  columns:[
-    {key:'id',label:t('datatable.id'),sortable:true,width:80},
-    {key:'name',label:t('common.name'),sortable:true,filterable:true},
-    {key:'vendor',label:t('datatable.vendor'),sortable:true,filterable:true,render:(v:any)=>v||t('datatable.na')},
-    {key:'software_type',label:t('datatable.softwareType'),sortable:true,filterable:true,render:(v:any)=>v||t('datatable.na')},
+  columns: [
+    { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
+    { key: 'name', label: t('common.name'), sortable: true, filterable: true },
+    { key: 'serial_number', label: t('datatable.serial_number'), sortable: true, filterable: true },
+    { key: 'updated_at', label: t('datatable.updatedAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+    { key: 'created_at', label: t('datatable.createdAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
   ],
-  searchableFields:['name','vendor','software_type'],
-  sortableFields:['id','name','vendor','software_type'],
-  defaultSort:{field:'name',order:'asc'},
-  defaultPageSize:20,
-  pageSizeOptions:[5,10,20,50,100],
+  searchableFields: ['name', 'serial_number'],
+  sortableFields: ['id', 'name', 'serial_number', 'updated_at', 'created_at'],
+  defaultSort: { field: 'updated_at', order: 'desc' },
+  defaultPageSize: 20,
+  pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
 });
 
 // Network Device configuration factory
 export const createNetworkDeviceConfig = (t: (key: string) => string): DataTableConfig<NetworkDevice> => ({
     type: 'network_devices',
-    icon: IconDeviceDesktop,
+    icon: IconRouter,
     columns: [
       { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
       { key: 'name', label: t('common.name'), sortable: true, filterable: true },
-      { key: 'device_type', label: t('datatable.deviceType'), sortable: true, filterable: true, render: (v:any)=>v||t('datatable.na') },
-      { key: 'ip_address', label: t('datatable.ipAddress'), sortable: true, filterable: true, render:(v:any)=>v||t('datatable.na')},
-      { key: 'status', label: t('common.status'), sortable: true, filterable: true, render:(v:any)=>v||t('datatable.na')},
+      { key: 'serial_number', label: t('datatable.serial_number'), sortable: true, filterable: true },
+      { key: 'updated_at', label: t('datatable.updatedAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+      { key: 'created_at', label: t('datatable.createdAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
     ],
-    searchableFields: ['name','device_type','ip_address','status'],
-    sortableFields: ['id','name','device_type','ip_address','status'],
-    defaultSort: { field: 'name', order: 'asc' },
+    searchableFields: ['name', 'serial_number'],
+    sortableFields: ['id', 'name', 'serial_number', 'updated_at', 'created_at'],
+    defaultSort: { field: 'updated_at', order: 'desc' },
     defaultPageSize: 20,
-    pageSizeOptions: [5,10,20,50,100],
+    pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
 });
 
 // Virtual Machine configuration factory
@@ -463,16 +425,35 @@ export const createVirtualMachineConfig = (t: (key: string) => string): DataTabl
     columns: [
       { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
       { key: 'name', label: t('common.name'), sortable: true, filterable: true },
-      { key: 'status', label: t('common.status'), sortable: true, filterable: true, render: (value: any) => (<span style={{ color: value === 'active' ? 'green' : value === 'maintenance' ? 'orange' : 'red', fontWeight: 'bold' }}>{value?.charAt(0).toUpperCase() + value?.slice(1) || t('datatable.na')}</span>) },
-      { key: 'group', label: t('datatable.group'), sortable: false, filterable: true, render: (value: any) => value?.name || t('datatable.na') },
-      { key: 'assigned_user', label: t('datatable.assignedTo'), sortable: false, filterable: true, render: (value: any) => value?.full_name || value?.username || t('datatable.na') },
+      { key: 'serial_number', label: t('datatable.serial_number'), sortable: true, filterable: true },
+      { key: 'updated_at', label: t('datatable.updatedAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+      { key: 'created_at', label: t('datatable.createdAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
     ],
-    searchableFields: ['name'],
-    sortableFields: ['id', 'name', 'status', 'cpu_cores', 'memory_mb', 'storage_gb', 'os_type', 'ip_address', 'power_state', 'hypervisor_type'],
-    defaultSort: { field: 'name', order: 'asc' },
+    searchableFields: ['name', 'serial_number'],
+    sortableFields: ['id', 'name', 'serial_number', 'updated_at', 'created_at'],
+    defaultSort: { field: 'updated_at', order: 'desc' },
     defaultPageSize: 20,
-    pageSizeOptions: [5, 10, 20, 50, 100],
+    pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
   });
+
+// Certificate key configuration factory
+
+export const createCertificateKeyConfig = (t: (key: string) => string): DataTableConfig<CertificateKey> => ({
+  type: 'certificate_keys',
+  icon: IconKey,
+  columns: [
+    { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
+    { key: 'name', label: t('common.name'), sortable: true, filterable: true },
+    { key: 'serial_number', label: t('datatable.serial_number'), sortable: true, filterable: true },
+    { key: 'updated_at', label: t('datatable.updatedAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+    { key: 'created_at', label: t('datatable.createdAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+  ],
+  searchableFields: ['name', 'serial_number'],
+  sortableFields: ['id', 'name', 'serial_number', 'updated_at', 'created_at'],
+  defaultSort: { field: 'updated_at', order: 'desc' },
+  defaultPageSize: 20,
+  pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
+});
 
 // Configuration registry factory
 export const createDataTableConfigs = (t: (key: string) => string) => ({
@@ -487,9 +468,10 @@ export const createDataTableConfigs = (t: (key: string) => string) => ({
   asset_types: createAssetTypeConfig(t),
   manufacturers: createManufacturerConfig(t),
   locations: createLocationConfig(t),
+  certificate_keys: createCertificateKeyConfig(t),
 });
 
-export type DataType = 'users' | 'roles' | 'groups' | 'computers' | 'network_devices' | 'software' | 'asset_types' | 'manufacturers' | 'locations' | 'virtual_machines';
+export type DataType = 'users' | 'roles' | 'groups' | 'computers' | 'network_devices' | 'software' | 'asset_types' | 'manufacturers' | 'locations' | 'virtual_machines' | 'certificate_keys';
 
 // Helper function to get configuration for a data type
 export function getDataTableConfig<T>(type: DataType, t: (key: string) => string): DataTableConfig<T> {
@@ -499,6 +481,6 @@ export function getDataTableConfig<T>(type: DataType, t: (key: string) => string
 
 // Helper function to check if a data type is supported
 export function isSupportedDataType(type: string): type is DataType {
-  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'computers', 'network_devices', 'software', 'asset_types', 'manufacturers', 'locations', 'virtual_machines'];
+  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'computers', 'network_devices', 'software', 'asset_types', 'manufacturers', 'locations', 'virtual_machines', 'certificate_keys'];
   return supportedTypes.includes(type as DataType);
 } 

@@ -1,10 +1,13 @@
-// Import styles of packages that you've installed.
-// All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/nprogress/styles.css';
+import 'mantine-contextmenu/styles.layer.css';
+import '@mantine/dates/styles.css';
 import { SessionProvider } from 'next-auth/react';
+import { ContextMenuProvider } from 'mantine-contextmenu';
 
 import type { AppProps } from 'next/app';
+import { NavigationProgress } from '@mantine/nprogress';
 import { createTheme, MantineProvider, AppShell } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import { useDisclosure } from '@mantine/hooks';
@@ -16,9 +19,10 @@ import { Header } from '../../components/Header';
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 import { SidebarProvider, useSidebar } from '../contexts/SidebarContext';
 import { ThemeProvider, useTheme } from '../contexts/ThemeContext';
+import { ModalsProvider } from '@mantine/modals';
 
 const theme = createTheme({
-  /** Put your mantine theme override here */
+
   primaryColor: 'blue',
   fontFamily: 'Inter, sans-serif',
   components: {
@@ -39,22 +43,11 @@ function AppContent({ Component, pageProps }: AppProps) {
   const { locale } = useLanguage();
   const { width } = useSidebar();
 
-  // Handle authentication redirects
   useEffect(() => {
-    if (status === 'loading') return; // Still loading
-    console.log('session', session);
-    console.log('status', status);
-    console.log('router.pathname', router.pathname);
-    // If not authenticated and not on auth pages, redirect to login
     if (!session && router.pathname !== '/login' && router.pathname !== '/register') {
       router.push('/login');
     }
   }, [session, status, router]);
-
-  // Show loading state while checking authentication
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
 
   // Show auth pages without AppShell layout
   if (router.pathname === '/login' || router.pathname === '/register') {
@@ -84,22 +77,23 @@ function AppContent({ Component, pageProps }: AppProps) {
       </AppShell>
     );
   }
-
-  // Show loading while redirecting
-  return <div>Loading...</div>;
 }
 
 function AppWithDirection(props: AppProps) {
   const { locale } = useLanguage();
-  
+
   return (
     <MantineProvider theme={theme}>
-      <Notifications position="bottom-right" zIndex={2077} />
-      <ThemeProvider>
-        <div dir={locale === 'ar' ? 'rtl' : 'ltr'}>
-          <AppContent {...props} />
-        </div>
-      </ThemeProvider>
+      <ModalsProvider>
+        <NavigationProgress />
+        <Notifications position="bottom-right" zIndex={2077} />
+        <ThemeProvider>
+          <ContextMenuProvider>
+            <div dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+              <AppContent {...props} />
+            </div>
+          </ContextMenuProvider>
+        </ThemeProvider></ModalsProvider>
     </MantineProvider>
   );
 }
