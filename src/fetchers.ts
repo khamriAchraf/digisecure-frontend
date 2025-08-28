@@ -5,7 +5,7 @@ import { useSession, getSession, signOut } from 'next-auth/react';
 import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine, ComplianceScope, ComplianceScopeAsset, Document, DocumentFolder, DocumentFolderNode, FolderContents, DocumentVersion, ComplianceScopeControl, CertificateKey, SoftwareVersion } from '../types/models';
 import { PaginationParams, PersistedTableConfig } from '../types/utils';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000/api/v1';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
 
 const extractErrorMessage = (info: any, fallback: string): string => {
   if (!info) return fallback;
