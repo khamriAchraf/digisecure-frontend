@@ -125,27 +125,27 @@ export function useDataTable<T extends { id: number | string }>({
   // Compute endpoint from data type and recycle bin mode
   const API_BASE = process.env.NEXT_PUBLIC_API_URL
   const basePathMap: Record<DataType, string> = {
-    users: `${API_BASE}/users`,
-    roles: `${API_BASE}/roles`,
-    groups: `${API_BASE}/groups`,
-    computers: `${API_BASE}/assets/computers`,
-    network_devices: `${API_BASE}/assets/network_devices`,
-    virtual_machines: `${API_BASE}/assets/virtual_machines`,
-    software: `${API_BASE}/assets/software`,
-    certificate_keys: `${API_BASE}/assets/certificate_keys`,
-    asset_types: `${API_BASE}/asset-types`,
-    manufacturers: `${API_BASE}/reference_data/manufacturers`,
-    locations: `${API_BASE}/reference_data/locations`,
+    users: `/users`,
+    roles: `/roles`,
+    groups: `/groups`,
+    computers: `/assets/computers`,
+    network_devices: `/assets/network_devices`,
+    virtual_machines: `/assets/virtual_machines`,
+    software: `/assets/software`,
+    certificate_keys: `/assets/certificate_keys`,
+    asset_types: `/asset-types`,
+    manufacturers: `/reference_data/manufacturers`,
+    locations: `/reference_data/locations`,
   };
 
   const recyclePathMap: Partial<Record<DataType, string>> = {
-    users: `${API_BASE}/recycle_bin/users`,
-    groups: `${API_BASE}/recycle_bin/groups`,
-    computers: `${API_BASE}/recycle_bin/assets/computers`,
-    network_devices: `${API_BASE}/recycle_bin/assets/network_devices`,
-    virtual_machines: `${API_BASE}/recycle_bin/assets/virtual_machines`,
-    software: `${API_BASE}/recycle_bin/assets/software`,
-    certificate_keys: `${API_BASE}/recycle_bin/assets/certificate_keys`,
+    users: `/recycle_bin/users`,
+    groups: `/recycle_bin/groups`,
+    computers: `/recycle_bin/assets/computers`,
+    network_devices: `/recycle_bin/assets/network_devices`,
+    virtual_machines: `/recycle_bin/assets/virtual_machines`,
+    software: `/recycle_bin/assets/software`,
+    certificate_keys: `/recycle_bin/assets/certificate_keys`,
   };
 
   const endpointPath = isRecycleBin
