@@ -252,6 +252,12 @@ export interface Document extends BaseModel {
   description?: string;
   folder_id?: number;
   id: number;
+  review_status: string;
+  review_notes: string;
+  review_frequency_months: number;
+  review_date: string;
+  user_id: number;
+  user: User;
   created_at: string; // ISO datetime string
   updated_at: string; // ISO datetime string
   versions?: DocumentVersion[]; // Present on single fetch
@@ -586,6 +592,18 @@ export interface ComplianceScopeControl extends BaseModel {
 
   document_count?: number;
   documents?: Document[];
+}
+
+export interface ScopeComplianceBreakdown extends BaseModel {
+  scope_name: string;
+  document_control_percentage: number;
+  asset_compliance_percentage: number;
+  total_compliance_percentage: number;
+}
+
+export interface ScopesComplianceSummary extends BaseModel {
+  scopes: Record<number, ScopeComplianceBreakdown>;
+  overall_progress_percentage: number;
 }
 
 // All types are already exported as interfaces above 

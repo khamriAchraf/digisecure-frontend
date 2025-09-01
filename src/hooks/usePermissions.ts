@@ -240,6 +240,14 @@ export const PERMISSIONS = {
   RECYCLE_BIN_USER_PURGE: "recycle_bin_user:purge",
   RECYCLE_BIN_USER_RESTORE: "recycle_bin_user:restore",
 
+  // Analytics permissions
+  ANALYTICS_READ: "analytics:read",
+  ANALYTICS_LIST: "analytics:list",
+  ANALYTICS_CREATE: "analytics:create",
+  ANALYTICS_UPDATE: "analytics:update",
+  ANALYTICS_DELETE: "analytics:delete",
+  ANALYTICS_PURGE: "analytics:purge",
+
 
   
   

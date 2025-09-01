@@ -47,7 +47,11 @@ const ComplianceControls: React.FC<ComplianceControlsProps> = ({ scopeId }) => {
           </Stack>
         </Grid.Col>
         <Grid.Col span={8}>
-          {selectedControl && <ComplianceDocumentDetails control={selectedControl} setSelectedControl={setSelectedControl} />}
+          {selectedControl && (
+            <div style={{ position: 'sticky', top: 80, height: 'fit-content' }}>
+              <ComplianceDocumentDetails control={selectedControl} setSelectedControl={setSelectedControl} />
+            </div>
+          )}
         </Grid.Col>
       </Grid>
     </React.Fragment>

@@ -1,13 +1,14 @@
-import React, { useMemo, useState } from 'react';
-import { Paper, Group, Text, ActionIcon, Tooltip, Tabs, Table, Button, Loader, Alert, Box } from '@mantine/core';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Paper, Group, Text, ActionIcon, Tooltip, Tabs, Table, Button, Loader, Alert, Box, Card, Grid, TextInput, Select, Textarea, NumberInput } from '@mantine/core';
 import { IconDownload, IconUpload, IconTrash, IconEdit, IconArrowsMove } from '@tabler/icons-react';
-import { useDocument, useDocumentVersions, downloadDocumentVersion } from '../../src/fetchers';
+import { useDocument, useDocumentVersions, downloadDocumentVersion, useUsers } from '../../src/fetchers';
 import { useHasPermission, PERMISSIONS } from '../../src/hooks/usePermissions';
 import { useDeleteDocument, useUploadDocumentVersion, useUpdateDocument } from '../../src/mutations';
 import VersionUploadModal from './VersionUploadModal';
 import RenameModal from './RenameModal';
 import MoveDocumentModal from './MoveDocumentModal';
 import type { DocumentVersion } from '../../types/models';
+import { DatePickerInput } from '@mantine/dates';
 
 interface DocumentDetailsPanelProps {
   documentId: number;
@@ -18,6 +19,52 @@ interface DocumentDetailsPanelProps {
 export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ documentId, onDeleted, onUpdated }) => {
   const { data: doc, isLoading: docLoading, mutate: refreshDoc } = useDocument(documentId);
   const { data: versions, isLoading: versionsLoading, mutate: refreshVersions } = useDocumentVersions(documentId);
+
+  const [form, setForm] = useState<Record<string, any>>({
+    description: doc?.description || '',
+    review_status: doc?.review_status || '',
+    review_notes: doc?.review_notes || '',
+    review_frequency_months: doc?.review_frequency_months || 0,
+    review_date: null as Date | null,
+    user_id: doc?.user_id || null,
+  });
+
+  const parseDate = (value?: string | null): Date | null => {
+    if (!value) return null;
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  };
+
+  useEffect(() => {
+    setForm({
+      description: doc?.description || '',
+      review_status: doc?.review_status || '',
+      review_notes: doc?.review_notes || '',
+      review_frequency_months: doc?.review_frequency_months || 0,
+      review_date: parseDate(doc?.review_date || null),
+      user_id: doc?.user_id || null,
+    });
+  }, [doc]);
+
+  const toValidDate = (value: unknown): Date | null => {
+    if (!value) return null;
+    if (value instanceof Date && !Number.isNaN(value.getTime())) return value;
+    try {
+      const parsed = new Date(value as any);
+      return Number.isNaN(parsed.getTime()) ? null : parsed;
+    } catch {
+      return null;
+    }
+  };
+
+  const formatDate = (value: unknown) => {
+    const d = toValidDate(value);
+    if (!d) return null;
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
 
   const canUpdate = useHasPermission(PERMISSIONS.DOCUMENTS_UPDATE);
   const canDelete = useHasPermission(PERMISSIONS.DOCUMENTS_DELETE);
@@ -30,6 +77,29 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
   const [renameOpen, setRenameOpen] = useState(false);
   const [moveOpen, setMoveOpen] = useState(false);
 
+  // Users dropdown search
+  const [userSearch, setUserSearch] = useState('');
+  const [debouncedUserSearch, setDebouncedUserSearch] = useState(userSearch);
+  useEffect(() => {
+    const h = setTimeout(() => setDebouncedUserSearch(userSearch), 300);
+    return () => clearTimeout(h);
+  }, [userSearch]);
+  const { data: usersData, isLoading: usersLoading } = useUsers({ page: 1, per_page: 1000, search: debouncedUserSearch });
+
+  const nextReviewDate: Date | null = useMemo(() => {
+    const d = form.review_date;
+    const freq = Number(form.review_frequency_months || 0);
+    if (!d || !freq || Number.isNaN(freq) || freq <= 0) return null;
+    const nd = new Date(d);
+    const day = nd.getDate();
+    nd.setMonth(nd.getMonth() + freq);
+    // Adjust if month rolled over
+    if (nd.getDate() !== day) {
+      nd.setDate(0);
+    }
+    return nd;
+  }, [form.review_date, form.review_frequency_months]);
+
   const latest = useMemo(() => {
     const list = versions || [];
     return list.slice().sort((a, b) => b.version_number - a.version_number)[0];
@@ -37,24 +107,24 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
 
   if (docLoading || versionsLoading) {
     return (
-      <Paper withBorder p="md">
+      <Card withBorder p="md">
         <Box p="md" style={{ display: 'flex', justifyContent: 'center' }}>
           <Loader />
         </Box>
-      </Paper>
+      </Card>
     );
   }
 
   if (!doc) {
     return (
-      <Paper withBorder p="md">
+      <Card withBorder p="md">
         <Alert color="red">Failed to load document</Alert>
-      </Paper>
+      </Card>
     );
   }
 
   return (
-    <Paper withBorder p="md">
+    <Card withBorder p="md">
       <Group justify="space-between" mb="sm">
         <Text fw={700}>{doc.name}</Text>
         <Group gap="xs">
@@ -131,7 +201,101 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
         </Tabs.Panel>
 
         <Tabs.Panel value="details" pt="sm">
-          <Text size="sm" c="dimmed">Coming soon…</Text>
+          <Grid>
+            <Grid.Col span={12}>
+              <Textarea
+                label="Description"
+                value={form.description}
+                onChange={(e) => setForm((f) => ({ ...f, description: e.currentTarget.value }))}
+                autosize
+                minRows={2}
+                disabled={!canUpdate}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Select
+                label="Review status"
+                data={[
+                  { value: 'Draft', label: 'Draft' },
+                  { value: 'Pending review', label: 'Pending review' },
+                  { value: 'Approved', label: 'Approved' },
+                  { value: 'Rejected', label: 'Rejected' },
+                ]}
+                value={form.review_status || null}
+                onChange={(val) => setForm((f) => ({ ...f, review_status: val }))}
+                allowDeselect
+                disabled={!canUpdate}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <DatePickerInput
+                label="Review date"
+                value={form.review_date}
+                onChange={(val) => setForm((f) => ({ ...f, review_date: (val as Date | null) }))}
+                valueFormat="YYYY-MM-DD"
+                disabled={!canUpdate}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <TextInput
+                label="Review frequency (months)"
+                value={String(form.review_frequency_months ?? '')}
+                readOnly
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <TextInput
+                label="Next review date"
+                value={formatDate(nextReviewDate) ?? ''}
+                readOnly
+              />
+            </Grid.Col>
+            <Grid.Col span={12}>
+              <Textarea
+                label="Review notes"
+                value={form.review_notes}
+                onChange={(e) => setForm((f) => ({ ...f, review_notes: e.currentTarget.value }))}
+                autosize
+                minRows={2}
+                disabled={!canUpdate}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Select
+                label="Assigned user"
+                searchable
+                data={(usersData?.data ?? []).map((u: any) => ({ value: String(u.id), label: u.full_name || u.username || u.email }))}
+                value={form.user_id != null ? String(form.user_id) : null}
+                onChange={(val) => setForm((f) => ({ ...f, user_id: val ? Number(val) : null }))}
+                searchValue={userSearch}
+                onSearchChange={setUserSearch}
+                rightSection={usersLoading ? <Loader size="xs" /> : undefined}
+                allowDeselect
+                disabled={!canUpdate}
+              />
+            </Grid.Col>
+            <Grid.Col span={12}>
+              <Group justify="flex-end">
+                <Button
+                  onClick={async () => {
+                    await updateDoc.mutate({
+                      id: doc.id,
+                      description: form.description,
+                      review_status: form.review_status,
+                      review_notes: form.review_notes,
+                      review_date: formatDate(form.review_date),
+                      user_id: form.user_id,
+                    } as any);
+                    await refreshDoc();
+                    onUpdated?.();
+                  }}
+                  disabled={!canUpdate}
+                >
+                  Save
+                </Button>
+              </Group>
+            </Grid.Col>
+          </Grid>
         </Tabs.Panel>
         <Tabs.Panel value="compliance" pt="sm">
           <Text size="sm" c="dimmed">Coming soon…</Text>
@@ -170,7 +334,7 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
           setMoveOpen(false);
         }}
       />
-    </Paper>
+    </Card>
   );
 };
 

@@ -37,6 +37,7 @@ export function Navbar() {
   const hasComplianceScopeList = useHasPermission(PERMISSIONS.COMPLIANCE_SCOPE_LIST);
   const hasRecycleBinUserList = useHasPermission(PERMISSIONS.RECYCLE_BIN_USER_LIST);
   const hasDocumentsList = useHasPermission(PERMISSIONS.DOCUMENTS_LIST);
+  const hasAnalyticsList = useHasPermission(PERMISSIONS.ANALYTICS_LIST);
 
   const adminLinks = [
     // Only show users link if user has user read permission
@@ -45,7 +46,7 @@ export function Navbar() {
   ];
 
   const mockdata = [
-    { label: t('navigation.dashboard'), icon: IconGauge, link: '/' },
+    ...(hasAnalyticsList ? [{ label: t('navigation.dashboards'), icon: IconGauge, links: [{ label: t('navigation.complianceDashboard'), link: '/' }, { label: t('navigation.assetsDashboard'), link: '/assets' }] }] : []),
     // Assets section - only show if user has asset read permission
     ...(hasComputersList || hasNetworkDevicesList || hasVirtualMachinesList || hasSoftwareList ? [{
       label: t('navigation.assets'),
@@ -65,7 +66,6 @@ export function Navbar() {
     }] : []),
     ...(hasComplianceScopeList ? [{ label: t('navigation.compliance'), icon: IconChecklist, link: '/compliance' }] : []),
     ...(hasDocumentsList ? [{ label: t('navigation.documents'), icon: IconFile, link: '/documents' }] : []),
-    { label: t('navigation.analytics'), icon: IconPresentationAnalytics, link: '/analytics' },
     { label: t('navigation.contracts'), icon: IconFileAnalytics, link: '/contracts' },
     { label: t('navigation.settings'), icon: IconAdjustments, link: '/settings' },
 

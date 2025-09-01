@@ -422,7 +422,6 @@ const DynamicEditForm: React.FC<DynamicEditFormProps> = ({
           <RelationshipWidget
             key={key}
             title={t(field.label_key ?? key)}
-            // Default fallbacks ensure component still renders if overrides missing
             currentItems={override?.currentItems ?? []}
             availableItems={override?.availableItems ?? []}
             onAdd={override?.onAdd ?? (() => Promise.resolve())}

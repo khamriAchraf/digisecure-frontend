@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
+import ComplianceDashboard from "../../components/Dashboards/ComplianceDashboard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,9 +34,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <h1>Welcome to XXX Dashboard</h1>
-        <p>This is your home page. Notice the breadcrumbs in the header showing your current location.</p>
-        <p>Try navigating to different pages using the sidebar to see the breadcrumbs update automatically!</p>
+        <ComplianceDashboard />
       </div>
     </>
   );

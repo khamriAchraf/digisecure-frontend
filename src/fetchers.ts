@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { useEffect } from 'react';
 import { notifications } from '@mantine/notifications';
 import { useSession, getSession, signOut } from 'next-auth/react';
-import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine, ComplianceScope, ComplianceScopeAsset, Document, DocumentFolder, DocumentFolderNode, FolderContents, DocumentVersion, ComplianceScopeControl, CertificateKey, SoftwareVersion } from '../types/models';
+import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine, ComplianceScope, ComplianceScopeAsset, Document, DocumentFolder, DocumentFolderNode, FolderContents, DocumentVersion, ComplianceScopeControl, CertificateKey, SoftwareVersion, ScopesComplianceSummary } from '../types/models';
 import { PaginationParams, PersistedTableConfig } from '../types/utils';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
@@ -1014,3 +1014,14 @@ export const useRootFolderDocuments = (enabled: boolean) => {
   return { data, isLoading, isError: error, mutate } as const;
 };
 
+export const useComplianceDashboard = () => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const { data, error, isLoading, mutate } = useSWR<ScopesComplianceSummary>(
+    `${API_BASE}/analytics/scopes/compliance`,
+    (url: string) => jsonFetcher(url, token)
+  );
+
+  return { data, isLoading, isError: error, mutate } as const;
+};

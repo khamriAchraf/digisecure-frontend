@@ -33,6 +33,11 @@ const theme = createTheme({
         },
       },
     },
+    DatePickerInput: {
+      defaultProps: {
+        valueFormat: 'DD-MM-YYYY',
+      },
+    },
   },
 });
 
