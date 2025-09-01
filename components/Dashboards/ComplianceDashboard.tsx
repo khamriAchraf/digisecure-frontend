@@ -67,7 +67,6 @@ const ComplianceDashboard = () => {
                                             value={overall}
                                             size={180}
                                             thickness={16}
-                                            valueFormat="percent"
                                             label={<Text fw={800} size="lg">{overall}%</Text>}
                                         />
                                     </Group>
