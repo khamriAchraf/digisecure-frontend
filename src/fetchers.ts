@@ -457,7 +457,6 @@ export const useUsersLegacy = () => {
   };
 };
 
-// Export helpers (fetcher & base URL) in case they are useful elsewhere
 export { jsonFetcher, API_BASE };
 
 // Table configuration fetchers

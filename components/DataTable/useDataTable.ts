@@ -123,29 +123,28 @@ export function useDataTable<T extends { id: number | string }>({
   }, [currentPage, pageSize, sortBy, sortOrder, searchQuery, filters]);
   
   // Compute endpoint from data type and recycle bin mode
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL
   const basePathMap: Record<DataType, string> = {
-    users: `/users`,
-    roles: `/roles`,
-    groups: `/groups`,
-    computers: `/assets/computers`,
-    network_devices: `/assets/network_devices`,
-    virtual_machines: `/assets/virtual_machines`,
-    software: `/assets/software`,
-    certificate_keys: `/assets/certificate_keys`,
-    asset_types: `/asset-types`,
-    manufacturers: `/reference_data/manufacturers`,
-    locations: `/reference_data/locations`,
+    users: `/users/`,
+    roles: `/roles/`,
+    groups: `/groups/`,
+    computers: `/assets/computers/`,
+    network_devices: `/assets/network_devices/`,
+    virtual_machines: `/assets/virtual_machines/`,
+    software: `/assets/software/`,
+    certificate_keys: `/assets/certificate_keys/`,
+    asset_types: `/asset-types/`,
+    manufacturers: `/reference_data/manufacturers/`,
+    locations: `/reference_data/locations/`,
   };
 
   const recyclePathMap: Partial<Record<DataType, string>> = {
-    users: `/recycle_bin/users`,
-    groups: `/recycle_bin/groups`,
-    computers: `/recycle_bin/assets/computers`,
-    network_devices: `/recycle_bin/assets/network_devices`,
-    virtual_machines: `/recycle_bin/assets/virtual_machines`,
-    software: `/recycle_bin/assets/software`,
-    certificate_keys: `/recycle_bin/assets/certificate_keys`,
+    users: `/recycle_bin/users/`,
+    groups: `/recycle_bin/groups/`,
+    computers: `/recycle_bin/assets/computers/`,
+    network_devices: `/recycle_bin/assets/network_devices/`,
+    virtual_machines: `/recycle_bin/assets/virtual_machines/`,
+    software: `/recycle_bin/assets/software/`,
+    certificate_keys: `/recycle_bin/assets/certificate_keys/`,
   };
 
   const endpointPath = isRecycleBin
