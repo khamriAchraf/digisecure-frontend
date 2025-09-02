@@ -138,13 +138,13 @@ export function useDataTable<T extends { id: number | string }>({
   };
 
   const recyclePathMap: Partial<Record<DataType, string>> = {
-    users: `/recycle_bin/users/`,
-    groups: `/recycle_bin/groups/`,
-    computers: `/recycle_bin/assets/computers/`,
-    network_devices: `/recycle_bin/assets/network_devices/`,
-    virtual_machines: `/recycle_bin/assets/virtual_machines/`,
-    software: `/recycle_bin/assets/software/`,
-    certificate_keys: `/recycle_bin/assets/certificate_keys/`,
+    users: `/recycle_bin/users`,
+    groups: `/recycle_bin/groups`,
+    computers: `/recycle_bin/assets/computers`,
+    network_devices: `/recycle_bin/assets/network_devices`,
+    virtual_machines: `/recycle_bin/assets/virtual_machines`,
+    software: `/recycle_bin/assets/software`,
+    certificate_keys: `/recycle_bin/assets/certificate_keys`,
   };
 
   const endpointPath = isRecycleBin

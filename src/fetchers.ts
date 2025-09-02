@@ -115,7 +115,7 @@ export const useUsers = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<User>(`${API_BASE}/users`, params);
+  return usePaginatedData<User>(`${API_BASE}/users/`, params);
 };
 
 
@@ -129,7 +129,7 @@ export const useRoles = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Role>(`${API_BASE}/roles`, params);
+  return usePaginatedData<Role>(`${API_BASE}/roles/`, params);
 };
 
 // Groups fetcher
@@ -141,7 +141,7 @@ export const useGroups = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Group>(`${API_BASE}/groups`, params);
+  return usePaginatedData<Group>(`${API_BASE}/groups/`, params);
 };
 
 // Single User fetcher
@@ -199,7 +199,7 @@ export const useComputers = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Computer>(`${API_BASE}/assets/computers`, params);
+  return usePaginatedData<Computer>(`${API_BASE}/assets/computers/`, params);
 };
 
 // Single Computer fetcher
@@ -244,7 +244,7 @@ export const useNetworkDevices = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<NetworkDevice>(`${API_BASE}/assets/network_devices`, params);
+  return usePaginatedData<NetworkDevice>(`${API_BASE}/assets/network_devices/`, params);
 };
 
 // Single NetworkDevice fetcher
@@ -258,7 +258,7 @@ export const useNetworkDevice = (ndId?: number | string) => {
 
 // Assets fetcher
 export const useSoftwares = (params?: { page?:number; per_page?:number; sort_by?:string; sort_order?:'asc'|'desc'; search?:string; filters?:Record<string,any>;})=>{
-  return usePaginatedData<Software>(`${API_BASE}/assets/software`,params);
+  return usePaginatedData<Software>(`${API_BASE}/assets/software/`,params);
 };
 
 // Single Software fetcher
@@ -275,7 +275,7 @@ export const useSoftware = (sid?: number | string)=>{
 export const useSoftwareVersions = (softwareId?: number | string) => {
   const { data: session } = useSession();
   const token = session?.accessToken;
-  const key = softwareId ? `${API_BASE}/assets/software/${softwareId}/versions` : null;
+  const key = softwareId ? `${API_BASE}/assets/software/${softwareId}/versions/` : null;
   const { data, error, isLoading, mutate } = useSWR<SoftwareVersion[]>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
   return { data, isLoading, isError: error, mutate } as const;
 };
@@ -285,7 +285,7 @@ export const useSoftwareVersions = (softwareId?: number | string) => {
 export const useSoftwareVersionComputers = (versionId?: number | string) => {
   const { data: session } = useSession();
   const token = session?.accessToken;
-  const key = versionId ? `${API_BASE}/assets/software/versions/${versionId}/computers` : null;
+  const key = versionId ? `${API_BASE}/assets/software/versions/${versionId}/computers/` : null;
   const { data, error, isLoading, mutate } = useSWR<Computer[]>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
   return { data, isLoading, isError: error, mutate } as const;
 };
@@ -294,7 +294,7 @@ export const useSoftwareVersionComputers = (versionId?: number | string) => {
 export const useSoftwareVersionVirtualMachines = (versionId?: number | string) => {
   const { data: session } = useSession();
   const token = session?.accessToken;
-  const key = versionId ? `${API_BASE}/assets/software/versions/${versionId}/virtual-machines` : null;
+  const key = versionId ? `${API_BASE}/assets/software/versions/${versionId}/virtual-machines/` : null;
   const { data, error, isLoading, mutate } = useSWR<VirtualMachine[]>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
   return { data, isLoading, isError: error, mutate } as const;
 };
@@ -303,7 +303,7 @@ export const useSoftwareVersionVirtualMachines = (versionId?: number | string) =
 export const useSoftwareVersionNetworkDevices = (versionId?: number | string) => {
   const { data: session } = useSession();
   const token = session?.accessToken;
-  const key = versionId ? `${API_BASE}/assets/software/versions/${versionId}/network-devices` : null;
+  const key = versionId ? `${API_BASE}/assets/software/versions/${versionId}/network-devices/` : null;
   const { data, error, isLoading, mutate } = useSWR<NetworkDevice[]>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
   return { data, isLoading, isError: error, mutate } as const;
 };
@@ -313,7 +313,7 @@ export const useSoftwareDocuments = (softwareId?: number | string) => {
   const { data: session } = useSession();
   const token = session?.accessToken;
 
-  const key = softwareId ? `${API_BASE}/assets/software/${softwareId}/documents` : null;
+  const key = softwareId ? `${API_BASE}/assets/software/${softwareId}/documents/` : null;
 
   const { data, error, isLoading, mutate } = useSWR<Document[]>(
     key,
@@ -333,7 +333,7 @@ export const useVirtualMachines = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<VirtualMachine>(`${API_BASE}/assets/virtual_machines`, params);
+  return usePaginatedData<VirtualMachine>(`${API_BASE}/assets/virtual_machines/`, params);
 };
 
 // Single VirtualMachine fetcher
@@ -368,7 +368,7 @@ export const useAssets = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Asset>(`${API_BASE}/assets`, params);
+  return usePaginatedData<Asset>(`${API_BASE}/assets/`, params);
 };
 
 // Single Asset fetcher
@@ -424,7 +424,7 @@ export const useManufacturers = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Manufacturer>(`${API_BASE}/reference_data/manufacturers`, params);
+  return usePaginatedData<Manufacturer>(`${API_BASE}/reference_data/manufacturers/`, params);
 };
 
 // Locations fetcher
@@ -436,7 +436,7 @@ export const useLocations = (params?: {
   search?: string;
   filters?: Record<string, any>;
 }) => {
-  return usePaginatedData<Location>(`${API_BASE}/reference_data/locations`, params);
+  return usePaginatedData<Location>(`${API_BASE}/reference_data/locations/`, params);
 };
 
 // Legacy useUsers hook for backward compatibility
@@ -445,7 +445,7 @@ export const useUsersLegacy = () => {
   const token = session?.accessToken;
 
   const { data, error, isLoading, mutate } = useSWR(
-    `${API_BASE}/users`,
+    `${API_BASE}/users/`,
     (url) => jsonFetcher(url, token)
   );
 
