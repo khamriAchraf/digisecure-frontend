@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Paper, Group, Text, ActionIcon, Tooltip, Tabs, Table, Button, Loader, Alert, Box, Card, Grid, TextInput, Select, Textarea, NumberInput } from '@mantine/core';
-import { IconDownload, IconUpload, IconTrash, IconEdit, IconArrowsMove } from '@tabler/icons-react';
+import { IconDownload, IconUpload, IconTrash, IconEdit, IconArrowsMove, IconHelpCircle } from '@tabler/icons-react';
 import { useDocument, useDocumentVersions, downloadDocumentVersion, useUsers } from '../../src/fetchers';
 import { useHasPermission, PERMISSIONS } from '../../src/hooks/usePermissions';
 import { useDeleteDocument, useUploadDocumentVersion, useUpdateDocument } from '../../src/mutations';
@@ -9,6 +9,7 @@ import RenameModal from './RenameModal';
 import MoveDocumentModal from './MoveDocumentModal';
 import type { DocumentVersion } from '../../types/models';
 import { DatePickerInput } from '@mantine/dates';
+import { t } from '../../i18n';
 
 interface DocumentDetailsPanelProps {
   documentId: number;
@@ -214,12 +215,12 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
             </Grid.Col>
             <Grid.Col span={6}>
               <Select
-                label="Review status"
+                label={t('forms.documents.review_status')}
                 data={[
-                  { value: 'Draft', label: 'Draft' },
-                  { value: 'Pending review', label: 'Pending review' },
-                  { value: 'Approved', label: 'Approved' },
-                  { value: 'Rejected', label: 'Rejected' },
+                  { value: 'Draft', label: t('forms.documents.status.Draft') },
+                  { value: 'Pending review', label: t('forms.documents.status.Pending review') },
+                  { value: 'Approved', label: t('forms.documents.status.Approved') },
+                  { value: 'Rejected', label: t('forms.documents.status.Rejected') },
                 ]}
                 value={form.review_status || null}
                 onChange={(val) => setForm((f) => ({ ...f, review_status: val }))}
@@ -229,7 +230,7 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
             </Grid.Col>
             <Grid.Col span={6}>
               <DatePickerInput
-                label="Review date"
+                label={t('forms.documents.review_date')}
                 value={form.review_date}
                 onChange={(val) => setForm((f) => ({ ...f, review_date: (val as Date | null) }))}
                 valueFormat="YYYY-MM-DD"
@@ -237,22 +238,30 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
               />
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput
-                label="Review frequency (months)"
-                value={String(form.review_frequency_months ?? '')}
-                readOnly
-              />
+              <Group gap="xs" align="center">
+                <Text fw={500}>{t('forms.documents.review_frequency_months')}</Text>
+                <Tooltip label={t('forms.documents.help.computedReview')}>
+                  <ActionIcon variant="subtle" size="sm">
+                    <IconHelpCircle size={14} />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+              <Text c="dimmed" mt={4}>{String(form.review_frequency_months ?? '') || '—'}</Text>
             </Grid.Col>
             <Grid.Col span={6}>
-              <TextInput
-                label="Next review date"
-                value={formatDate(nextReviewDate) ?? ''}
-                readOnly
-              />
+              <Group gap="xs" align="center">
+                <Text fw={500}>{t('forms.documents.next_review_date')}</Text>
+                <Tooltip label={t('forms.documents.help.computedReview')}>
+                  <ActionIcon variant="subtle" size="sm">
+                    <IconHelpCircle size={14} />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+              <Text c="dimmed" mt={4}>{formatDate(nextReviewDate) ?? '—'}</Text>
             </Grid.Col>
             <Grid.Col span={12}>
               <Textarea
-                label="Review notes"
+                label={t('forms.documents.review_notes')}
                 value={form.review_notes}
                 onChange={(e) => setForm((f) => ({ ...f, review_notes: e.currentTarget.value }))}
                 autosize
@@ -262,7 +271,7 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
             </Grid.Col>
             <Grid.Col span={6}>
               <Select
-                label="Assigned user"
+                label={t('forms.documents.assigned_user')}
                 searchable
                 data={(usersData?.data ?? []).map((u: any) => ({ value: String(u.id), label: u.full_name || u.username || u.email }))}
                 value={form.user_id != null ? String(form.user_id) : null}
@@ -291,7 +300,7 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
                   }}
                   disabled={!canUpdate}
                 >
-                  Save
+                  {t('common.save')}
                 </Button>
               </Group>
             </Grid.Col>
@@ -314,7 +323,7 @@ export const DocumentDetailsPanel: React.FC<DocumentDetailsPanelProps> = ({ docu
       <RenameModal
         opened={renameOpen}
         initialName={doc.name}
-        title="Rename document"
+        title={t('forms.documents.rename_document')}
         onClose={() => setRenameOpen(false)}
         onSubmit={async (newName) => {
           await updateDoc.mutate({ id: doc.id, name: newName });

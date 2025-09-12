@@ -12,9 +12,11 @@ interface LinksGroupProps {
   links?: { label: string; link: string }[];
   link?: string; // optional direct link for parent when no children
   collapsed?: boolean;
+  opened?: boolean; // controlled open state from parent
+  onToggle?: () => void; // notify parent to toggle
 }
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, collapsed = false }: LinksGroupProps) {
+export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, collapsed = false, opened: openedProp, onToggle }: LinksGroupProps) {
   const theme = useMantineTheme();
   const hasLinks = Array.isArray(links);
   const router = useRouter();
@@ -23,7 +25,8 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, co
   if (collapsed === undefined) {
     collapsed = sidebarCollapsed;
   }
-  const [opened, setOpened] = useState(initiallyOpened || false);
+  const [uncontrolledOpened, setUncontrolledOpened] = useState(initiallyOpened || false);
+  const opened = openedProp !== undefined ? openedProp : uncontrolledOpened;
   const [popoverOpened, setPopoverOpened] = useState(false);
   const isHoveringTriggerRef = useRef(false);
   const isHoveringDropdownRef = useRef(false);
@@ -49,25 +52,27 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, co
   const isCurrentSection = hasLinks && links.some(link => {
     // Check if current pathname starts with the link path
     // This handles both exact matches and nested routes
-    return router.pathname === link.link || router.pathname.startsWith(link.link + '/');
+    return router.pathname === link.link;
   });
 
   // Active state for a direct parent link (when no children)
   const isDirectLinkActive = !hasLinks && link
-    ? router.pathname === link || router.pathname.startsWith(link + '/')
+    ? router.pathname === link
     : false;
 
   // Check if a specific link is active
   const isLinkActive = (linkPath: string) => {
-    return router.pathname === linkPath || router.pathname.startsWith(linkPath + '/');
+    return router.pathname === linkPath;
   };
 
-  // Auto-open the section if it contains the current page
+  // Auto-open the section if it contains the current page (only when uncontrolled)
   useEffect(() => {
-    if (isCurrentSection && !collapsed) {
-      setOpened(true);
+    if (openedProp === undefined) {
+      if (isCurrentSection && !collapsed) {
+        setUncontrolledOpened(true);
+      }
     }
-  }, [isCurrentSection, router.pathname, collapsed]);
+  }, [openedProp, isCurrentSection, router.pathname, collapsed]);
 
   useEffect(() => {
     return () => {
@@ -193,7 +198,11 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links, link, co
       <UnstyledButton
         onClick={() => {
           if (hasLinks) {
-            setOpened((o) => !o);
+            if (onToggle) {
+              onToggle();
+            } else {
+              setUncontrolledOpened((o) => !o);
+            }
           } else if (link) {
             router.push(link);
           }

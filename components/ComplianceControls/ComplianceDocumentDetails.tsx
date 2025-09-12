@@ -6,6 +6,7 @@ import { useScopeControl } from '../../src/fetchers';
 import { useAttachDocumentsToControl, useDetachDocumentsFromControl } from '../../src/mutations';
 import { t } from '../../i18n';
 import { openDocumentPicker } from '../Documents/DocumentPicker';
+import DocumentStatus from '../Documents/DocumentStatus';
 
 
 interface ComplianceDocumentDetailsProps {
@@ -65,6 +66,7 @@ const ComplianceDocumentDetails: React.FC<ComplianceDocumentDetailsProps> = ({ c
                                                 <IconFileText size={14} />
                                             </ThemeIcon>
                                             <Text size="sm">{doc.name}</Text>
+                                            <DocumentStatus status={doc.review_status as any} />
                                         </Group>
                                         <ActionIcon
                                             variant="subtle"

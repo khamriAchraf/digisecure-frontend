@@ -17,13 +17,16 @@ import { LinksGroup } from './NavbarLinksGroup';
 import Image from 'next/image';
 import { useLanguage } from '../src/contexts/LanguageContext';
 import { useHasPermission, PERMISSIONS } from '../src/hooks/usePermissions';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import { useSidebar } from '../src/contexts/SidebarContext';
+import { useRouter } from 'next/router';
 
 export function Navbar() {
   const { t } = useLanguage();
   const { collapsed: isCollapsed, toggleCollapsed } = useSidebar();
+  const router = useRouter();
+  const [openGroupLabel, setOpenGroupLabel] = useState<string | null>(null);
   
   // Permission checks
   const hasComputersList = useHasPermission(PERMISSIONS.COMPUTER_LIST);
@@ -71,8 +74,34 @@ export function Navbar() {
 
   ];
 
+  // Ensure only one group is open at a time (accordion behavior)
+  useEffect(() => {
+    if (isCollapsed) {
+      setOpenGroupLabel(null);
+      return;
+    }
+    const currentPath = router.pathname;
+    const matched = mockdata.find((item: any) => {
+      if (Array.isArray(item.links)) {
+        return item.links.some((l: any) => l.link === currentPath);
+      }
+      return item.link === currentPath;
+    });
+    setOpenGroupLabel(matched ? matched.label : null);
+    // Only depend on pathname and collapsed to avoid overriding user toggles unnecessarily
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.pathname, isCollapsed]);
+
   const links = mockdata.map((item) => (
-    <LinksGroup {...item} key={item.label} collapsed={isCollapsed} />
+    <LinksGroup
+      {...item}
+      key={item.label}
+      collapsed={isCollapsed}
+      opened={openGroupLabel === item.label}
+      onToggle={() =>
+        setOpenGroupLabel((prev) => (prev === item.label ? null : item.label))
+      }
+    />
   ));
 
   return (

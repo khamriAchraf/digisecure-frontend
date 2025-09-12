@@ -146,7 +146,7 @@
     "items": "éléments",
     "item": "élément",
     "noDataFound": "Aucune donnée trouvée",
-    "refresh": "Actualiser",
+    "refreshTable": "Actualiser",
     "export": "Exporter",
     "view": "Voir",
     "edit": "Modifier",
@@ -1715,11 +1715,28 @@
       }
     },
     "documents": {
+      "help": {
+        "computedReview": "Ces valeurs sont calculées à partir des périmètres de conformité auxquels le document appartient."
+      },
       "create": {
         "title": "Créer un document",
         "description": "Créer un nouveau document dans le système"
       },
-      "attach": "Attacher un document"
+      "review_date": "Date de dernière révision",
+      "description": "Description",
+      "review_frequency_months": "Fréquence de révision (mois)",
+      "next_review_date": "Date de prochaine révision",
+      "assigned_user": "Utilisateur assigné",
+      "rename_document": "Renommer le document",
+      "review_status": "Statut de révision",
+      "review_notes": "Notes de révision",
+      "attach": "Attacher un document",
+      "status": {
+        "Draft": "Brouillon",
+        "Approved": "Approuvé",
+        "Rejected": "Rejeté",
+        "Pending review": "En attente de révision"
+      }
     }
   },
   "relationships": {

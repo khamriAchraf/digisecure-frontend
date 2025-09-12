@@ -1712,11 +1712,20 @@
       }
     },
     "documents": {
+      "help": {
+        "computedReview": "These values are computed from the compliance scopes the document belongs to."
+      },
       "create": {
         "title": "Create Document",
         "description": "Create a new document in the system"
       },
-      "attach": "Attach a document"
+      "attach": "Attach a document",
+      "status": {
+        "Draft": "Draft",
+        "Approved": "Approved",
+        "Rejected": "Rejected",
+        "Pending review": "Pending review"
+      }
     }
   },
   "relationships": {
