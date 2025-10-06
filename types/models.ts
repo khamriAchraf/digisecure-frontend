@@ -79,11 +79,12 @@ export interface Computer extends Asset {
   cpu?: string;
   ram?: string;
   storage?: string;
-  os?: string;
+  operating_system_id?: number;
   mac_address?: string;
   ip_address?: string;
   model?: string;
   hostname?: string;
+  operating_system?: OperatingSystem;
   groups?: Group[];
 }
 
@@ -293,9 +294,8 @@ export interface VirtualMachine extends Asset {
   cpu_cores?: number;
   memory_mb?: number;
   storage_gb?: number;
-  os_type?: string;  // Windows, Linux, macOS
-  os_version?: string;
-  os_architecture?: string;  // x86_64, ARM64, etc.
+  operating_system_id?: number;
+  operating_system?: OperatingSystem;
 
   // Network configuration
   ip_address?: string;
@@ -364,6 +364,7 @@ export interface VirtualMachine extends Asset {
 export interface Asset extends BaseModel {
   name: string;
   asset_type: number; // Foreign key to AssetType
+  type: string;
   serial_number?: string;
   inventory_number?: string;
   manufacturer_id?: number; // Foreign key to Manufacturer
@@ -409,6 +410,18 @@ export interface Location extends BaseModel {
   room_number?: string;
   longitude?: number;
   floor_number?: string;
+}
+
+export interface OperatingSystem extends BaseModel {
+  name: string;
+  vendor: string;
+  version: string;
+  architecture: string;
+  end_of_life_date: string;
+  end_of_support_date: string;
+  comment?: string;
+  created_at: string; // ISO datetime string
+  updated_at: string; // ISO datetime string
 }
 
 // Authentication types
@@ -468,6 +481,25 @@ export interface ComplianceScopeAsset extends BaseModel {
   next_review_date?: string | null; // ISO date string or null
   compliance_notes?: string | null;
 }
+
+export interface ComplianceScopeEvent extends BaseModel {
+  scope_id: number;
+  name: string;
+  description?: string | null;
+  frequency?: string | null;
+  next_due_date?: string | null; // ISO date string
+  last_done_date?: string | null; // ISO date string
+  notify?: boolean | null;
+  remind_before_days?: number | null;
+  notes?: string | null;
+  notify_user_count?: number | null;
+  notify_group_count?: number | null;
+  // Relationships
+  scope?: ComplianceScope;
+  notify_users?: User[];
+  notify_groups?: Group[];
+}
+
 // Request types for API calls
 export interface CreateUserRequest {
   email: string;

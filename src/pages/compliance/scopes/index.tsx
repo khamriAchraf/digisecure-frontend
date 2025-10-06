@@ -22,11 +22,11 @@ import {
   useComputedColorScheme,
 } from '@mantine/core';
 import { IconChevronDown, IconCreditCard, IconScale, IconShieldCheck, IconExternalLink, IconPlus, IconChecklist } from '@tabler/icons-react';
-import { useComplianceScopes } from '../../fetchers';
-import type { ComplianceScope } from '../../../types/models';
-import { useHasPermission, PERMISSIONS } from '../../hooks/usePermissions';
+import { useComplianceScopes } from '../../../fetchers';
+import type { ComplianceScope } from '../../../../types/models';
+import { useHasPermission, PERMISSIONS } from '../../../hooks/usePermissions';
 import Head from 'next/head';
-import { useTranslation } from '@/hooks/useTranslation';
+import { useTranslation } from '../../../hooks/useTranslation';
 
 const getScopeIcon = (name: string) => {
   const normalized = name.toLowerCase();
@@ -73,7 +73,7 @@ export default function CompliancePage() {
               withBorder
               radius="md"
               padding="lg"
-              onClick={() => router.push(`/compliance/${scope.id}`)}
+              onClick={() => router.push(`/compliance/scopes/${scope.id}`)}
               onMouseEnter={() => setHoveredCardId(scope.id)}
               onMouseLeave={() => setHoveredCardId((current) => (current === scope.id ? null : current))}
               style={{

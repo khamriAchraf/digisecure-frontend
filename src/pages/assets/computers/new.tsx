@@ -42,6 +42,7 @@ export default function CreateComputerPage() {
       serial_number: cleanValues.serial_number || null,
       inventory_number: cleanValues.inventory_number || null,
       manufacturer_id: cleanValues.manufacturer_id ? parseInt(cleanValues.manufacturer_id) : null,
+      operating_system_id: cleanValues.operating_system_id ? parseInt(cleanValues.operating_system_id) : null,
       status: cleanValues.status,
       purchase_date: cleanValues.purchase_date || null,
       warranty_expiry: cleanValues.warranty_expiry || null,

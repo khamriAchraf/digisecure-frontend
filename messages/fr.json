@@ -8,7 +8,14 @@
     "settings": "Paramètres",
     "security": "Sécurité",
     "compliance": "Conformité",
-    "documents": "Documents"
+    "documents": "Documents",
+    "dashboards": "Tableaux de bord",
+    "complianceDashboard": "Conformité",
+    "assetsDashboard": "Actifs",
+    "reference_data": "Données de référence",
+    "manufacturers": "Fabricants",
+    "locations": "Emplacements",
+    "operating_systems": "Systèmes d'exploitation"
   },
   "assets": {
     "computers": "Ordinateurs",
@@ -23,7 +30,7 @@
     "group": "Groupe",
     "roles": "Rôles",
     "role": "Rôle",
-    "dictionaries": "Dictionnaires",
+    "reference_data": "Données de référence",
     "recycle_bin": "Corbeille"
   },
   "compliance": {
@@ -45,6 +52,7 @@
     "recoveryCodes": "Codes de récupération"
   },
   "common": {
+    "send": "Envoyer",
     "all": "Tous",
     "loading": "Chargement...",
     "save": "Enregistrer",
@@ -81,7 +89,8 @@
     "noOptions": "Aucune option disponible",
     "assets": "Actifs",
     "documents": "Documents",
-    "assetsWithinScope": "Actifs relevant du périmètre {scope}"
+    "assetsWithinScope": "Actifs relevant du périmètre {scope}",
+    "events": "Événements"
   },
   "auth": {
     "login": "Connexion",
@@ -96,7 +105,15 @@
     "welcomeBack": "Bon retour !",
     "signInToAccount": "Connectez-vous à votre compte",
     "passwordPlaceholder": "Votre mot de passe",
-    "invalidCredentials": "Email ou mot de passe invalide"
+    "invalidCredentials": "Email ou mot de passe invalide",
+    "invalidToken": "Token invalide",
+    "resetPassword": "Réinitialiser mot de passe",
+    "sendResetPasswordEmail": "Mot de passe oublié ?",
+    "sendResetPasswordEmailDescription": "Entrez votre email pour recevoir un email de réinitialisation de mot de passe",
+    "resetPasswordEmailSent": "Email de réinitialisation de mot de passe envoyé",
+    "resetPasswordEmailSentDescription": "Un email de réinitialisation de mot de passe a été envoyé à votre adresse email",
+    "resetPasswordEmailSentSuccess": "Email de réinitialisation de mot de passe envoyé avec succès",
+    "resetPasswordEmailSentError": "Erreur lors de l'envoi de l'email de réinitialisation de mot de passe"
   },
   "language": {
     "english": "Anglais",
@@ -242,6 +259,34 @@
       "lifecycle": "Cycle de vie",
       "software_versions": "Versions",
       "documents": "Documents"
+    },
+    "events": {
+      "name": "Nom",
+      "namePlaceholder": "Nom de l'événement",
+      "description": "Description",
+      "descriptionPlaceholder": "Description de l'événement",
+      "frequency": "Fréquence",
+      "frequencyPlaceholder": "Sélectionnez une fréquence",
+      "frequencyHelp": "À quelle fréquence cet événement doit-il se produire",
+      "frequencies": {
+        "daily": "Quotidien",
+        "weekly": "Hebdomadaire",
+        "biweekly": "Bihebdomadaire",
+        "monthly": "Mensuel",
+        "quarterly": "Trimestriel",
+        "semiannual": "Semestriel",
+        "yearly": "Annuel"
+      },
+      "nextDueDate": "Prochaine échéance",
+      "nextDueDatePlaceholder": "Sélectionnez une date",
+      "lastDoneDate": "Dernière exécution",
+      "lastDoneDatePlaceholder": "Sélectionnez une date",
+      "notify": "Activer les notifications",
+      "notifyHelp": "Envoyer des rappels pour cet événement",
+      "remindBeforeDays": "Rappeler avant (jours)",
+      "remindBeforeDaysHelp": "Nombre de jours avant l'échéance pour envoyer un rappel",
+      "notes": "Notes",
+      "notesPlaceholder": "Notes additionnelles"
     },
     "group": {
       "create": {
@@ -479,6 +524,13 @@
           "label": "Numéro de série",
           "placeholder": "Entrez le numéro de série",
           "help_text": "Le numéro de série du fabricant pour cet ordinateur."
+        },
+        "operating_system_id": {
+          "label": "Système d'exploitation",
+          "help_text": "Le système d'exploitation installé sur cet ordinateur.",
+          "options": {
+            "no_operating_system": "Aucun système d'exploitation"
+          }
         },
         "inventory_number": {
           "label": "Numéro d'inventaire",
@@ -1737,7 +1789,78 @@
         "Rejected": "Rejeté",
         "Pending review": "En attente de révision"
       }
+    },
+    "location": {
+      "createSuccess": "Emplacement créé avec succès !",
+      "fields": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom de l'emplacement",
+          "help_text": "Le nom de l'emplacement."
+        },
+        "address": {
+          "label": "Adresse",
+          "placeholder": "Entrez l'adresse de l'emplacement",
+          "help_text": "L'adresse de l'emplacement."
+        },
+        "postal_code": {
+          "label": "Code postal",
+          "placeholder": "Entrez le code postal de l'emplacement",
+          "help_text": "Le code postal de l'emplacement."
+        },
+        "town": {
+          "label": "Ville",
+          "placeholder": "Entrez la ville de l'emplacement",
+          "help_text": "La ville de l'emplacement."
+        },
+        "state": {
+          "label": "État",
+          "placeholder": "Entrez l'état de l'emplacement",
+          "help_text": "L'état de l'emplacement."
+        },
+        "country": {
+          "label": "Pays",
+          "placeholder": "Entrez le pays de l'emplacement",
+          "help_text": "Le pays de l'emplacement."
+        },
+        "building_number": {
+          "label": "Numéro de bâtiment",
+          "placeholder": "Entrez le numéro de bâtiment de l'emplacement",
+          "help_text": "Le numéro de bâtiment de l'emplacement."
+        },
+        "floor_number": {
+          "label": "Numéro de étage",
+          "placeholder": "Entrez le numéro de étage de l'emplacement",
+          "help_text": "Le numéro de étage de l'emplacement."
+        },
+        "room_number": {
+          "label": "Numéro de pièce",
+          "placeholder": "Entrez le numéro de pièce de l'emplacement",
+          "help_text": "Le numéro de pièce de l'emplacement."
+        },
+        "longitude": {
+          "label": "Longitude",
+          "placeholder": "Entrez la longitude de l'emplacement",
+          "help_text": "La longitude de l'emplacement."
+        },
+        "latitude": {
+          "label": "Latitude",
+          "placeholder": "Entrez la latitude de l'emplacement",
+          "help_text": "La latitude de l'emplacement."
+        },
+        "altitude": {
+          "label": "Altitude",
+          "placeholder": "Entrez l'altitude de l'emplacement",
+          "help_text": "L'altitude de l'emplacement."
+        },
+        "comment": {
+          "label": "Commentaire",
+          "placeholder": "Entrez le commentaire de l'emplacement",
+          "help_text": "Le commentaire de l'emplacement."
+        }
+      }
     }
+
   },
   "relationships": {
     "groups": "Groupes",
@@ -1793,11 +1916,15 @@
     },
     "quickCreate": {
       "success": "{resource} créé avec succès !"
+    },
+    "complianceEvent": {
+      "updateSuccess": "Événement mis à jour avec succès"
     }
   },
   "modals": {
     "add_version": "Ajouter une version logicielle",
     "version_details": "Détails de la version",
-    "pick_document": "Sélectionner un document"
+    "pick_document": "Sélectionner un document",
+    "editEvent": "Modifier l'événement"
   }
 } 

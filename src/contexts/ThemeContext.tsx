@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useMantineColorScheme } from '@mantine/core';
 
 type ColorScheme = 'light' | 'dark' | 'auto';
@@ -27,6 +27,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [colorScheme, setColorSchemeState] = useState<ColorScheme>('auto');
   const [resolvedColorScheme, setResolvedColorScheme] = useState<'light' | 'dark'>('light');
   const { setColorScheme: setMantineColorScheme } = useMantineColorScheme();
+  const mantineSetterRef = useRef(setMantineColorScheme);
+
+  // Keep a stable reference to Mantine setter to avoid effect loops on identity changes
+  useEffect(() => {
+    mantineSetterRef.current = setMantineColorScheme;
+  }, [setMantineColorScheme]);
 
   // Load color scheme from localStorage on mount
   useEffect(() => {
@@ -48,7 +54,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     const updateResolvedScheme = () => {
       const resolved = resolveColorScheme();
       setResolvedColorScheme(resolved);
-      setMantineColorScheme(resolved);
+      mantineSetterRef.current(resolved);
     };
 
     updateResolvedScheme();
@@ -59,7 +65,23 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       mediaQuery.addEventListener('change', updateResolvedScheme);
       return () => mediaQuery.removeEventListener('change', updateResolvedScheme);
     }
-  }, [colorScheme, setMantineColorScheme]);
+  }, [colorScheme]);
+
+  // Sync color scheme across tabs by listening to storage changes
+  useEffect(() => {
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === 'colorScheme' && typeof event.newValue === 'string') {
+        const maybeScheme = event.newValue as ColorScheme;
+        if (['light', 'dark', 'auto'].includes(maybeScheme)) {
+          // Update state only; do not write back to localStorage here to avoid loops
+          setColorSchemeState(maybeScheme);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
 
   const setColorScheme = (scheme: ColorScheme) => {
     setColorSchemeState(scheme);

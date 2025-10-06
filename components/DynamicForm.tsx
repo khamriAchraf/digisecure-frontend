@@ -265,10 +265,20 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
             label={t(field.label_key ?? key)}
             placeholder={t(field.placeholder_key ?? '')}
             description={t(field.help_text_key ?? '')}
-            data={options.map((o) => ({
-              value: String(o.value),
-              label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
-            }))}
+            data={options.map((o) => {
+              const isOsField = key === 'operating_system_id' || key === 'operating_system';
+              if (isOsField) {
+                const p: any = (o as any).label_params || {};
+                if (p.name || p.version || p.vendor || p.architecture) {
+                  const label = `${p.name ?? ''}${p.version ? ` ${p.version}` : ''}${p.vendor ? ` - ${p.vendor}` : ''}${p.architecture ? ` (${p.architecture})` : ''}`.trim();
+                  return { value: String((o as any).value), label };
+                }
+              }
+              return {
+                value: String((o as any).value),
+                label: (o as any).label_params ? t((o as any).label_key, (o as any).label_params) : t((o as any).label_key),
+              };
+            })}
             value={form.values[key] as string | null}
             onChange={(val) => form.setFieldValue(key, val)}
             resourceType={field.quick_create_resource!}
@@ -286,10 +296,20 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
           label={t(field.label_key ?? key)}
           placeholder={t(field.placeholder_key ?? '')}
           description={t(field.help_text_key ?? '')}
-          data={options.map((o) => ({
-            value: String(o.value),
-            label: o.label_params ? t(o.label_key, o.label_params) : t(o.label_key),
-          }))}
+          data={options.map((o) => {
+            const isOsField = key === 'operating_system_id' || key === 'operating_system';
+            if (isOsField) {
+              const p: any = (o as any).label_params || {};
+              if (p.name || p.version || p.vendor || p.architecture) {
+                const label = `${p.name ?? ''}${p.version ? ` ${p.version}` : ''}${p.vendor ? ` - ${p.vendor}` : ''}${p.architecture ? ` (${p.architecture})` : ''}`.trim();
+                return { value: String((o as any).value), label };
+              }
+            }
+            return {
+              value: String((o as any).value),
+              label: (o as any).label_params ? t((o as any).label_key, (o as any).label_params) : t((o as any).label_key),
+            };
+          })}
           value={currentValue == null || currentValue === '' ? null : String(currentValue)}
           onChange={(val) => form.setFieldValue(key, val)}
           allowDeselect

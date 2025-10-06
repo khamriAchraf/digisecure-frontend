@@ -46,9 +46,9 @@ const ComplianceDashboard = () => {
 
     return (
         <React.Fragment>
-            <Title order={2}>Compliance Dashboard</Title>
-            <Tabs>
-                <Tabs.List defaultValue="all" mt="md">
+            <Title order={2}>Tableau de bord de conformité</Title>
+            <Tabs defaultValue="all">
+                <Tabs.List mt="md">
                     <Tabs.Tab value="all">Overview</Tabs.Tab>
                     {scopes.map((s) => (
                         <Tabs.Tab key={s.scope_name} value={s.scope_name}>{s.scope_name}</Tabs.Tab>
@@ -61,7 +61,7 @@ const ComplianceDashboard = () => {
                         <Grid gutter="md">
                             <Grid.Col span={{ base: 12, md: 4 }}>
                                 <Paper p="md" radius="md" withBorder>
-                                    <Title order={4}>Overall compliance progress</Title>
+                                    <Title order={4}>Niveau global de la conformité</Title>
                                     <Group justify="center" mt="md">
                                         <SemiCircleProgress
                                             value={overall}
@@ -75,7 +75,7 @@ const ComplianceDashboard = () => {
 
                             <Grid.Col span={{ base: 12, md: 8 }}>
                                 <Paper p="md" radius="md" withBorder>
-                                    <Title order={4}>Progress for active compliance scopes</Title>
+                                    <Title order={4}>Niveaux de conformité par périmètre</Title>
                                     <ScrollArea type="auto" mt="md">
                                         <Group wrap="nowrap" gap="lg" align="center">
                                             {scopes.map((s, idx) => {
@@ -97,7 +97,7 @@ const ComplianceDashboard = () => {
                                                 );
                                             })}
                                             {scopes.length === 0 && (
-                                                <Text c="dimmed">No active compliance scopes</Text>
+                                                <Text c="dimmed">Aucun périmètre de conformité actif</Text>
                                             )}
                                         </Group>
                                     </ScrollArea>
@@ -114,14 +114,14 @@ const ComplianceDashboard = () => {
 
                             <Grid.Col span={{ base: 12, md: 6 }}>
                                 <Paper p="md" radius="md" withBorder>
-                                    <Title order={4}>Assigned controls for compliance scopes</Title>
+                                    <Title order={4}>Contrôles assignés pour les périmètres de conformité</Title>
                                     <Box mt="md">
                                         <BarChart
                                             h={240}
                                             data={documentControlsData}
                                             dataKey="scope"
                                             series={[
-                                                { name: 'Compliance', color: 'blue.4' },
+                                                { name: 'Compliance', color: 'blue.2    ' },
                                                 { name: 'Remaining', color: 'blue.9' },
                                             ]}
                                             type="stacked"

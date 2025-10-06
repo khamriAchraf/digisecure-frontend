@@ -1,6 +1,6 @@
 import React from 'react';
 import { TableColumn } from '../../types/utils';
-import { User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine, NetworkDevice, Software, CertificateKey } from '../../types/models';
+import { User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, VirtualMachine, NetworkDevice, Software, CertificateKey, OperatingSystem } from '../../types/models';
 import { IconUser, IconShield, IconUsers, IconDeviceDesktop, IconRouter, IconCategory, IconBuilding, IconMapPin, IconDeviceLaptop, IconApps, IconNetwork, IconKey } from '@tabler/icons-react';
 import { Text } from '@mantine/core';
 
@@ -455,6 +455,25 @@ export const createCertificateKeyConfig = (t: (key: string) => string): DataTabl
   pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
 });
 
+// Operating System configuration factory
+
+export const createOperatingSystemConfig = (t: (key: string) => string): DataTableConfig<OperatingSystem> => ({
+  type: 'operating_systems',
+  icon: IconBuilding,
+  columns: [
+    { key: 'id', label: t('datatable.id'), sortable: true, width: 80 },
+    { key: 'name', label: t('common.name'), sortable: true, filterable: true },
+    { key: 'version', label: t('datatable.version'), sortable: true, filterable: true },
+    { key: 'created_at', label: t('datatable.createdAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+    { key: 'updated_at', label: t('datatable.updatedAt'), sortable: true, filterable: true, render: (value: any) => (<Text>{value ? new Date(value).toLocaleString() : t('datatable.na')}</Text>) },
+  ],
+  searchableFields: ['name', 'version'],
+  sortableFields: ['id', 'name', 'version', 'created_at', 'updated_at'],
+  defaultSort: { field: 'updated_at', order: 'desc' },
+  defaultPageSize: 20,
+  pageSizeOptions: [5, 10, 15, 20, 25, 30, 50, 100, 150, 200, 250, 300, 500, 1000],
+});
+
 // Configuration registry factory
 export const createDataTableConfigs = (t: (key: string) => string) => ({
   users: createUserConfig(t),
@@ -469,9 +488,10 @@ export const createDataTableConfigs = (t: (key: string) => string) => ({
   manufacturers: createManufacturerConfig(t),
   locations: createLocationConfig(t),
   certificate_keys: createCertificateKeyConfig(t),
+  operating_systems: createOperatingSystemConfig(t),
 });
 
-export type DataType = 'users' | 'roles' | 'groups' | 'computers' | 'network_devices' | 'software' | 'asset_types' | 'manufacturers' | 'locations' | 'virtual_machines' | 'certificate_keys';
+export type DataType = 'users' | 'roles' | 'groups' | 'computers' | 'network_devices' | 'software' | 'asset_types' | 'manufacturers' | 'locations' | 'virtual_machines' | 'certificate_keys' | 'operating_systems';
 
 // Helper function to get configuration for a data type
 export function getDataTableConfig<T>(type: DataType, t: (key: string) => string): DataTableConfig<T> {
@@ -481,6 +501,6 @@ export function getDataTableConfig<T>(type: DataType, t: (key: string) => string
 
 // Helper function to check if a data type is supported
 export function isSupportedDataType(type: string): type is DataType {
-  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'computers', 'network_devices', 'software', 'asset_types', 'manufacturers', 'locations', 'virtual_machines', 'certificate_keys'];
+  const supportedTypes: DataType[] = ['users', 'roles', 'groups', 'computers', 'network_devices', 'software', 'asset_types', 'manufacturers', 'locations', 'virtual_machines', 'certificate_keys', 'operating_systems'];
   return supportedTypes.includes(type as DataType);
 } 

@@ -1,4 +1,4 @@
-import { useManufacturers, useLocations, useGroups, useUsers, useRoles } from '@/fetchers';
+import { useManufacturers, useLocations, useGroups, useUsers, useRoles, useOperatingSystems } from '@/fetchers';
 
 /**
  * Small helper type used by DynamicForm. Mirrors the one defined there but
@@ -73,6 +73,40 @@ export const optionSources: Record<string, OptionSource> = {
     emptyOption: {
       value: '',
       label_key: 'forms.computer.fields.location_id.options.no_location',
+    },
+  },
+
+  // -------------------------------------------------------------------------
+  // Computers ▸ operating_system_id
+  // -------------------------------------------------------------------------
+  operating_system_id: {
+    hook: () => useOperatingSystems({ per_page: 9999 }),
+    buildOption: (item: any) => ({
+      value: String(item.id),
+      // Display a rich label: name + version + vendor (architecture)
+      // Fallbacks in case some fields are missing
+      label_key: `${item.name ?? ''}${item.version ? ` ${item.version}` : ''}${item.architecture ? ` (${item.architecture})` : ''}${item.vendor ? ` - ${item.vendor}` : ''}`.trim(),
+      label_params: undefined,
+    }),
+    emptyOption: {
+      value: '',
+      label_key: 'forms.computer.fields.operating_system_id.options.no_operating_system',
+    },
+  },
+
+  // -------------------------------------------------------------------------
+  // Computers ▸ operating_system (alias, if schema uses relation name)
+  // -------------------------------------------------------------------------
+  operating_system: {
+    hook: () => useOperatingSystems({ per_page: 9999 }),
+    buildOption: (item: any) => ({
+      value: String(item.id),
+      label_key: `${item.name ?? ''}${item.version ? ` ${item.version}` : ''}${item.architecture ? ` (${item.architecture})` : ''}${item.vendor ? ` - ${item.vendor}` : ''}`.trim(),
+      label_params: undefined,
+    }),
+    emptyOption: {
+      value: '',
+      label_key: 'forms.computer.fields.operating_system.options.no_operating_system',
     },
   },
 

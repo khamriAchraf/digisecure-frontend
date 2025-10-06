@@ -43,6 +43,7 @@ import {
   IconUpload,
   IconRecycle,
   IconChevronDown,
+  IconArrowLeft,
 } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { DataTableConfig, getDataTableConfig, DataType } from './config';
@@ -73,9 +74,11 @@ const getCreatePermission = (dataType: DataType): string => {
       return PERMISSIONS.VIRTUAL_MACHINE_CREATE;
     case 'asset_types':
     case 'manufacturers':
+      return PERMISSIONS.MANUFACTURER_CREATE;
+    case 'operating_systems':
+      return PERMISSIONS.OPERATING_SYSTEM_CREATE;
     case 'locations':
-      // These reference data types use reference data permissions
-      return PERMISSIONS.REFERENCE_DATA_CREATE;
+      return PERMISSIONS.LOCATION_CREATE;
     case 'certificate_keys':
       return PERMISSIONS.CERTIFICATE_KEY_CREATE;
     default:
@@ -103,6 +106,7 @@ export interface DataTableProps<T> {
   onSearchChange?: (query: string) => void;
   onFilterChange?: (filters: Record<string, any>) => void;
   onRefresh?: () => void;
+  onBack?: () => void;
 
   // Action callbacks
   onView?: (item: T) => void;
@@ -171,6 +175,7 @@ export function DataTable<T extends { id: number | string }>({
   onSearchChange,
   onFilterChange,
   onRefresh,
+  onBack,
   onView,
   onEdit,
   onDelete,
@@ -461,6 +466,11 @@ export function DataTable<T extends { id: number | string }>({
   const tableHeader = (
     <Group justify="space-between" mb="md">
       <Group>
+        {onBack && (
+        <ActionIcon variant="light" onClick={onBack} aria-label={t('common.back')} size="lg">
+          <IconArrowLeft size={20} />
+        </ActionIcon>
+        )}
         {config.icon && <config.icon size={28} />}
         <Title order={2} c={effectiveRecycleBin ? 'red' : 'inherit'}>
           {title || `${dataType.charAt(0).toUpperCase() + dataType.slice(1)}`}
@@ -877,6 +887,15 @@ export function DataTable<T extends { id: number | string }>({
 
   // Delete confirmation modal
   const { deleteTitleKey, deleteMessageKey, confirmKey, cancelKey, purgeTitleKey, purgeMessageKey } = useConfirmMessages(dataType);
+  
+  // Determine if we should show impacted assets for this data type
+  const shouldShowImpactedAssets = dataType === 'locations' || dataType === 'manufacturers';
+  const getResourceType = () => {
+    if (dataType === 'locations') return 'location';
+    if (dataType === 'manufacturers') return 'manufacturer';
+    return undefined;
+  };
+  
   const confirmModal = (
     <ConfirmModal
       opened={confirmModalOpened}
@@ -893,6 +912,10 @@ export function DataTable<T extends { id: number | string }>({
         setConfirmDeleteItem(null);
         closeConfirmModal();
       }}
+      showImpactedAssets={shouldShowImpactedAssets}
+      resourceType={getResourceType()}
+      resourceId={typeof confirmDeleteItem?.id === 'number' ? confirmDeleteItem.id : undefined}
+      resourceName={(confirmDeleteItem as any)?.name}
     />
   );
 

@@ -23,7 +23,7 @@ import { ModalsProvider } from '@mantine/modals';
 
 const theme = createTheme({
 
-  primaryColor: 'blue',
+  primaryColor: 'orange',
   fontFamily: 'Inter, sans-serif',
   components: {
     AppShell: {
@@ -48,14 +48,20 @@ function AppContent({ Component, pageProps }: AppProps) {
   const { locale } = useLanguage();
   const { width } = useSidebar();
 
-  useEffect(() => {
-    if (!session && router.pathname !== '/login' && router.pathname !== '/register') {
-      router.push('/login');
-    }
-  }, [session, status, router]);
+  // Define public routes that don't require authentication
+  const publicRoutes = ['/login', '/register', '/reset-password','/forgot-password'];
+  const isPublicRoute = publicRoutes.includes(router.pathname);
 
-  // Show auth pages without AppShell layout
-  if (router.pathname === '/login' || router.pathname === '/register') {
+  useEffect(() => {
+    if (!session && !isPublicRoute) {
+      // Store the current path as callback URL for after login
+      const callbackUrl = encodeURIComponent(router.asPath);
+      router.push(`/login?callbackUrl=${callbackUrl}`);
+    }
+  }, [session, status, router, isPublicRoute]);
+
+  // Show public pages without AppShell layout
+  if (isPublicRoute) {
     return <Component {...pageProps} />;
   }
 
@@ -89,16 +95,17 @@ function AppWithDirection(props: AppProps) {
 
   return (
     <MantineProvider theme={theme}>
-      <ModalsProvider>
-        <NavigationProgress />
-        <Notifications position="bottom-right" zIndex={2077} />
-        <ThemeProvider>
+
+      <ThemeProvider>
+        <ModalsProvider>
+          <NavigationProgress />
+          <Notifications position="bottom-right" zIndex={2077} />
           <ContextMenuProvider>
             <div dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AppContent {...props} />
             </div>
-          </ContextMenuProvider>
-        </ThemeProvider></ModalsProvider>
+          </ContextMenuProvider></ModalsProvider>
+      </ThemeProvider>
     </MantineProvider>
   );
 }

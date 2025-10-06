@@ -1136,6 +1136,189 @@ export const useDeleteCertificateKey = (options?: {
   );
 };
 
+// Locations mutations
+export const useCreateLocation = (options?: {
+  onSuccess?: (location: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async (locationData: any) => {
+      return mutationClient(`${API_BASE}/reference_data/locations/`, 'POST', locationData, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.location.createSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useUpdateLocation = (options?: {
+  onSuccess?: (location: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async ({ id, ...locationData }: { id: number } & any) => {
+      return mutationClient(`${API_BASE}/reference_data/locations/${id}`, 'PUT', locationData, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.location.updateSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useDeleteLocation = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async (id: number) => {
+      return mutationClient(`${API_BASE}/reference_data/locations/${id}`, 'DELETE', undefined, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.location.deleteSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+// Manufacturers mutations
+export const useCreateManufacturer = (options?: {
+  onSuccess?: (manufacturer: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async (manufacturerData: any) => {
+      return mutationClient(`${API_BASE}/reference_data/manufacturers/`, 'POST', manufacturerData, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.manufacturer.createSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useUpdateManufacturer = (options?: {
+  onSuccess?: (manufacturer: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async ({ id, ...manufacturerData }: { id: number } & any) => {
+      return mutationClient(`${API_BASE}/reference_data/manufacturers/${id}`, 'PUT', manufacturerData, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.manufacturer.updateSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useDeleteManufacturer = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async (id: number) => {
+      return mutationClient(`${API_BASE}/reference_data/manufacturers/${id}`, 'DELETE', undefined, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.manufacturer.deleteSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+// Operating Systems mutations
+export const useCreateOperatingSystem = (options?: {
+  onSuccess?: (operatingSystem: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async (operatingSystemData: any) => {
+      return mutationClient(`${API_BASE}/reference_data/operating_systems/`, 'POST', operatingSystemData, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.operatingSystem.createSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useUpdateOperatingSystem = (options?: {
+  onSuccess?: (operatingSystem: any) => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation(
+    async ({ id, ...operatingSystemData }: { id: number } & any) => {
+      return mutationClient(`${API_BASE}/reference_data/operating_systems/${id}`, 'PUT', operatingSystemData, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.operatingSystem.updateSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useDeleteOperatingSystem = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async (id: number) => {
+      return mutationClient(`${API_BASE}/reference_data/operating_systems/${id}`, 'DELETE', undefined, session?.accessToken);
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.operatingSystem.deleteSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
 
 // Generic quick create mutation for any resource type
 export const useQuickCreate = (resourceType: string, options?: {
@@ -1313,5 +1496,37 @@ export const useDeleteDocumentVersion = (options?: { onSuccess?: ()=>void; onErr
   return useMutation<void>(
     async (versionId: number) => mutationClient(`${API_BASE}/documents/versions/${versionId}`, 'DELETE', undefined, session?.accessToken),
     { ...options, successNotification: { message: 'notifications.version.deleteSuccess', color: 'red' } }
+  );
+};
+
+export const useResetPassword = (options?: { onSuccess?: ()=>void; onError?: (e:any)=>void; }) => {
+  return useMutation<void>(
+    async ({ token, password }: { token: string; password: string }) => mutationClient(`${API_BASE}/auth/reset-password`, 'POST', { token, new_password: password }),
+    { ...options, successNotification: { message: 'notifications.password.resetSuccess', color: 'teal' } }
+  );
+};
+
+export const useForgotPassword = (options?: { onSuccess?: ()=>void; onError?: (e:any)=>void; }) => {
+  return useMutation<void>(
+    async ({ email }: { email: string }) => mutationClient(`${API_BASE}/auth/forgot-password`, 'POST', { email }),
+    { ...options }
+  );
+};
+
+// Compliance Events
+export const useUpdateComplianceEvent = (options?: { onSuccess?: ()=>void; onError?: (e:any)=>void; }) => {
+  const { data: session } = useSession();
+  return useMutation<void>(
+    async ({ scopeId, eventId, data }: { scopeId: number; eventId: number; data: any }) => {
+      const result = await mutationClient(
+        `${API_BASE}/compliance/events/${eventId}`,
+        'PUT',
+        data,
+        session?.accessToken
+      );
+      await swrMutate(`${API_BASE}/compliance/scopes/${scopeId}/events`);
+      return result;
+    },
+    { ...options, successNotification: { message: 'notifications.complianceEvent.updateSuccess', color: 'teal' } }
   );
 };

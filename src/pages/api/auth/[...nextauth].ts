@@ -149,8 +149,7 @@ export const authOptions: NextAuthOptions = {
       // expose only short-lived access token to the browser
       session.accessToken = token.accessToken as string;
       session.error = token.error as string | undefined;
-      
-      console.log("🔍 Session callback - decrypted token:", session.accessToken);
+    
       return session;
     },
   },

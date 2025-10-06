@@ -21,11 +21,13 @@ import {
     Skeleton,
 } from '@mantine/core';
 import { IconArrowLeft, IconSearch, IconSortAscending, IconSortDescending, IconRefresh } from '@tabler/icons-react';
-import { useComplianceScopes, useScopeAssets } from '../../fetchers';
-import { t } from '../../../i18n';
+import { t } from '../../../../i18n';
 import { BsStars } from "react-icons/bs";
-import ComplianceControls from '../../../components/ComplianceControls/ComplianceControls';
-import ScopeAssetsProgress from '../../../components/ScopeAssetsProgress';
+import ComplianceControls from '../../../../components/ComplianceControls/ComplianceControls';
+import ScopeEvents from '../../../../components/ComplianceScopeEvents/ScopeEvents';
+import ScopeAssetsProgress from '../../../../components/ScopeAssetsProgress';
+import { useComplianceScopes } from '../../../fetchers';
+import { useScopeAssets } from '../../../fetchers';
 
 // Mapping for asset type tabs
 const TAB_CONFIGS = [
@@ -266,7 +268,7 @@ const CompliancePage = () => {
     }, [allScopes, idNum]);
 
     const handleBack = () => {
-        router.push('/compliance');
+        router.push('/compliance/scopes');
     };
 
     const theme = useMantineTheme();
@@ -289,11 +291,15 @@ const CompliancePage = () => {
                     </Button>
                 </Group>
 
-                <Tabs defaultValue="assets">
+                <Tabs defaultValue="events">
                     <Tabs.List style={{ marginBottom: '20px' }}>
+                        <Tabs.Tab value="events">{t('common.events')}</Tabs.Tab>
                         <Tabs.Tab value="assets">{t('common.assets')}</Tabs.Tab>
                         <Tabs.Tab value="documents">{t('common.documents')}</Tabs.Tab>
                     </Tabs.List>
+                    <Tabs.Panel value="events">
+                        <ScopeEvents scopeId={idNum} />
+                    </Tabs.Panel>
                     <Tabs.Panel value="assets">
                         <Group justify="space-between" mb="md">
                             <Title order={3}>{t('common.assetsWithinScope', { scope: scope?.name })}</Title>

@@ -4,16 +4,17 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { TextInput, PasswordInput, Button, Paper, Title, Container, Text, Alert, LoadingOverlay } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
-import { useTranslation } from '../hooks/useTranslation';
+import { useTranslation } from '../../hooks/useTranslation';
+import { useForgotPassword } from '@/mutations';
 
-export default function Login() {
+export default function ForgotPassword() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
   const { t } = useTranslation();
+  const { mutate: forgotPassword, isLoading: isForgotPasswordLoading } = useForgotPassword();
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -26,22 +27,23 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setInfo('');
     setLoading(true);
     
     const callbackUrl = router.query.callbackUrl as string;
     const redirectUrl = callbackUrl ? decodeURIComponent(callbackUrl) : '/';
     
-    const res = await signIn('credentials', {
+    const res = await forgotPassword({
       email,
-      password,
       callbackUrl: redirectUrl,
     });
     
     setLoading(false);
     
-    if (res?.error) {
-      setError(t('auth.invalidCredentials'));
+    //@ts-ignore
+    if (res) {
+      //@ts-ignore
+      setInfo(t('auth.resetPasswordEmailSent'));
     }
   };
 
@@ -56,9 +58,9 @@ export default function Login() {
 
   return (
     <Container size={420} my={40}>
-      <Title ta="center">{t('auth.welcomeBack')}</Title>
+      <Title ta="center">{t('auth.forgotPassword')}</Title>
       <Text c="dimmed" size="sm" ta="center" mt={5}>
-        {t('auth.signInToAccount')}
+        {t('auth.sendResetPasswordEmailDescription')}
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
@@ -71,28 +73,20 @@ export default function Login() {
             required
             type="email"
           />
-          <PasswordInput
-            label={t('common.password')}
-            placeholder={t('auth.passwordPlaceholder')}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            mt="md"
-          />
           
-          {error && (
-            <Alert icon={<IconAlertCircle size={16} />} title={t('common.error')} color="red" mt="md">
-              {error}
+          {info && (
+            <Alert icon={<IconAlertCircle size={16} />} title={t('common.info')} color="gray" mt="md">
+              {info}
             </Alert>
           )}
 
           <Text ta="right" mt="md" size='sm'>
-            <Link href="/forgot-password" target="_blank" >
-              {t('auth.forgotPassword')}
+            <Link href="/login" target="_blank" >
+              {t('auth.signIn')}
             </Link>
           </Text>
           <Button type="submit" fullWidth mt="xl" loading={loading}>
-            {t('auth.signIn')}
+            {t('common.send')}
           </Button>
         </form>
       </Paper>

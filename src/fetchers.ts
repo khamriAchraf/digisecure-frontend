@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { useEffect } from 'react';
 import { notifications } from '@mantine/notifications';
 import { useSession, getSession, signOut } from 'next-auth/react';
-import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine, ComplianceScope, ComplianceScopeAsset, Document, DocumentFolder, DocumentFolderNode, FolderContents, DocumentVersion, ComplianceScopeControl, CertificateKey, SoftwareVersion, ScopesComplianceSummary } from '../types/models';
+import { PaginatedResponse, User, Role, Group, Asset, AssetType, Manufacturer, Location, Computer, NetworkDevice, Software, VirtualMachine, ComplianceScope, ComplianceScopeAsset, Document, DocumentFolder, DocumentFolderNode, FolderContents, DocumentVersion, ComplianceScopeControl, CertificateKey, SoftwareVersion, ScopesComplianceSummary, OperatingSystem, ComplianceScopeEvent } from '../types/models';
 import { PaginationParams, PersistedTableConfig } from '../types/utils';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
@@ -415,6 +415,28 @@ export const useAssetTypes = (params?: {
   return usePaginatedData<AssetType>(`${API_BASE}/asset-types`, params);
 };
 
+export const useAssetsLocationFilter = (params?: {
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
+  search?: string;
+  location_id?: number;
+}) => {
+  return usePaginatedData<Asset>(`${API_BASE}/assets/?location_id=${params?.location_id}`, params);
+};
+
+export const useAssetsManufacturerFilter = (params?: {
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
+  search?: string;
+  manufacturer_id?: number;
+}) => {
+  return usePaginatedData<Asset>(`${API_BASE}/assets/?manufacturer_id=${params?.manufacturer_id}`, params);
+};
+
 // Manufacturers fetcher
 export const useManufacturers = (params?: {
   page?: number;
@@ -427,6 +449,14 @@ export const useManufacturers = (params?: {
   return usePaginatedData<Manufacturer>(`${API_BASE}/reference_data/manufacturers/`, params);
 };
 
+export const useManufacturer = (manufacturerId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+  const key = manufacturerId ? `${API_BASE}/reference_data/manufacturers/${manufacturerId}` : null;
+  const { data, error, isLoading, mutate } = useSWR<Manufacturer>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
+  return { data, isLoading, isError: error, mutate } as const;
+};
+
 // Locations fetcher
 export const useLocations = (params?: {
   page?: number;
@@ -437,6 +467,33 @@ export const useLocations = (params?: {
   filters?: Record<string, any>;
 }) => {
   return usePaginatedData<Location>(`${API_BASE}/reference_data/locations/`, params);
+};
+
+export const useLocation = (locationId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+  const key = locationId ? `${API_BASE}/reference_data/locations/${locationId}` : null;
+  const { data, error, isLoading, mutate } = useSWR<Location>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
+  return { data, isLoading, isError: error, mutate } as const;
+};
+
+export const useOperatingSystems = (params?: {
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
+  search?: string;
+  filters?: Record<string, any>;
+}) => {
+  return usePaginatedData<OperatingSystem>(`${API_BASE}/reference_data/operating_systems/`, params);
+};
+
+export const useOperatingSystem = (operatingSystemId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+  const key = operatingSystemId ? `${API_BASE}/reference_data/operating_systems/${operatingSystemId}` : null;
+  const { data, error, isLoading, mutate } = useSWR<OperatingSystem>(key, (url: string) => jsonFetcher(url, token), { shouldRetryOnError:false});
+  return { data, isLoading, isError: error, mutate } as const;
 };
 
 // Legacy useUsers hook for backward compatibility
@@ -790,6 +847,23 @@ export const useScopeControl = (scopeId?: number | string, controlId?: number | 
 
   return { data, isLoading, isError: error, mutate } as const;
 };
+
+// GET /compliance/scopes/{scope_id}/event
+export const useScopeEvents = (scopeId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const base = scopeId ? `${API_BASE}/compliance/scopes/${scopeId}/events` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<ComplianceScopeEvent[]>(
+    base,
+    (u: string) => jsonFetcher(u, token)
+  );
+
+  return { data, isLoading, isError: error, mutate } as const;
+};
+
+
 
 
 export const useDetetedUsers = (

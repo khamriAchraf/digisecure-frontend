@@ -8,7 +8,11 @@
     "settings": "Settings",
     "security": "Security",
     "compliance": "Compliance",
-    "documents": "Documents"
+    "reference_data": "Reference Data",
+    "manufacturers": "Manufacturers",
+    "locations": "Locations",
+    "documents": "Documents",
+    "operating_systems": "Operating Systems"
   },
   "assets": {
     "computers": "Computers",
@@ -23,7 +27,7 @@
     "group": "Group",
     "roles": "Roles",
     "role": "Role",
-    "dictionaries": "Dictionaries",
+    "reference_data": "Reference Data",
     "recycle_bin": "Recycle Bin"
   },
   "compliance": {

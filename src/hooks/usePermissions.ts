@@ -203,14 +203,32 @@ export const PERMISSIONS = {
   GROUP_UPDATE: "group:update",
   GROUP_DELETE: "group:delete",
   GROUP_PURGE: "group:purge",
+ 
+  // Location permissions
+  LOCATION_READ: "location:read",
+  LOCATION_LIST: "location:list",
+  LOCATION_CREATE: "location:create",
+  LOCATION_UPDATE: "location:update",
+  LOCATION_DELETE: "location:delete",
+  LOCATION_PURGE: "location:purge",
+
+  // Manufacturer permissions
+  MANUFACTURER_READ: "manufacturer:read",
+  MANUFACTURER_LIST: "manufacturer:list",
+  MANUFACTURER_CREATE: "manufacturer:create",
+  MANUFACTURER_UPDATE: "manufacturer:update",
+  MANUFACTURER_DELETE: "manufacturer:delete",
+  MANUFACTURER_PURGE: "manufacturer:purge",
   
-  // Reference data permissions
-  REFERENCE_DATA_READ: "reference_data:read",
-  REFERENCE_DATA_LIST: "reference_data:list",
-  REFERENCE_DATA_CREATE: "reference_data:create",
-  REFERENCE_DATA_UPDATE: "reference_data:update",
-  REFERENCE_DATA_DELETE: "reference_data:delete",
-  REFERENCE_DATA_PURGE: "reference_data:purge",
+  // Operating system permissions
+  OPERATING_SYSTEM_READ: "operating_system:read",
+  OPERATING_SYSTEM_LIST: "operating_system:list",
+  OPERATING_SYSTEM_CREATE: "operating_system:create",
+  OPERATING_SYSTEM_UPDATE: "operating_system:update",
+  OPERATING_SYSTEM_DELETE: "operating_system:delete",
+  OPERATING_SYSTEM_PURGE: "operating_system:purge",
+
+
   
   // Asset permissions
   // compliance manage is the ability to tag/untag assets with compliance scopes
@@ -225,6 +243,13 @@ export const PERMISSIONS = {
   COMPLIANCE_SCOPE_UPDATE: "compliance_scope:update",
   COMPLIANCE_SCOPE_DELETE: "compliance_scope:delete",
   COMPLIANCE_SCOPE_PURGE: "compliance_scope:purge",
+  
+  // Compliance event permissions
+  COMPLIANCE_EVENT_READ: "compliance_event:read",
+  COMPLIANCE_EVENT_LIST: "compliance_event:list",
+  COMPLIANCE_EVENT_CREATE: "compliance_event:create",
+  COMPLIANCE_EVENT_UPDATE: "compliance_event:update",
+  COMPLIANCE_EVENT_DELETE: "compliance_event:delete",
 
   // Documents permissions
   DOCUMENTS_READ: "document:read",
@@ -247,6 +272,14 @@ export const PERMISSIONS = {
   ANALYTICS_UPDATE: "analytics:update",
   ANALYTICS_DELETE: "analytics:delete",
   ANALYTICS_PURGE: "analytics:purge",
+
+  // Data register
+  DATA_REGISTER_READ: "data_register:read",
+  DATA_REGISTER_LIST: "data_register:list",
+  DATA_REGISTER_CREATE: "data_register:create",
+  DATA_REGISTER_UPDATE: "data_register:update",
+  DATA_REGISTER_DELETE: "data_register:delete",
+  DATA_REGISTER_PURGE: "data_register:purge",
 
 
   

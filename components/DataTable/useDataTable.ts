@@ -135,6 +135,7 @@ export function useDataTable<T extends { id: number | string }>({
     asset_types: `/asset-types/`,
     manufacturers: `/reference_data/manufacturers/`,
     locations: `/reference_data/locations/`,
+    operating_systems: `/reference_data/operating_systems/`,
   };
 
   const recyclePathMap: Partial<Record<DataType, string>> = {
@@ -155,10 +156,24 @@ export function useDataTable<T extends { id: number | string }>({
 
   const { data: paginatedData, isLoading, isError, mutate } = usePaginatedData<T>(endpoint, queryParams);
   
-  // Extract data and metadata
-  const data = paginatedData?.data || [];
-  const totalItems = paginatedData?.total || 0;
-  const totalPages = paginatedData?.total_pages || 0;
+  // Extract data and metadata (support multiple response shapes)
+  const paginatedAny = paginatedData as any;
+  const normalizedRows: T[] =
+    (paginatedAny?.data as T[])
+    ?? (paginatedAny?.results as T[])
+    ?? (paginatedAny?.items as T[])
+    ?? (paginatedAny?.rows as T[])
+    ?? [];
+
+  const data = normalizedRows;
+  const totalItems: number =
+    (paginatedAny?.total as number)
+    ?? (paginatedAny?.count as number)
+    ?? (paginatedAny?.total_items as number)
+    ?? normalizedRows.length;
+  const totalPages: number =
+    (paginatedAny?.total_pages as number)
+    ?? (totalItems && pageSize ? Math.ceil(totalItems / pageSize) : 0);
   
   // Action handlers
   const setPage = useCallback((page: number) => {

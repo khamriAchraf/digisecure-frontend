@@ -41,11 +41,21 @@ export function Navbar() {
   const hasRecycleBinUserList = useHasPermission(PERMISSIONS.RECYCLE_BIN_USER_LIST);
   const hasDocumentsList = useHasPermission(PERMISSIONS.DOCUMENTS_LIST);
   const hasAnalyticsList = useHasPermission(PERMISSIONS.ANALYTICS_LIST);
+  const hasOperatingSystemList = useHasPermission(PERMISSIONS.OPERATING_SYSTEM_LIST);
+  const hasManufacturerList = useHasPermission(PERMISSIONS.MANUFACTURER_LIST);
+  const hasLocationList = useHasPermission(PERMISSIONS.LOCATION_LIST);
+  const hasDataRegisterList = useHasPermission(PERMISSIONS.DATA_REGISTER_LIST);
 
   const adminLinks = [
     // Only show users link if user has user read permission
     ...(hasUserList ? [{ label: t('administration.users'), link: '/admin/users' }] : []),
     ...(hasGroupList ? [{ label: t('administration.groups'), link: '/admin/groups' }] : []),
+    ...(hasOperatingSystemList || hasManufacturerList || hasLocationList ? [{ label: t('administration.reference_data'), link: '/admin/reference_data' }] : []),
+  ];
+
+  const complianceLinks = [
+    ...(hasComplianceScopeList ? [{ label: t('navigation.scopes'), icon: IconChecklist, link: '/compliance/scopes' }] : []),
+    ...(hasDataRegisterList ? [{ label: t('navigation.data_register'), icon: IconFile, link: '/compliance/data_register' }] : []),
   ];
 
   const mockdata = [
@@ -67,14 +77,12 @@ export function Navbar() {
       icon: IconShieldCheck,
       links: adminLinks,
     }] : []),
-    ...(hasComplianceScopeList ? [{ label: t('navigation.compliance'), icon: IconChecklist, link: '/compliance' }] : []),
+    ...(complianceLinks.length > 0 ? [{ label: t('navigation.compliance'), icon: IconChecklist, links: complianceLinks }] : []),
     ...(hasDocumentsList ? [{ label: t('navigation.documents'), icon: IconFile, link: '/documents' }] : []),
-    { label: t('navigation.contracts'), icon: IconFileAnalytics, link: '/contracts' },
     { label: t('navigation.settings'), icon: IconAdjustments, link: '/settings' },
 
   ];
 
-  // Ensure only one group is open at a time (accordion behavior)
   useEffect(() => {
     if (isCollapsed) {
       setOpenGroupLabel(null);
@@ -88,7 +96,6 @@ export function Navbar() {
       return item.link === currentPath;
     });
     setOpenGroupLabel(matched ? matched.label : null);
-    // Only depend on pathname and collapsed to avoid overriding user toggles unnecessarily
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname, isCollapsed]);
 
