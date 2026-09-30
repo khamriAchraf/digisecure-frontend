@@ -483,6 +483,7 @@ export interface ComplianceScopeAsset extends BaseModel {
 }
 
 export interface ComplianceScopeEvent extends BaseModel {
+  id: number;
   scope_id: number;
   name: string;
   description?: string | null;
@@ -494,6 +495,10 @@ export interface ComplianceScopeEvent extends BaseModel {
   notes?: string | null;
   notify_user_count?: number | null;
   notify_group_count?: number | null;
+  start: string | null;
+  end: string | null;
+  title: string | null;
+  allDay: boolean | null;
   // Relationships
   scope?: ComplianceScope;
   notify_users?: User[];

@@ -3,6 +3,7 @@ import '@mantine/notifications/styles.css';
 import '@mantine/nprogress/styles.css';
 import 'mantine-contextmenu/styles.layer.css';
 import '@mantine/dates/styles.css';
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import { SessionProvider } from 'next-auth/react';
 import { ContextMenuProvider } from 'mantine-contextmenu';
 

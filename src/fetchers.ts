@@ -1098,3 +1098,25 @@ export const useComplianceDashboard = () => {
 
   return { data, isLoading, isError: error, mutate } as const;
 };
+
+export const useEvent = (eventId?: number | string) => {
+  const { data: session } = useSession();
+  const token = session?.accessToken;
+
+  const key = eventId ? `${API_BASE}/compliance/events/${eventId}` : null;
+
+  const { data, error, isLoading, mutate } = useSWR<ComplianceScopeEvent>(
+    key,
+    (url: string) => jsonFetcher(url, token),
+    {
+      shouldRetryOnError: false,
+    },
+  );
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    mutate,
+  } as const;
+};

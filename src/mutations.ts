@@ -1530,3 +1530,103 @@ export const useUpdateComplianceEvent = (options?: { onSuccess?: ()=>void; onErr
     { ...options, successNotification: { message: 'notifications.complianceEvent.updateSuccess', color: 'teal' } }
   );
 };
+
+export const useAddUserToEvent = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ eventId, userId }: { eventId: number; userId: number }) => {
+      return mutationClient(
+        `${API_BASE}/compliance/events/${eventId}/users/${userId}`,
+        'POST',
+        undefined,
+        session?.accessToken
+      );
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.userAddedSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useRemoveUserFromEvent = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ eventId, userId }: { eventId: number; userId: number }) => {
+      return mutationClient(
+        `${API_BASE}/compliance/events/${eventId}/users/${userId}`,
+        'DELETE',
+        undefined,
+        session?.accessToken
+      );
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.userRemovedSuccess',
+        color: 'red',
+      },
+    }
+  );
+};
+
+export const useAddgroupToEvent = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ eventId, groupId }: { eventId: number; groupId: number }) => {
+      return mutationClient(
+        `${API_BASE}/compliance/events/${eventId}/groups/${groupId}`,
+        'POST',
+        undefined,
+        session?.accessToken
+      );
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.groupAddedSuccess',
+        color: 'teal',
+      },
+    }
+  );
+};
+
+export const useRemovegroupFromEvent = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}) => {
+  const { data: session } = useSession();
+
+  return useMutation<void>(
+    async ({ eventId, groupId }: { eventId: number; groupId: number }) => {
+      return mutationClient(
+        `${API_BASE}/compliance/events/${eventId}/groups/${groupId}`,
+        'DELETE',
+        undefined,
+        session?.accessToken
+      );
+    },
+    {
+      ...options,
+      successNotification: {
+        message: 'notifications.group.groupRemovedSuccess',
+        color: 'red',
+      },
+    }
+  );
+};

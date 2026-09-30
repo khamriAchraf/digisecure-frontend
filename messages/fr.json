@@ -52,6 +52,7 @@
     "recoveryCodes": "Codes de récupération"
   },
   "common": {
+    "general":"Général",
     "send": "Envoyer",
     "all": "Tous",
     "loading": "Chargement...",
@@ -1925,6 +1926,7 @@
     "add_version": "Ajouter une version logicielle",
     "version_details": "Détails de la version",
     "pick_document": "Sélectionner un document",
-    "editEvent": "Modifier l'événement"
+    "editEvent": "Modifier l'événement",
+    "notifications": "Notifications"
   }
 } 

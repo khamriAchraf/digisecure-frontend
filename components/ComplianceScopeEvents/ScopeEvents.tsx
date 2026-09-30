@@ -6,6 +6,7 @@ import { IconCheck, IconAlertCircle, IconClock, IconCircleDashed, IconRepeat } f
 import { getEventStatusInfo } from '../../types/utils';
 import { ComplianceScopeEvent } from '../../types/models';
 import EventModal from '../EventModal/EventModal';
+import EventsCalendar from './EventsCalendar';
 
 const ScopeEvents = ({ scopeId }: { scopeId: number }) => {
 
@@ -185,10 +186,13 @@ const ScopeEvents = ({ scopeId }: { scopeId: number }) => {
                 </Timeline>
             )}
 
+            {displayMode === 'calendar' && sortedEvents.length > 0 && (
+                <EventsCalendar events={sortedEvents} />
+            )}
             <EventModal
                 opened={modalOpened}
                 onClose={handleModalClose}
-                event={selectedEvent}
+                eventId={selectedEvent?.id}
                 scopeId={scopeId}
                 onSuccess={handleEventUpdate}
             />
