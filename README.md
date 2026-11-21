@@ -9,6 +9,12 @@ origin and set `NEXTAUTH_SECRET` to a securely generated random value. For
 production, provide these values in the deployment environment; the API URL is
 embedded into the frontend at build time.
 
+Set `DEMO_RECRUITER_EMAIL` and `DEMO_RECRUITER_PASSWORD` to a dedicated demo
+account's credentials to enable recruiter access on the login screen. Keep the
+values server-side (do not use `NEXT_PUBLIC_` variables), and use a demo account
+with appropriate limited permissions. These credentials are intentionally
+available to anyone requesting the public demo-access endpoint.
+
 The backend must allow the frontend's exact origin in its CORS configuration.
 Public account registration is disabled; an administrator must create accounts.
 
