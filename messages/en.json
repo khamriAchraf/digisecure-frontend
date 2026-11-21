@@ -12,13 +12,20 @@
     "manufacturers": "Manufacturers",
     "locations": "Locations",
     "documents": "Documents",
-    "operating_systems": "Operating Systems"
+    "operating_systems": "Operating Systems",
+    "dashboards": "Dashboards",
+    "complianceDashboard": "Compliance dashboard",
+    "assetsDashboard": "Asset dashboard",
+    "data_register": "Data register",
+    "scopes": "Compliance scopes"
   },
   "assets": {
     "computers": "Computers",
     "network_devices": "Network Devices",
     "virtual_machines": "Virtual Machines",
-    "software": "Software"
+    "software": "Software",
+    "networkDevices": "Network devices",
+    "virtualMachines": "Virtual machines"
   },
   "administration": {
     "users": "Users",
@@ -28,7 +35,8 @@
     "roles": "Roles",
     "role": "Role",
     "reference_data": "Reference Data",
-    "recycle_bin": "Recycle Bin"
+    "recycle_bin": "Recycle Bin",
+    "dictionaries": "Dictionaries"
   },
   "compliance": {
     "scopes": "Scopes",
@@ -41,7 +49,8 @@
     "pickDocumentToAttach": "Select a document to attach",
     "attachSelected": "Attach",
     "documentsCoverage": "Documents coverage",
-    "progress": "Progress"
+    "progress": "Progress",
+    "assetsCoverage": "Asset coverage"
   },
   "security": {
     "enable2FA": "Enable 2FA",
@@ -82,7 +91,17 @@
     "redirecting": "Redirecting...",
     "add": "Add",
     "remove": "Remove",
-    "noOptions": "No options available"
+    "noOptions": "No options available",
+    "general": "General",
+    "send": "Send",
+    "assets": "Assets",
+    "documents": "Documents",
+    "assetsWithinScope": "Assets in the {scope} scope",
+    "events": "Events",
+    "na": "N/A",
+    "purge": "Delete permanently",
+    "restore": "Restore",
+    "username": "Username"
   },
   "auth": {
     "login": "Login",
@@ -97,7 +116,18 @@
     "welcomeBack": "Welcome back!",
     "signInToAccount": "Sign in to your account",
     "passwordPlaceholder": "Your password",
-    "invalidCredentials": "Invalid email or password"
+    "invalidCredentials": "Invalid email or password",
+    "invalidToken": "Invalid token",
+    "resetPassword": "Reset password",
+    "sendResetPasswordEmail": "Forgot your password?",
+    "sendResetPasswordEmailDescription": "Enter your email to receive a password reset link.",
+    "resetPasswordEmailSent": "Password reset email sent",
+    "resetPasswordEmailSentDescription": "A password reset email has been sent to your email address.",
+    "resetPasswordEmailSentSuccess": "Password reset email sent successfully",
+    "resetPasswordEmailSentError": "Failed to send password reset email",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "resetPasswordDescription": "Enter a new password to reset your account password."
   },
   "language": {
     "english": "English",
@@ -215,7 +245,19 @@
     "certificate_keys": "Certificates/Keys",
     "serial_number": "Serial Number",
     "usersCount": "Users Count",
-    "assetsCount": "Assets Count"
+    "assetsCount": "Assets Count",
+    "refreshTable": "Refresh",
+    "deletedAt": "Deleted at",
+    "locations": "Locations",
+    "manufacturers": "Manufacturers",
+    "operatingSystems": "Operating systems",
+    "recycleBinLocations": "Deleted locations",
+    "recycleBinManufacturers": "Deleted manufacturers",
+    "recycleBinOperatingSystems": "Deleted operating systems",
+    "role": {
+      "name": "Role"
+    },
+    "version": "Version"
   },
   "forms": {
     "errors": {
@@ -621,6 +663,13 @@
             "High": "High",
             "Medium": "Medium",
             "Low": "Low"
+          }
+        },
+        "operating_system_id": {
+          "label": "Operating system",
+          "help_text": "The operating system installed on this computer.",
+          "options": {
+            "no_operating_system": "No operating system"
           }
         }
       }
@@ -1641,7 +1690,8 @@
           "label": "Replacement Planned",
           "help_text": "Whether replacement of this software is planned."
         }
-      }
+      },
+      "add_version": "Add version"
     },
     "add_version": "Add Version",
     "certificate_key": {
@@ -1713,6 +1763,9 @@
             "pending": "Pending"
           }
         }
+      },
+      "edit": {
+        "title": "Edit certificate key"
       }
     },
     "documents": {
@@ -1729,6 +1782,134 @@
         "Approved": "Approved",
         "Rejected": "Rejected",
         "Pending review": "Pending review"
+      },
+      "review_date": "Last review date",
+      "description": "Description",
+      "review_frequency_months": "Review frequency (months)",
+      "next_review_date": "Next review date",
+      "assigned_user": "Assigned user",
+      "rename_document": "Rename document",
+      "review_status": "Review status",
+      "review_notes": "Review notes"
+    },
+    "events": {
+      "name": "Name",
+      "namePlaceholder": "Enter event name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter event description",
+      "frequency": "Frequency",
+      "frequencyPlaceholder": "Select a frequency",
+      "frequencyHelp": "How often should this event occur?",
+      "frequencies": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "biweekly": "Every two weeks",
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "semiannual": "Every six months",
+        "yearly": "Yearly"
+      },
+      "nextDueDate": "Next due date",
+      "nextDueDatePlaceholder": "Select a date",
+      "lastDoneDate": "Last completed date",
+      "lastDoneDatePlaceholder": "Select a date",
+      "notify": "Enable notifications",
+      "notifyHelp": "Send reminders for this event",
+      "remindBeforeDays": "Remind before (days)",
+      "remindBeforeDaysHelp": "Number of days before the due date to send a reminder",
+      "notes": "Notes",
+      "notesPlaceholder": "Enter additional notes"
+    },
+    "location": {
+      "createSuccess": "Location created successfully!",
+      "create": {
+        "title": "Create location"
+      },
+      "edit": {
+        "title": "Edit location"
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Enter the location name",
+          "help_text": "The name of the location."
+        },
+        "address": {
+          "label": "Address",
+          "placeholder": "Enter the location address",
+          "help_text": "The address of the location."
+        },
+        "postal_code": {
+          "label": "Postal code",
+          "placeholder": "Enter the postal code",
+          "help_text": "The postal code for the location."
+        },
+        "town": {
+          "label": "Town",
+          "placeholder": "Enter the town or city",
+          "help_text": "The town or city where the location is based."
+        },
+        "state": {
+          "label": "State/region",
+          "placeholder": "Enter the state or region",
+          "help_text": "The state or region of the location."
+        },
+        "country": {
+          "label": "Country",
+          "placeholder": "Enter the country",
+          "help_text": "The country where the location is based."
+        },
+        "building_number": {
+          "label": "Building number",
+          "placeholder": "Enter the building number",
+          "help_text": "The building number for the location."
+        },
+        "floor_number": {
+          "label": "Floor number",
+          "placeholder": "Enter the floor number",
+          "help_text": "The floor number for the location."
+        },
+        "room_number": {
+          "label": "Room number",
+          "placeholder": "Enter the room number",
+          "help_text": "The room number for the location."
+        },
+        "longitude": {
+          "label": "Longitude",
+          "placeholder": "Enter the longitude",
+          "help_text": "The geographic longitude of the location."
+        },
+        "latitude": {
+          "label": "Latitude",
+          "placeholder": "Enter the latitude",
+          "help_text": "The geographic latitude of the location."
+        },
+        "altitude": {
+          "label": "Altitude",
+          "placeholder": "Enter the altitude",
+          "help_text": "The altitude of the location."
+        },
+        "comment": {
+          "label": "Comment",
+          "placeholder": "Enter a comment about the location",
+          "help_text": "A comment about the location."
+        }
+      }
+    },
+    "manufacturer": {
+      "create": {
+        "title": "Create manufacturer"
+      },
+      "edit": {
+        "title": "Edit manufacturer"
+      }
+    },
+    "operatingSystem": {
+      "create": {
+        "title": "Create operating system"
+      },
+      "edit": {
+        "title": "Edit operating system"
       }
     }
   },
@@ -1786,11 +1967,32 @@
     },
     "quickCreate": {
       "success": "{resource} created successfully!"
+    },
+    "complianceEvent": {
+      "updateSuccess": "Event updated successfully"
     }
   },
   "modals": {
     "add_version": "Add software version",
     "version_details": "Version details",
-    "pick_document": "Select a document"
+    "pick_document": "Select a document",
+    "editEvent": "Edit event",
+    "notifications": "Notifications"
+  },
+  "confirm": {
+    "delete": {
+      "bulk": {
+        "message": "Are you sure you want to delete {count} selected item(s)?",
+        "more": "and {extra} more...",
+        "title": "Delete selected items?"
+      }
+    },
+    "purge": {
+      "bulk": {
+        "message": "Are you sure you want to permanently delete {count} selected item(s)? This cannot be undone.",
+        "more": "and {extra} more...",
+        "title": "Permanently delete selected items?"
+      }
+    }
   }
 }

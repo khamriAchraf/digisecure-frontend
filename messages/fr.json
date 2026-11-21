@@ -15,13 +15,17 @@
     "reference_data": "Données de référence",
     "manufacturers": "Fabricants",
     "locations": "Emplacements",
-    "operating_systems": "Systèmes d'exploitation"
+    "operating_systems": "Systèmes d'exploitation",
+    "data_register": "Registre des données",
+    "scopes": "Périmètres de conformité"
   },
   "assets": {
     "computers": "Ordinateurs",
     "network_devices": "Périphériques réseau",
     "virtual_machines": "Machines virtuelles",
-    "software": "Logiciels"
+    "software": "Logiciels",
+    "networkDevices": "Périphériques réseau",
+    "virtualMachines": "Machines virtuelles"
   },
   "administration": {
     "users": "Utilisateurs",
@@ -31,7 +35,8 @@
     "roles": "Rôles",
     "role": "Rôle",
     "reference_data": "Données de référence",
-    "recycle_bin": "Corbeille"
+    "recycle_bin": "Corbeille",
+    "dictionaries": "Dictionnaires"
   },
   "compliance": {
     "scopes": "Périmètres",
@@ -44,7 +49,8 @@
     "pickDocumentToAttach": "Sélectionnez un document à attacher",
     "attachSelected": "Attacher",
     "documentsCoverage": "Couverture des documents",
-    "progress": "Progression"
+    "progress": "Progression",
+    "assetsCoverage": "Couverture des actifs"
   },
   "security": {
     "enable2FA": "Activer 2FA",
@@ -91,7 +97,11 @@
     "assets": "Actifs",
     "documents": "Documents",
     "assetsWithinScope": "Actifs relevant du périmètre {scope}",
-    "events": "Événements"
+    "events": "Événements",
+    "na": "N/D",
+    "purge": "Supprimer définitivement",
+    "restore": "Restaurer",
+    "username": "Nom d'utilisateur"
   },
   "auth": {
     "login": "Connexion",
@@ -114,7 +124,10 @@
     "resetPasswordEmailSent": "Email de réinitialisation de mot de passe envoyé",
     "resetPasswordEmailSentDescription": "Un email de réinitialisation de mot de passe a été envoyé à votre adresse email",
     "resetPasswordEmailSentSuccess": "Email de réinitialisation de mot de passe envoyé avec succès",
-    "resetPasswordEmailSentError": "Erreur lors de l'envoi de l'email de réinitialisation de mot de passe"
+    "resetPasswordEmailSentError": "Erreur lors de l'envoi de l'email de réinitialisation de mot de passe",
+    "confirmPasswordPlaceholder": "Confirmez votre mot de passe",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+    "resetPasswordDescription": "Saisissez un nouveau mot de passe pour réinitialiser votre compte."
   },
   "language": {
     "english": "Anglais",
@@ -232,7 +245,19 @@
     "certificate_keys": "Certificats/Clés",
     "serial_number": "Numéro de série",
     "usersCount": "Nombre d'utilisateurs",
-    "assetsCount": "Nombre d'éléments"
+    "assetsCount": "Nombre d'éléments",
+    "computer": "Ordinateur",
+    "deletedAt": "Supprimé le",
+    "locations": "Emplacements",
+    "manufacturers": "Fabricants",
+    "operatingSystems": "Systèmes d'exploitation",
+    "recycleBinLocations": "Emplacements supprimés",
+    "recycleBinManufacturers": "Fabricants supprimés",
+    "recycleBinOperatingSystems": "Systèmes d'exploitation supprimés",
+    "role": {
+      "name": "Rôle"
+    },
+    "version": "Version"
   },
   "forms": {
     "errors": {
@@ -1765,6 +1790,9 @@
             "pending": "En attente"
           }
         }
+      },
+      "edit": {
+        "title": "Modifier la clé de certificat"
       }
     },
     "documents": {
@@ -1859,6 +1887,29 @@
           "placeholder": "Entrez le commentaire de l'emplacement",
           "help_text": "Le commentaire de l'emplacement."
         }
+      },
+      "create": {
+        "title": "Créer un emplacement"
+      },
+      "edit": {
+        "title": "Modifier un emplacement"
+      }
+    },
+    "add_version": "Ajouter une version",
+    "manufacturer": {
+      "create": {
+        "title": "Créer un fabricant"
+      },
+      "edit": {
+        "title": "Modifier un fabricant"
+      }
+    },
+    "operatingSystem": {
+      "create": {
+        "title": "Créer un système d'exploitation"
+      },
+      "edit": {
+        "title": "Modifier un système d'exploitation"
       }
     }
 
@@ -1928,5 +1979,21 @@
     "pick_document": "Sélectionner un document",
     "editEvent": "Modifier l'événement",
     "notifications": "Notifications"
+  },
+  "confirm": {
+    "delete": {
+      "bulk": {
+        "message": "Voulez-vous vraiment supprimer {count} élément(s) sélectionné(s) ?",
+        "more": "et {extra} élément(s) supplémentaire(s)...",
+        "title": "Supprimer les éléments sélectionnés ?"
+      }
+    },
+    "purge": {
+      "bulk": {
+        "message": "Voulez-vous vraiment supprimer définitivement {count} élément(s) sélectionné(s) ? Cette action est irréversible.",
+        "more": "et {extra} élément(s) supplémentaire(s)...",
+        "title": "Supprimer définitivement les éléments sélectionnés ?"
+      }
+    }
   }
 } 

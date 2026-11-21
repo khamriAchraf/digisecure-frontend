@@ -1,6 +1,7 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { jwtDecode } from "jwt-decode";
+import { API_BASE } from "../../../api";
 
 declare module "next-auth" {
   interface Session {
@@ -61,7 +62,7 @@ export const authOptions: NextAuthOptions = {
           password: creds?.password ?? "",
         });
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+          `${API_BASE}/auth/login`,
           { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body }
         );
         if (!res.ok) return null;
@@ -110,7 +111,7 @@ export const authOptions: NextAuthOptions = {
 
       // 3. ATTEMPT ROTATION VIA BACKEND /auth/refresh
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
+        const res = await fetch(`${API_BASE}/auth/refresh`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ refresh_token: token.refreshToken }),
@@ -158,7 +159,7 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signOut({ token }) {
       if (!token?.refreshToken) return;
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+      await fetch(`${API_BASE}/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh_token: token.refreshToken }),

@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
+## Backend configuration
+
+Copy `.env.example` to `.env.local` for local development. Set
+`NEXT_PUBLIC_API_URL` to the backend API root, including `/api/v1` (for example,
+`http://localhost:8000/api/v1`). Configure `NEXTAUTH_URL` for the frontend's
+origin and set `NEXTAUTH_SECRET` to a securely generated random value. For
+production, provide these values in the deployment environment; the API URL is
+embedded into the frontend at build time.
+
+The backend must allow the frontend's exact origin in its CORS configuration.
+Public account registration is disabled; an administrator must create accounts.
+
 ## Getting Started
 
 First, run the development server:

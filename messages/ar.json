@@ -8,13 +8,24 @@
     "settings": "الإعدادات",
     "security": "الأمان",
     "compliance": "الامتثال",
-    "documents": "الوثائق"
+    "documents": "الوثائق",
+    "reference_data": "البيانات المرجعية",
+    "manufacturers": "الشركات المصنّعة",
+    "locations": "المواقع",
+    "operating_systems": "أنظمة التشغيل",
+    "dashboards": "لوحات المعلومات",
+    "complianceDashboard": "لوحة الامتثال",
+    "assetsDashboard": "لوحة الأصول",
+    "data_register": "سجل البيانات",
+    "scopes": "نطاقات الامتثال"
   },
   "assets": {
     "computers": "الحواسيب",
     "network_devices": "الأجهزة الشبكية",
     "virtual_machines": "الأجهزة الافتراضية",
-    "software": "البرمجيات"
+    "software": "البرمجيات",
+    "networkDevices": "أجهزة الشبكة",
+    "virtualMachines": "الأجهزة الافتراضية"
   },
   "administration": {
     "users": "المستخدمون",
@@ -24,7 +35,8 @@
     "roles": "الأدوار",
     "role": "الدور",
     "dictionaries": "القواميس",
-    "recycle_bin": "المهملات"
+    "recycle_bin": "المهملات",
+    "reference_data": "البيانات المرجعية"
   },
   "compliance": {
     "scopes": "مجالات",
@@ -37,7 +49,8 @@
     "pickDocumentToAttach": "اختر مستندًا لإرفاقه",
     "attachSelected": "إرفاق",
     "documentsCoverage": "تغطية المستندات",
-    "progress": "التقدم"
+    "progress": "التقدم",
+    "assetsCoverage": "تغطية الأصول"
   },
   "security": {
     "enable2FA": "تفعيل المصادقة الثنائية",
@@ -78,7 +91,17 @@
     "redirecting": "جاري إعادة التوجيه...",
     "add": "إضافة",
     "remove": "إزالة",
-    "noOptions": "لا توجد خيارات متاحة"
+    "noOptions": "لا توجد خيارات متاحة",
+    "general": "عام",
+    "send": "إرسال",
+    "assets": "الأصول",
+    "documents": "المستندات",
+    "assetsWithinScope": "الأصول ضمن نطاق {scope}",
+    "events": "الأحداث",
+    "na": "غير متاح",
+    "purge": "حذف نهائي",
+    "restore": "استعادة",
+    "username": "اسم المستخدم"
   },
   "auth": {
     "login": "تسجيل الدخول",
@@ -93,7 +116,18 @@
     "welcomeBack": "مرحباً بعودتك!",
     "signInToAccount": "سجل الدخول إلى حسابك",
     "passwordPlaceholder": "كلمة المرور الخاصة بك",
-    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة"
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "invalidToken": "رمز غير صالح",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "sendResetPasswordEmail": "هل نسيت كلمة المرور؟",
+    "sendResetPasswordEmailDescription": "أدخل بريدك الإلكتروني لتلقي رابط إعادة تعيين كلمة المرور.",
+    "resetPasswordEmailSent": "تم إرسال رسالة إعادة تعيين كلمة المرور",
+    "resetPasswordEmailSentDescription": "تم إرسال رسالة إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+    "resetPasswordEmailSentSuccess": "تم إرسال رسالة إعادة تعيين كلمة المرور بنجاح",
+    "resetPasswordEmailSentError": "تعذّر إرسال رسالة إعادة تعيين كلمة المرور",
+    "confirmPasswordPlaceholder": "أكّد كلمة المرور",
+    "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+    "resetPasswordDescription": "أدخل كلمة مرور جديدة لإعادة تعيين كلمة مرور حسابك."
   },
   "language": {
     "english": "الإنجليزية",
@@ -209,7 +243,21 @@
     "certificate_keys": "الشهادات/المفاتيح",
     "serial_number": "الرقم التسلسلي",
     "usersCount": "عدد المستخدمين",
-    "assetsCount": "عدد الأصول"
+    "assetsCount": "عدد الأصول",
+    "computer": "حاسوب",
+    "computers": "أجهزة الكمبيوتر",
+    "refreshTable": "تحديث",
+    "deletedAt": "تاريخ الحذف",
+    "locations": "المواقع",
+    "manufacturers": "الشركات المصنّعة",
+    "operatingSystems": "أنظمة التشغيل",
+    "recycleBinLocations": "المواقع المحذوفة",
+    "recycleBinManufacturers": "الشركات المصنّعة المحذوفة",
+    "recycleBinOperatingSystems": "أنظمة التشغيل المحذوفة",
+    "role": {
+      "name": "الدور"
+    },
+    "version": "الإصدار"
   },
   "forms": {
     "errors": {
@@ -615,6 +663,13 @@
             "High": "عالي",
             "Medium": "متوسط",
             "Low": "منخفض"
+          }
+        },
+        "operating_system_id": {
+          "label": "نظام التشغيل",
+          "help_text": "نظام التشغيل المثبّت على هذا الكمبيوتر.",
+          "options": {
+            "no_operating_system": "بدون نظام تشغيل"
           }
         }
       }
@@ -1635,7 +1690,8 @@
           "label": "الاستبدال مخطط",
           "help_text": "ما إذا كان استبدال هذه البرمجية مخطط."
         }
-      }
+      },
+      "add_version": "إضافة إصدار"
     },
     "certificate_key": {
       "create": {
@@ -1706,6 +1762,9 @@
             "pending": "قيد الانتظار"
           }
         }
+      },
+      "edit": {
+        "title": "تعديل مفتاح الشهادة"
       }
     },
     "documents": {
@@ -1713,13 +1772,153 @@
         "title": "إنشاء مستند",
         "description": "إنشاء مستند جديد في النظام"
       },
-      "attach": "إرفاق مستند"
+      "attach": "إرفاق مستند",
+      "help": {
+        "computedReview": "تُحتسب هذه القيم استنادًا إلى نطاقات الامتثال المرتبط بها المستند."
+      },
+      "status": {
+        "Draft": "مسودة",
+        "Approved": "معتمد",
+        "Rejected": "مرفوض",
+        "Pending review": "قيد المراجعة"
+      },
+      "assigned_user": "المستخدم المعيّن",
+      "description": "الوصف",
+      "next_review_date": "تاريخ المراجعة التالية",
+      "rename_document": "إعادة تسمية المستند",
+      "review_date": "تاريخ آخر مراجعة",
+      "review_frequency_months": "وتيرة المراجعة (بالأشهر)",
+      "review_notes": "ملاحظات المراجعة",
+      "review_status": "حالة المراجعة"
+    },
+    "add_version": "إضافة إصدار",
+    "events": {
+      "name": "الاسم",
+      "namePlaceholder": "أدخل اسم الحدث",
+      "description": "الوصف",
+      "descriptionPlaceholder": "أدخل وصف الحدث",
+      "frequency": "التكرار",
+      "frequencyPlaceholder": "اختر معدل التكرار",
+      "frequencyHelp": "كم مرة يجب أن يتكرر هذا الحدث؟",
+      "frequencies": {
+        "daily": "يوميًا",
+        "weekly": "أسبوعيًا",
+        "biweekly": "كل أسبوعين",
+        "monthly": "شهريًا",
+        "quarterly": "كل ثلاثة أشهر",
+        "semiannual": "كل ستة أشهر",
+        "yearly": "سنويًا"
+      },
+      "nextDueDate": "موعد الاستحقاق التالي",
+      "nextDueDatePlaceholder": "اختر تاريخًا",
+      "lastDoneDate": "تاريخ آخر إنجاز",
+      "lastDoneDatePlaceholder": "اختر تاريخًا",
+      "notify": "تفعيل الإشعارات",
+      "notifyHelp": "إرسال تذكيرات لهذا الحدث",
+      "remindBeforeDays": "التذكير قبل (أيام)",
+      "remindBeforeDaysHelp": "عدد الأيام قبل موعد الاستحقاق لإرسال التذكير",
+      "notes": "ملاحظات",
+      "notesPlaceholder": "أدخل ملاحظات إضافية"
+    },
+    "location": {
+      "createSuccess": "تم إنشاء الموقع بنجاح!",
+      "create": {
+        "title": "إنشاء موقع"
+      },
+      "edit": {
+        "title": "تعديل الموقع"
+      },
+      "fields": {
+        "name": {
+          "label": "اسم الموقع",
+          "placeholder": "أدخل اسم الموقع",
+          "help_text": "اسم الموقع."
+        },
+        "address": {
+          "label": "العنوان",
+          "placeholder": "أدخل عنوان الموقع",
+          "help_text": "عنوان الموقع."
+        },
+        "postal_code": {
+          "label": "الرمز البريدي",
+          "placeholder": "أدخل الرمز البريدي",
+          "help_text": "الرمز البريدي للموقع."
+        },
+        "town": {
+          "label": "المدينة",
+          "placeholder": "أدخل اسم المدينة",
+          "help_text": "المدينة التي يقع فيها الموقع."
+        },
+        "state": {
+          "label": "الولاية أو المنطقة",
+          "placeholder": "أدخل الولاية أو المنطقة",
+          "help_text": "الولاية أو المنطقة التي يقع فيها الموقع."
+        },
+        "country": {
+          "label": "البلد",
+          "placeholder": "أدخل البلد",
+          "help_text": "البلد الذي يقع فيه الموقع."
+        },
+        "building_number": {
+          "label": "رقم المبنى",
+          "placeholder": "أدخل رقم المبنى",
+          "help_text": "رقم المبنى للموقع."
+        },
+        "floor_number": {
+          "label": "رقم الطابق",
+          "placeholder": "أدخل رقم الطابق",
+          "help_text": "رقم الطابق للموقع."
+        },
+        "room_number": {
+          "label": "رقم الغرفة",
+          "placeholder": "أدخل رقم الغرفة",
+          "help_text": "رقم الغرفة للموقع."
+        },
+        "longitude": {
+          "label": "خط الطول",
+          "placeholder": "أدخل خط الطول",
+          "help_text": "خط الطول الجغرافي للموقع."
+        },
+        "latitude": {
+          "label": "خط العرض",
+          "placeholder": "أدخل خط العرض",
+          "help_text": "خط العرض الجغرافي للموقع."
+        },
+        "altitude": {
+          "label": "الارتفاع",
+          "placeholder": "أدخل الارتفاع",
+          "help_text": "ارتفاع الموقع."
+        },
+        "comment": {
+          "label": "ملاحظة",
+          "placeholder": "أدخل ملاحظة عن الموقع",
+          "help_text": "ملاحظة حول الموقع."
+        }
+      }
+    },
+    "manufacturer": {
+      "create": {
+        "title": "إنشاء شركة مصنّعة"
+      },
+      "edit": {
+        "title": "تعديل الشركة المصنّعة"
+      }
+    },
+    "operatingSystem": {
+      "create": {
+        "title": "إنشاء نظام تشغيل"
+      },
+      "edit": {
+        "title": "تعديل نظام التشغيل"
+      }
     }
   },
   "modals": {
     "add_version": "إضافة إصدار برمجي",
     "version_details": "تفاصيل الإصدار",
-    "pick_document": "اختر مستندًا"
+    "pick_document": "اختر مستندًا",
+    "editEvent": "تعديل الحدث",
+    "notifications": "الإشعارات"
   },
   "relationships": {
     "groups": "المجموعات",
@@ -1775,6 +1974,25 @@
     },
     "quickCreate": {
       "success": "تم إنشاء {resource} بنجاح!"
+    },
+    "complianceEvent": {
+      "updateSuccess": "تم تحديث الحدث بنجاح"
+    }
+  },
+  "confirm": {
+    "delete": {
+      "bulk": {
+        "message": "هل تريد بالتأكيد حذف العناصر المحددة وعددها {count}؟",
+        "more": "و{extra} عناصر أخرى...",
+        "title": "حذف العناصر المحددة؟"
+      }
+    },
+    "purge": {
+      "bulk": {
+        "message": "هل تريد بالتأكيد حذف العناصر المحددة وعددها {count} نهائيًا؟ لا يمكن التراجع عن هذا الإجراء.",
+        "more": "و{extra} عناصر أخرى...",
+        "title": "حذف العناصر المحددة نهائيًا؟"
+      }
     }
   }
 }

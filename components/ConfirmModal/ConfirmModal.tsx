@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Stack, Text, Group, Button, Alert, Table, Loader, ScrollArea } from '@mantine/core';
 import { IconAlertTriangle } from '@tabler/icons-react';
 import { useSession } from 'next-auth/react';
+import { API_BASE } from '../../src/api';
 import { Asset } from '../../types/models';
 
 export interface ConfirmModalProps {
@@ -53,7 +54,6 @@ export function ConfirmModal({
     const fetchImpactedAssets = async () => {
       setAssetsLoading(true);
       try {
-        const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
         const endpoint = resourceType === 'location' 
           ? `${API_BASE}/assets/?location_id=${resourceId}&per_page=50`
           : `${API_BASE}/assets/?manufacturer_id=${resourceId}&per_page=50`;

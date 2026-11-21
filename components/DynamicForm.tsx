@@ -78,7 +78,7 @@ const MemoSelectField = React.memo(
     const roles: any[] = rolesResp?.data ?? [];
     const currentUserRoleId: number | null = session?.user?.role_id ?? null;
 
-    let options = srcOptions ?? field.options ?? [];
+    let options: UIFieldOption[] = srcOptions ?? field.options ?? [];
     if (isRoleField && roles.length > 0 && currentUserRoleId !== null) {
       const currentUserRole = roles.find((r) => r.id === currentUserRoleId);
       const currentRank: number | undefined = currentUserRole?.rank;
@@ -339,6 +339,11 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
     }
   }, [isSubmitting, schemaResp, onRefreshOptions, refreshFieldOptions]);
 
+  const orderedFields = useMemo(() => {
+    const fields: Record<string, UIField> = schemaResp?.ui?.fields || {};
+    return Object.entries(fields).sort(([, a], [, b]) => a.order - b.order);
+  }, [schemaResp]);
+
   if (isLoading) {
     return (
       <Group justify="center" mt="lg">
@@ -349,10 +354,6 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
   if (isError || !schemaResp) {
     return <p>{t('forms.errors.loadFailed')}</p>;
   }
-
-  const orderedFields = useMemo(() => {
-    return Object.entries(schemaResp.ui.fields || {}).sort((a, b) => a[1].order - b[1].order);
-  }, [schemaResp]);
 
   return (
     <form
